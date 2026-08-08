@@ -1,0 +1,173 @@
+[
+  {
+    "slug": "27-design-way-kalkallo",
+    "address": "27 Design Way",
+    "suburb": "Kalkallo",
+    "postcode": "3064",
+    "estate": "Cloverton Estate",
+    "price": "$760,000 – $790,000",
+    "note": "Ex-display · investment-ready",
+    "beds": 4,
+    "baths": 2,
+    "cars": 2,
+    "land": "392 m²",
+    "hero": "kalkallo-facade",
+    "gallery": [
+      "kalkallo-facade",
+      "kalkallo-living",
+      "kalkallo-kitchen"
+    ],
+    "featured": true,
+    "description": "A carefully finished four-bedroom ex-display home in Cloverton Estate, combining a composed street presence with generous family living and a proven tenancy history. The 392 m² allotment, practical floor plan and direct access to the northern growth corridor make this a considered home or long-term investment.",
+    "highlights": [
+      "Ex-display specification and finish",
+      "Open-plan kitchen, dining and living",
+      "Four bedrooms with a private main suite",
+      "Double garage and low-maintenance grounds",
+      "Established tenancy history",
+      "Cloverton Estate address"
+    ]
+  },
+  {
+    "slug": "7-rulingia-road-donnybrook",
+    "address": "7 Rulingia Road",
+    "suburb": "Donnybrook",
+    "postcode": "3064",
+    "estate": "Olivine Estate",
+    "price": "$690,000 – $740,000",
+    "note": "Motivated campaign",
+    "beds": 4,
+    "baths": 2,
+    "cars": 2,
+    "land": "392 m²",
+    "hero": "donnybrook-drone",
+    "gallery": [
+      "donnybrook-drone",
+      "donnybrook-living"
+    ],
+    "featured": true,
+    "description": "A modern single-level family home in Donnybrook, shaped around open living, straightforward maintenance and connection to the growing Olivine community. The campaign is positioned for buyers who value space, clean contemporary finishes and northern-corridor convenience.",
+    "highlights": [
+      "Four-bedroom single-level layout",
+      "Open living and dining zone",
+      "Contemporary neutral interiors",
+      "Double garage",
+      "Olivine Estate setting",
+      "Close to developing local amenity"
+    ]
+  },
+  {
+    "slug": "6-mathoura-road-mickleham",
+    "address": "6 Mathoura Road",
+    "suburb": "Mickleham",
+    "postcode": "3064",
+    "estate": "Merrifield Estate",
+    "price": "$775,000",
+    "note": "Currently leased at $630 per week",
+    "beds": 4,
+    "baths": 2,
+    "cars": 2,
+    "land": "448 m²",
+    "hero": "mickleham-kitchen",
+    "gallery": [
+      "mickleham-kitchen",
+      "mickleham-living",
+      "drone-mathoura"
+    ],
+    "featured": true,
+    "description": "A polished Mickleham home offering four-bedroom scale, a substantial kitchen and family-focused living. Its current lease provides immediate income while the Merrifield location supports long-term owner-occupier and investment appeal.",
+    "highlights": [
+      "Current rental income of $630 per week",
+      "Large contemporary kitchen",
+      "Four-bedroom accommodation",
+      "Family living and dining zones",
+      "Double garage",
+      "Merrifield Estate position"
+    ]
+  },
+  {
+    "slug": "31-roseneath-way-mickleham",
+    "address": "31 Roseneath Way",
+    "suburb": "Mickleham",
+    "postcode": "3064",
+    "estate": "Merrifield Estate",
+    "price": "$630,000 – $660,000",
+    "note": "First-home buyer ready",
+    "beds": 4,
+    "baths": 2,
+    "cars": 1,
+    "land": "—",
+    "hero": "roseneath-facade",
+    "gallery": [
+      "roseneath-facade",
+      "roseneath-living",
+      "roseneath-kitchen"
+    ],
+    "featured": true,
+    "description": "A bright, well-resolved four-bedroom home in Mickleham with an approachable price guide and a calm contemporary interior. The layout places everyday living first, with low-maintenance spaces and an address close to Merrifield services.",
+    "highlights": [
+      "Four-bedroom family layout",
+      "Light-filled living spaces",
+      "Contemporary bathroom and kitchen",
+      "Single garage",
+      "Low-maintenance presentation",
+      "Merrifield access"
+    ]
+  },
+  {
+    "slug": "105-tungsten-drive-kalkallo",
+    "address": "105 Tungsten Drive",
+    "suburb": "Kalkallo",
+    "postcode": "3064",
+    "estate": "Cloverton Estate",
+    "price": "$660,000 – $690,000",
+    "note": "NorthEdge current campaign",
+    "beds": 4,
+    "baths": 2,
+    "cars": 2,
+    "land": "—",
+    "hero": "tungsten-facade",
+    "gallery": [
+      "tungsten-facade",
+      "kalkallo-living",
+      "kalkallo-kitchen"
+    ],
+    "featured": false,
+    "description": "A modern four-bedroom residence in Kalkallo with a strong architectural façade and an open family plan. The current NorthEdge campaign is guided at $660,000 – $690,000. Buyers should confirm availability, inspections and campaign documents directly with the agency before acting.",
+    "highlights": [
+      "Contemporary architectural façade",
+      "Four bedrooms",
+      "Open-plan living",
+      "Double garage",
+      "Cloverton Estate setting",
+      "Current NorthEdge price guide"
+    ]
+  },
+  {
+    "slug": "6-alisterus-road-kalkallo",
+    "address": "6 Alisterus Road",
+    "suburb": "Kalkallo",
+    "postcode": "3064",
+    "estate": "Cloverton Estate",
+    "price": "$660,000 – $689,000",
+    "note": "NorthEdge current campaign",
+    "beds": 4,
+    "baths": 2,
+    "cars": 2,
+    "land": "—",
+    "hero": "alisterus-facade",
+    "gallery": [
+      "alisterus-facade"
+    ],
+    "featured": false,
+    "description": "A four-bedroom Kalkallo campaign positioned for buyers seeking a contemporary family home within the established Cloverton community. Contact NorthEdge for the current photography, document status and inspection arrangements before acting.",
+    "highlights": [
+      "Four-bedroom accommodation",
+      "Two bathrooms",
+      "Double garage",
+      "Cloverton Estate address",
+      "Current campaign documents to be confirmed",
+      "Private inspection coordination"
+    ]
+  }
+]
