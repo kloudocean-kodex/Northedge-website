@@ -1,4 +1,5 @@
 name: NorthEdge conservative SOI truth gate
+# corrected repository-relative manifest path handling
 
 on:
   push:
