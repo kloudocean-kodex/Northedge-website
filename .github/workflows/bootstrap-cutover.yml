@@ -15,4 +15,4 @@ jobs:
           fetch-depth: 0
       - name: Reconstruct and verify exact Cutover R1 tree
         run: python tools/bootstrap-compact.py
-# trigger after corrected verified payload segments
+# trigger after payload integrity corrections 2026-08-08
