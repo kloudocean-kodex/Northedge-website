@@ -3,7 +3,8 @@ import base64, hashlib, json, lzma, os, shutil, subprocess, tarfile, tempfile, t
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-PAYLOAD = ROOT / '.bootstrap' / 'changed_text.b64'
+PAYLOAD_DIR = ROOT / '.bootstrap'
+PAYLOAD_GLOB = 'final.*'
 PREVIEW = 'https://northedge-rebirth.netlify.app/'
 MANIFEST = ROOT / 'RELEASE_MANIFEST.json'
 REMOVE = [
@@ -21,8 +22,11 @@ def sha256(p: Path) -> str:
 def run(*args: str):
     subprocess.run(args, cwd=ROOT, check=True)
 
-# 1) Restore every changed/non-public text file exactly as prepared locally.
-raw = lzma.decompress(base64.b64decode(PAYLOAD.read_text().strip()))
+parts=sorted(PAYLOAD_DIR.glob(PAYLOAD_GLOB))
+if not parts:
+    raise RuntimeError('Bootstrap payload parts missing')
+encoded=''.join(p.read_text().strip() for p in parts)
+raw = lzma.decompress(base64.b64decode(encoded))
 with tempfile.NamedTemporaryFile(suffix='.tar', delete=False) as tf:
     tf.write(raw); name=tf.name
 try:
@@ -39,8 +43,6 @@ manifest=json.loads(MANIFEST.read_text(encoding='utf-8'))
 entries=manifest['files']
 print(f'Manifest entries: {len(entries)}')
 
-# 2) Retrieve only package files not in the compact payload from the approved
-# R3 preview. Never accept a byte unless it matches the Cutover R1 manifest.
 for e in entries:
     rel=e['path']
     p=ROOT / rel
@@ -66,7 +68,6 @@ for e in entries:
             err=ex; time.sleep(2*(attempt+1))
     if err: raise err
 
-# 3) Full package verification against the locally-authored manifest.
 problems=[]
 for e in entries:
     p=ROOT/e['path']
@@ -77,13 +78,10 @@ if problems:
     raise RuntimeError('Manifest verification failed: ' + '; '.join(problems[:20]))
 print('All manifest entries verified.')
 
-# Package manifest intentionally excludes itself; verify expected total tree.
 package_files=[p for p in ROOT.rglob('*') if p.is_file() and '.git' not in p.parts and '.bootstrap' not in p.parts and not ('.github' in p.parts and 'workflows' in p.parts and p.name=='bootstrap-cutover.yml') and p.name!='bootstrap-compact.py']
 if len(package_files) != manifest['fileCount']:
     raise RuntimeError(f'Package file count mismatch: {len(package_files)} != {manifest["fileCount"]}')
 
-# 4) Remove one-time transport/bootstrap material so release HEAD contains only
-# the verified Cutover R1 repository tree.
 for p in REMOVE:
     if p.is_dir(): shutil.rmtree(p, ignore_errors=True)
     elif p.exists(): p.unlink()
