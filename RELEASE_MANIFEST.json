@@ -1,0 +1,884 @@
+{
+  "release": "NorthEdge Cutover R1",
+  "date": "2026-08-08",
+  "baseRelease": "NorthEdge R3",
+  "baseSha256": "7003c5932d9b96ed5113c93008578b990a50c490f8d5e985f587396372d3cb1c",
+  "fileCount": 176,
+  "files": [
+    {
+      "path": ".env.example",
+      "bytes": 302,
+      "sha256": "d01ae3e859715f219a2cd7f756cecb7985ee61f97a21127f4a2fedfc40640f3e"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 61,
+      "sha256": "56062225c683dac505a192908db787d22acd9efe77f656350b659b8328a157fa"
+    },
+    {
+      "path": "README.md",
+      "bytes": 1525,
+      "sha256": "060e35eccdb9c786716e3f474c0d1dcfb2ec5badd9b5f0f02f69410f24a09bf4"
+    },
+    {
+      "path": "docs/DEPLOYMENT.md",
+      "bytes": 2360,
+      "sha256": "b2883d2bc40af3559909a24c152954225af0476ad2802f43ee52d51bbbaa8685"
+    },
+    {
+      "path": "docs/QA_REPORT.md",
+      "bytes": 3105,
+      "sha256": "821db37e9ca823febf5fdd6d69a517783a04207ccc014500b83cbfe765ea64b2"
+    },
+    {
+      "path": "docs/SOURCE_PROVENANCE.md",
+      "bytes": 731,
+      "sha256": "2cdc997813228224fe6f31892ca63834c10d9b0842715e29df6208a2208b4d28"
+    },
+    {
+      "path": "functions/api/health.js",
+      "bytes": 336,
+      "sha256": "5e247765948d03f0af5e65f52cf164408553426a38d70e5defcb8a7ae9e09024"
+    },
+    {
+      "path": "functions/api/leads.js",
+      "bytes": 5842,
+      "sha256": "d7e3637f0ef3ae8fda80f518790210add01594fdbc69d32a5b29e1354a1582c4"
+    },
+    {
+      "path": "public/404.html",
+      "bytes": 8297,
+      "sha256": "08b826db791dbf4acc43a57ecc7a43aa3328159d4eb03b6c4a304258aaea5dcd"
+    },
+    {
+      "path": "public/_headers",
+      "bytes": 639,
+      "sha256": "ce7314e979fc47aa9ddb9c0bc165f10df36277f58bd4515dd02edf8419cf0810"
+    },
+    {
+      "path": "public/_redirects",
+      "bytes": 185,
+      "sha256": "7aec76abcc7020ca71d7e77b1876a1c46cbe3e566405b48d1055a07cf816b67a"
+    },
+    {
+      "path": "public/about.html",
+      "bytes": 11746,
+      "sha256": "e238c93d376b0e602db6927f3870504f731f9a455ad51ee3c79f3e18e6d323bb"
+    },
+    {
+      "path": "public/accessibility.html",
+      "bytes": 8968,
+      "sha256": "9684116b57d6c6ab4c6c7ec4564fe3a78fafcc734dcd1677179df4dbfe91dfba"
+    },
+    {
+      "path": "public/agent-gurinder-sandhu.html",
+      "bytes": 13196,
+      "sha256": "d28b72077fca25f998c80909256a345956d4ac0b7b696c2b6788023bc473930a"
+    },
+    {
+      "path": "public/area-beveridge.html",
+      "bytes": 10960,
+      "sha256": "3ae21bb2660e29a4dfab6c28ad9b3cec5f51b170c75194fb4d81d9c2230eb6a0"
+    },
+    {
+      "path": "public/area-donnybrook.html",
+      "bytes": 12219,
+      "sha256": "d7c193429a0a1e33d4d4625b4308bfcd9491e18f3efb4f47c51fc76e13cc0fc6"
+    },
+    {
+      "path": "public/area-kalkallo.html",
+      "bytes": 15240,
+      "sha256": "03c7d6b55486f20df4b9249ef6b613156112fd461ba3a707e0fe57a45cf287a1"
+    },
+    {
+      "path": "public/area-mickleham.html",
+      "bytes": 13890,
+      "sha256": "f77d87190211287631365765c7a21ec56dd7c1ddd50fab1d30a3b765479acc30"
+    },
+    {
+      "path": "public/areas.html",
+      "bytes": 12148,
+      "sha256": "13bd1a3565c530f63f4ecfd32f9928c6005336a6d46f1c1570d6adce7bc193fb"
+    },
+    {
+      "path": "public/assets/css/client-demo.css",
+      "bytes": 24140,
+      "sha256": "cdc0e74d69d8dac196061f0de76638770c845b595a9882e2b4b9dbbb72d3ef26"
+    },
+    {
+      "path": "public/assets/css/final-demo.css",
+      "bytes": 12016,
+      "sha256": "cd7ef70213934fd7294b08eded47e3d1dbedfea9e62cf9740c1306f4d7871e0b"
+    },
+    {
+      "path": "public/assets/css/site.css",
+      "bytes": 32696,
+      "sha256": "4737e71468a1010788f406196be142ef117bf1ced7da5fdb83bcd9c7ca8aac4a"
+    },
+    {
+      "path": "public/assets/css/v2.css",
+      "bytes": 35807,
+      "sha256": "e12709e4dc9a3560aad4aa60ea165917b039f3ca1f8464d2a70cbf1201ce15b6"
+    },
+    {
+      "path": "public/assets/images/alisterus-facade-1600.jpg",
+      "bytes": 28578,
+      "sha256": "e1dced43f9206a58ce5fe7beeccfeebb20778df793caa6392c6c841cb2dc83d7"
+    },
+    {
+      "path": "public/assets/images/alisterus-facade-2400.jpg",
+      "bytes": 53191,
+      "sha256": "9bafcb87235a8c274ed3abdc58087861a195833b4892b6ce3f7436bfe0b6bf0d"
+    },
+    {
+      "path": "public/assets/images/alisterus-facade-480.jpg",
+      "bytes": 8553,
+      "sha256": "80c9ecdf81a25e79d3303eece789b6fa7f4ca8e4368fb2857faf9926a1dbc2d0"
+    },
+    {
+      "path": "public/assets/images/alisterus-facade-960.jpg",
+      "bytes": 15705,
+      "sha256": "325868635507e5aecb785350a8106c50af653020594b3bd9d18ae5e499da56c7"
+    },
+    {
+      "path": "public/assets/images/band-plain-1600.jpg",
+      "bytes": 469422,
+      "sha256": "f142b2e3c6310e28618625b9fab10c297c9e6fd35cacc78a8a1748ee3bf82697"
+    },
+    {
+      "path": "public/assets/images/band-plain-480.jpg",
+      "bytes": 49655,
+      "sha256": "07761a9865c36cd9c0a6a3d425d7ffe29e1d0977cdc602747d21c1366040f6ea"
+    },
+    {
+      "path": "public/assets/images/band-plain-960.jpg",
+      "bytes": 188964,
+      "sha256": "0f4b87bc834bcda432e67c2ca6a8f3143170a394af86d2616fac6891a01fce41"
+    },
+    {
+      "path": "public/assets/images/breather-golden-1600.jpg",
+      "bytes": 253057,
+      "sha256": "c984b1ae97cdb05f4d3270d2f74f71c0563ba9b9efba3db9b7d34fcdb15706a3"
+    },
+    {
+      "path": "public/assets/images/breather-golden-480.jpg",
+      "bytes": 31703,
+      "sha256": "645a3b06f3c3c143964cfbf2bd4df6c2a280276eec87cfd88110ed88045d52b0"
+    },
+    {
+      "path": "public/assets/images/breather-golden-960.jpg",
+      "bytes": 106589,
+      "sha256": "d54b8b80c7743efc143f5d06b9a4ef0127d46da17e9c236e5c4c90653ba6a059"
+    },
+    {
+      "path": "public/assets/images/corridor-1600.jpg",
+      "bytes": 132905,
+      "sha256": "2e47416a1b19694bdc93ebeb9e2bebc7370bfb020bcc2fe95cc9b4a5136d1393"
+    },
+    {
+      "path": "public/assets/images/corridor-480.jpg",
+      "bytes": 14690,
+      "sha256": "35ed606db33c849b0f43324895f2063d06c3df505e66ee592c14cec8094efa1e"
+    },
+    {
+      "path": "public/assets/images/corridor-960.jpg",
+      "bytes": 52062,
+      "sha256": "0186f56a9f0d5d0716e1469bc7ba31a64a1d119d16e25d2170e3867fb9877338"
+    },
+    {
+      "path": "public/assets/images/donnybrook-drone-1600.jpg",
+      "bytes": 295355,
+      "sha256": "f3d82b0d9ed3a792b4394a93c1cdbd0602a3e432d5ce2dabf355cd8aa87e569b"
+    },
+    {
+      "path": "public/assets/images/donnybrook-drone-2400.jpg",
+      "bytes": 657030,
+      "sha256": "86409519d228b891044e48ebae84c0fab230bdb8f37259aa39ef1826bc238e03"
+    },
+    {
+      "path": "public/assets/images/donnybrook-drone-480.jpg",
+      "bytes": 28861,
+      "sha256": "f04340b483c43204f9432a4d84c3c0a275743c3e86eeab24cae4f8c2d1bf5bf8"
+    },
+    {
+      "path": "public/assets/images/donnybrook-drone-960.jpg",
+      "bytes": 107577,
+      "sha256": "3ae10cf1070cba9df33cb50db7daaa89b7ed6add98f24b26e1139d3dd744b051"
+    },
+    {
+      "path": "public/assets/images/donnybrook-living-480.jpg",
+      "bytes": 26364,
+      "sha256": "02c2bd18813a3fd0e49cc2f0ac8557ab5d6e02993c67fc02b6b543a750a5ea21"
+    },
+    {
+      "path": "public/assets/images/donnybrook-living-960.jpg",
+      "bytes": 86906,
+      "sha256": "47069a5ec9579e6b55a05eee4c7f09d0d73c71efc3a235139eda64b292e06bad"
+    },
+    {
+      "path": "public/assets/images/drone-fennel-1600.jpg",
+      "bytes": 405551,
+      "sha256": "68d7278506c6d502423e99574a87c9882cce0020c9fb4969ee0e105872e181cc"
+    },
+    {
+      "path": "public/assets/images/drone-fennel-2400.jpg",
+      "bytes": 914298,
+      "sha256": "784ba6a98c0e6fd432bf58d5b59e7a064476115890c09f8281bfb11a9b13f642"
+    },
+    {
+      "path": "public/assets/images/drone-fennel-480.jpg",
+      "bytes": 40996,
+      "sha256": "9ccceb014763e4de8e920ff1a7756879585fa32fade282ba0207ac2d4a0d3cbd"
+    },
+    {
+      "path": "public/assets/images/drone-fennel-960.jpg",
+      "bytes": 149715,
+      "sha256": "6bf67285c137be4e215dae0aea1fe6d16f1ec6adc61879e4cc322aa065b9e29f"
+    },
+    {
+      "path": "public/assets/images/drone-hockley-1600.jpg",
+      "bytes": 361096,
+      "sha256": "6982feea890b1afda3809a9e6298d56931890f6425f10aa9cc29bc3523720d9a"
+    },
+    {
+      "path": "public/assets/images/drone-hockley-2400.jpg",
+      "bytes": 742550,
+      "sha256": "498219d096901bc802a7304120c095cea9434eb6b43a8df4e8ecdc8be042b73f"
+    },
+    {
+      "path": "public/assets/images/drone-hockley-480.jpg",
+      "bytes": 39821,
+      "sha256": "1fc55da2f704e72927f65cd7770ca8f04de27bc83def36e4e1979300cc8b3a4e"
+    },
+    {
+      "path": "public/assets/images/drone-hockley-960.jpg",
+      "bytes": 142309,
+      "sha256": "dd7a3fa885c9d8f61e651592cea675789648c8fa4db6feb1ef16a4de22a31056"
+    },
+    {
+      "path": "public/assets/images/drone-mathoura-1600.jpg",
+      "bytes": 386682,
+      "sha256": "950b68b5fec26776b285a7d8b66adf7970710a6f7466f03f829a83e5629612de"
+    },
+    {
+      "path": "public/assets/images/drone-mathoura-480.jpg",
+      "bytes": 40982,
+      "sha256": "ce8380b20c44e8255f6f0a1131a09298907a86e41792fdd89c773d63bab42f9d"
+    },
+    {
+      "path": "public/assets/images/drone-mathoura-960.jpg",
+      "bytes": 150355,
+      "sha256": "2c0b53209ca455f6fa57e5e1905cfec61457ffb8c236b7c981988b6c9dfaa3ef"
+    },
+    {
+      "path": "public/assets/images/drone-sesame-1600.jpg",
+      "bytes": 379842,
+      "sha256": "f5d2fba72cc7f2a2b6350372c1bd82f61df10df0404bbc26f84b6c5bbe40794f"
+    },
+    {
+      "path": "public/assets/images/drone-sesame-2400.jpg",
+      "bytes": 819994,
+      "sha256": "fe4e90d30d251f34b1cb18194cb7b2e6169f199e69e003bff69c86f402e13c3f"
+    },
+    {
+      "path": "public/assets/images/drone-sesame-480.jpg",
+      "bytes": 39792,
+      "sha256": "813868d6453ddd439a13027c5786b31aa188f4b1ba43cd7a42cc16430680b0fa"
+    },
+    {
+      "path": "public/assets/images/drone-sesame-960.jpg",
+      "bytes": 146311,
+      "sha256": "de6abb3838a894f5105824b7f0797cdfbbbda5ee0f47b9ab0d99aa202683813d"
+    },
+    {
+      "path": "public/assets/images/estate-b-1600.jpg",
+      "bytes": 211578,
+      "sha256": "df235012df22c1291baec150f4abc7db27bd49d0f0a42be98ff81ca5e584a0bc"
+    },
+    {
+      "path": "public/assets/images/estate-b-480.jpg",
+      "bytes": 24763,
+      "sha256": "71d7b5707b26bf2b71632de0c257fcbed8ab848a898a05dd0bf1682f188d39ab"
+    },
+    {
+      "path": "public/assets/images/estate-b-960.jpg",
+      "bytes": 80520,
+      "sha256": "7a92f0a5af910f17500e9bdd61bc2a60ca419aab32fbd2206d3a4e9f5ee20800"
+    },
+    {
+      "path": "public/assets/images/estate-c-1600.jpg",
+      "bytes": 291274,
+      "sha256": "e4b3ba23450b0d406a7cd8ee65d0eacde96ed572608578cca21b42a1dda329e6"
+    },
+    {
+      "path": "public/assets/images/estate-c-480.jpg",
+      "bytes": 31479,
+      "sha256": "7a92f5973516d8efdbe737baca558f2e7498a6f091454ceeb91f4ed0cdee239b"
+    },
+    {
+      "path": "public/assets/images/estate-c-960.jpg",
+      "bytes": 117092,
+      "sha256": "04c989de19bc7d06c69181dcd886218d3a2eeff825b42c82692edd18b55cd579"
+    },
+    {
+      "path": "public/assets/images/estate-e-1600.jpg",
+      "bytes": 388033,
+      "sha256": "356c76cd8e65c3c7a56266ac78cb876077accf95f8f822a982053147ddc62b92"
+    },
+    {
+      "path": "public/assets/images/estate-e-480.jpg",
+      "bytes": 51613,
+      "sha256": "909ce4270649ce1f2f2bc733ff3ec6ee21e8ac2e7a7bf53ec5753293c690ffe1"
+    },
+    {
+      "path": "public/assets/images/estate-e-960.jpg",
+      "bytes": 167091,
+      "sha256": "375295aa9155db34d2a7166cfc6002e645bb34f7b4c15becf9d1da46119889b7"
+    },
+    {
+      "path": "public/assets/images/estate-highlands-1600.jpg",
+      "bytes": 437505,
+      "sha256": "5dcbc4a33a522ebdd95bc7c81d04a590a9703cd483cb0b5b43729733a1b38c66"
+    },
+    {
+      "path": "public/assets/images/estate-highlands-480.jpg",
+      "bytes": 45870,
+      "sha256": "be05bb33bbb59a2b835943047e505fa171620cf365a213516770509da1f61ee2"
+    },
+    {
+      "path": "public/assets/images/estate-highlands-960.jpg",
+      "bytes": 174109,
+      "sha256": "70124204c1c3c1a5d3458855cff555a84ef2ede09160a9f2ebbec81bb0a509ad"
+    },
+    {
+      "path": "public/assets/images/gurinder-560.jpg",
+      "bytes": 37159,
+      "sha256": "598944fef997b446186cb777a6904f887d958ae5d64fb26371c2a1ed92065b84"
+    },
+    {
+      "path": "public/assets/images/gurinder.jpg",
+      "bytes": 37159,
+      "sha256": "598944fef997b446186cb777a6904f887d958ae5d64fb26371c2a1ed92065b84"
+    },
+    {
+      "path": "public/assets/images/handover-1600.jpg",
+      "bytes": 548968,
+      "sha256": "9b193224a00f9b455cad1119e4917c3f9a8b45b45e018a1bf2e4a66d04600a49"
+    },
+    {
+      "path": "public/assets/images/handover-960.jpg",
+      "bytes": 255985,
+      "sha256": "c0cf3bfd511d6e6815cde3ff4e21e18b4985ddf632ebbaf949d4226b684e59ac"
+    },
+    {
+      "path": "public/assets/images/hero-corridor-1600.jpg",
+      "bytes": 407518,
+      "sha256": "3ba269b166d01c89eee447a5007a382e4e32faa407c52a8e39458102e0bd3c63"
+    },
+    {
+      "path": "public/assets/images/hero-corridor-2400.jpg",
+      "bytes": 892440,
+      "sha256": "0232b08dbd912798e89089fa81597b902277ddcdb4db0ff89ed37d6dd873c34f"
+    },
+    {
+      "path": "public/assets/images/hero-corridor-480.jpg",
+      "bytes": 48044,
+      "sha256": "a6e126fbcbb4cf8dec2feb39f4f1408b45d0c965f8f3dc1a3dfd708706fad46d"
+    },
+    {
+      "path": "public/assets/images/hero-corridor-960.jpg",
+      "bytes": 168874,
+      "sha256": "94474add63c1b3ee6b90f79063f6a805d2ad562eac6fb4a1a3cd7dbf9d7c298f"
+    },
+    {
+      "path": "public/assets/images/insight-market-1600.jpg",
+      "bytes": 92664,
+      "sha256": "63dcb6ae5d0ede4e7f82b54448304cd69ec8f070f1cea837670f6afe4e487f0e"
+    },
+    {
+      "path": "public/assets/images/insight-market-480.jpg",
+      "bytes": 12406,
+      "sha256": "560967c8af66ed350ac18b5ef2c220739937d8b0a3dfac5a04bc74ef3e20e523"
+    },
+    {
+      "path": "public/assets/images/insight-market-960.jpg",
+      "bytes": 39339,
+      "sha256": "97b079a5e0ca671f58f2a74b47ee3f20857d5631a7f937609687b888fab12694"
+    },
+    {
+      "path": "public/assets/images/kalkallo-facade-1600.jpg",
+      "bytes": 332894,
+      "sha256": "78a4eaa2fe775feaaaa9ac7d00469d25c3a51ae0b0f77d38dd6db4534a81f9fd"
+    },
+    {
+      "path": "public/assets/images/kalkallo-facade-2400.jpg",
+      "bytes": 690909,
+      "sha256": "979d70337662314d8767b4a64b1f3ee4533948c83371a163cdb04c3214714746"
+    },
+    {
+      "path": "public/assets/images/kalkallo-facade-480.jpg",
+      "bytes": 36311,
+      "sha256": "f5292266410bd8a7890b5a71816ec6022ecc5ebd3ab966425a0cd858d97b6439"
+    },
+    {
+      "path": "public/assets/images/kalkallo-facade-960.jpg",
+      "bytes": 130178,
+      "sha256": "f61b29e03d522ffc5f13d040a4c834ca8769638c5fff8be90c127f7dd6da1a6f"
+    },
+    {
+      "path": "public/assets/images/kalkallo-kitchen-1600.jpg",
+      "bytes": 249444,
+      "sha256": "b1429f3cd9f09cf78eda5d43896d3ee427d6dc53ea5831e46b41de66246f01ad"
+    },
+    {
+      "path": "public/assets/images/kalkallo-kitchen-2400.jpg",
+      "bytes": 456108,
+      "sha256": "38e7bc8684b643d263611d395893c303f59323c0601fa9bcab5f06c875c5a25f"
+    },
+    {
+      "path": "public/assets/images/kalkallo-kitchen-480.jpg",
+      "bytes": 28940,
+      "sha256": "32ae7cec1586a779fbf31b4be7341413eb2addbbbaa5b82230d7dc6fdfe6ac36"
+    },
+    {
+      "path": "public/assets/images/kalkallo-kitchen-960.jpg",
+      "bytes": 106065,
+      "sha256": "d2a83b1c2ce9887e3d9400df6ae4efd85e48847c6854ab2b370783f8a640581c"
+    },
+    {
+      "path": "public/assets/images/kalkallo-living-1600.jpg",
+      "bytes": 203332,
+      "sha256": "557349e152776b811e670b4a0c5e987eafbba0679de21426634e2c2549413be4"
+    },
+    {
+      "path": "public/assets/images/kalkallo-living-2400.jpg",
+      "bytes": 395300,
+      "sha256": "459c1411939168a83f3230fd336fdae6013cb53634019af5fff83e42d8992404"
+    },
+    {
+      "path": "public/assets/images/kalkallo-living-480.jpg",
+      "bytes": 26050,
+      "sha256": "ecc374a9dcab2464705a51f582d6fcfc9c956c28fb4642d158deb5f9cb122f20"
+    },
+    {
+      "path": "public/assets/images/kalkallo-living-960.jpg",
+      "bytes": 84448,
+      "sha256": "547f62e388492a217406714e1def5612a53afdc8e24797227138ee6739e6f8fb"
+    },
+    {
+      "path": "public/assets/images/logo-320.png",
+      "bytes": 14819,
+      "sha256": "f976a35ed417ac8da6f0dc927067a5b6510eb964758161a302fce0d188506718"
+    },
+    {
+      "path": "public/assets/images/logo-640.jpg",
+      "bytes": 18694,
+      "sha256": "3f436f16e1f729c93afe92046507979577f1ff2f273e8e994b3df3b0070fba62"
+    },
+    {
+      "path": "public/assets/images/logo-640.png",
+      "bytes": 43681,
+      "sha256": "e9fc3644a0f924fd1c43cf2c9fd4e8fa7ca4169433df1727f9b9cdf8ee675e45"
+    },
+    {
+      "path": "public/assets/images/logo.png",
+      "bytes": 182673,
+      "sha256": "97465e3b83ba0d5d1331998bd0041bd96bcf19410274fabdfe6002834791bc62"
+    },
+    {
+      "path": "public/assets/images/lux-interior-1600.jpg",
+      "bytes": 232565,
+      "sha256": "c7cbd9b1267b1474faa012eb0249d1320282deb687f34a7a54c33c31a4a6da5c"
+    },
+    {
+      "path": "public/assets/images/lux-interior-2400.jpg",
+      "bytes": 580880,
+      "sha256": "a972da8b9b27a36dc326f74c7a91c5d623d58594f131c2984cdabd4cb4e73ce5"
+    },
+    {
+      "path": "public/assets/images/lux-interior-480.jpg",
+      "bytes": 25256,
+      "sha256": "d5200c8306af6eb68f1f0f2e53d0a211095ffd233980db046db60a84ad945584"
+    },
+    {
+      "path": "public/assets/images/lux-interior-960.jpg",
+      "bytes": 88440,
+      "sha256": "ea01b6078e98e761bd5994f020769dc1063bff9f2abf11373870e912c7768c8d"
+    },
+    {
+      "path": "public/assets/images/mickleham-facade-1600.jpg",
+      "bytes": 273390,
+      "sha256": "c4ce9c3a2b46f506bd8f3e3f27661f76e9c55ec05033c5fa379c64024b707c79"
+    },
+    {
+      "path": "public/assets/images/mickleham-facade-2400.jpg",
+      "bytes": 599769,
+      "sha256": "f34f0dcda8d5d0845af429bc65d5cb10feb43d4bee70b9612c8ee11ce5ea3af7"
+    },
+    {
+      "path": "public/assets/images/mickleham-facade-480.jpg",
+      "bytes": 27382,
+      "sha256": "739d83ef389ddd7ed5ba3af4eb78bb20e82b346b5d36ee7d98deefe5a0ac35e7"
+    },
+    {
+      "path": "public/assets/images/mickleham-facade-960.jpg",
+      "bytes": 100138,
+      "sha256": "537b4be888072118e6742059baf1f316d8fa24c76906f5b1365a01e6bfe515f4"
+    },
+    {
+      "path": "public/assets/images/mickleham-kitchen-1600.jpg",
+      "bytes": 187074,
+      "sha256": "2cad508c96e4d86758a746628a664d017e900d6ac2da8788ad99ae37968b2c63"
+    },
+    {
+      "path": "public/assets/images/mickleham-kitchen-2400.jpg",
+      "bytes": 379370,
+      "sha256": "2c40c9214fa9a17f593469aabec302eaee466bc6416722cf6c7723fc17418516"
+    },
+    {
+      "path": "public/assets/images/mickleham-kitchen-480.jpg",
+      "bytes": 27619,
+      "sha256": "4f4b73d46beb0be59139f85a77a79f494a4678b09f51558611fd9b36635f95eb"
+    },
+    {
+      "path": "public/assets/images/mickleham-kitchen-960.jpg",
+      "bytes": 81064,
+      "sha256": "c5a34ecfbd33daaa20efa2cf5875ccc99510669da44bcf37283a67d3e5a040d1"
+    },
+    {
+      "path": "public/assets/images/mickleham-living-1600.jpg",
+      "bytes": 166601,
+      "sha256": "1a07f31fc7649ba554a1c97ac76bcb1bdbafbb0c023e4c3f9e65a956e7d4021a"
+    },
+    {
+      "path": "public/assets/images/mickleham-living-2400.jpg",
+      "bytes": 325993,
+      "sha256": "f2d0ceddf7ebd47df82c2e296ccf850a9aa5f563dc050b81965ee0998bd6a2df"
+    },
+    {
+      "path": "public/assets/images/mickleham-living-480.jpg",
+      "bytes": 24832,
+      "sha256": "0e26bef1ef895db2cd6d66d15c79459cb21d1dad5a6182b880215cb82d25a6da"
+    },
+    {
+      "path": "public/assets/images/mickleham-living-960.jpg",
+      "bytes": 72348,
+      "sha256": "d960d007e14980a81275e02dcb75d1b03b701e62a923f1d3651744baf9271170"
+    },
+    {
+      "path": "public/assets/images/roseneath-facade-1600.jpg",
+      "bytes": 227934,
+      "sha256": "00537ff5324b1ec90a58caaf09988f0493daf2ffb9aeab95d38807da58179183"
+    },
+    {
+      "path": "public/assets/images/roseneath-facade-2400.jpg",
+      "bytes": 500399,
+      "sha256": "36ec678b3907747c54d8e02a026ded99d37438957d58b6e3c1a0f685410ec321"
+    },
+    {
+      "path": "public/assets/images/roseneath-facade-480.jpg",
+      "bytes": 24633,
+      "sha256": "2fcf3e9eb824cbe5efa7541d4e3dc7c79388ac651d835fd21d533e9d3a30c720"
+    },
+    {
+      "path": "public/assets/images/roseneath-facade-960.jpg",
+      "bytes": 84981,
+      "sha256": "73aeeb00a78bc3b52ad10da90fba3536a60749e064c51d82b595bb1a7b511cae"
+    },
+    {
+      "path": "public/assets/images/roseneath-kitchen-1600.jpg",
+      "bytes": 155961,
+      "sha256": "b26715a709154846c70061ad1c18ee23408132990a8c1c0f7469f32da22103ba"
+    },
+    {
+      "path": "public/assets/images/roseneath-kitchen-2400.jpg",
+      "bytes": 321987,
+      "sha256": "6de1517e66e53385fa152f36a8e54eecc250fe30ae226cb3be3ca6d00b9f0e21"
+    },
+    {
+      "path": "public/assets/images/roseneath-kitchen-480.jpg",
+      "bytes": 20863,
+      "sha256": "eb2cea3f5b44eecc5c35f23d2f12297052739bcf92ac756481e1b6daff4b78e8"
+    },
+    {
+      "path": "public/assets/images/roseneath-kitchen-960.jpg",
+      "bytes": 63875,
+      "sha256": "2389659959ad4ab290df6239a6ce9065503da812042784ec3b07106fcc92afa5"
+    },
+    {
+      "path": "public/assets/images/roseneath-living-1600.jpg",
+      "bytes": 214438,
+      "sha256": "43f8628e40b4a0c6b79ce55355c110e9f2f976c2466c854d50d2a9d7151c4c36"
+    },
+    {
+      "path": "public/assets/images/roseneath-living-2400.jpg",
+      "bytes": 442052,
+      "sha256": "9a108d0ed6c1a1e6cc2e81139e2b5439aacdbf13111f2c70c660900f7850431e"
+    },
+    {
+      "path": "public/assets/images/roseneath-living-480.jpg",
+      "bytes": 24840,
+      "sha256": "f29c9acbf5554669bf76d4c7b24c057f60c730b878164a6bc2af722b4337d500"
+    },
+    {
+      "path": "public/assets/images/roseneath-living-960.jpg",
+      "bytes": 84632,
+      "sha256": "714c99373498f34c06e1ceb8cb4c65649cddb2cfda44191df047b3bb39f2f740"
+    },
+    {
+      "path": "public/assets/images/sold-amstel-480.jpg",
+      "bytes": 53177,
+      "sha256": "3bd53ca8c47b23b100c567407a96d06f444a2b3f5f8d09ebfc9181334c45e20b"
+    },
+    {
+      "path": "public/assets/images/sold-board-960.jpg",
+      "bytes": 327621,
+      "sha256": "6b632b3a5bac751d63e81669ddbbac2f6f576155800d03ddb17a4860304112cb"
+    },
+    {
+      "path": "public/assets/images/sold-latteridge-1600.jpg",
+      "bytes": 493032,
+      "sha256": "2f7e53e9e55d00ec84155ed88c52026e41ec59db0b2b67cbfe0294d52352d5d3"
+    },
+    {
+      "path": "public/assets/images/sold-latteridge-480.jpg",
+      "bytes": 43567,
+      "sha256": "df3db9f78c865edadab3bfeff09b06155962995d30cf837ebad825e04c09b6fc"
+    },
+    {
+      "path": "public/assets/images/sold-latteridge-960.jpg",
+      "bytes": 174981,
+      "sha256": "6b22057cc43927ad11d51924c37d0bb32e39607ca351f236b2e3d68b03186350"
+    },
+    {
+      "path": "public/assets/images/tex-basalt-1600.jpg",
+      "bytes": 260482,
+      "sha256": "48cf68830b363abae09c9b6e979aa4bfaa01342fc59dc163f339ba1f8d08ff75"
+    },
+    {
+      "path": "public/assets/images/tex-basalt-480.jpg",
+      "bytes": 22511,
+      "sha256": "0c43ba313a710e879fbff5d5a28c89fb6c33f2d87e11a8bd629bb84913da85c5"
+    },
+    {
+      "path": "public/assets/images/tex-basalt-960.jpg",
+      "bytes": 99556,
+      "sha256": "f537c1f1026ac305bd66bcc0146cb9d2a7b0380378ac26b80c5131d0ca820cc9"
+    },
+    {
+      "path": "public/assets/images/tex-render-1600.jpg",
+      "bytes": 244551,
+      "sha256": "7d9b3e646c26036abe2263a1d68caeb9e97631a856c736ff7bd115d52e801d6d"
+    },
+    {
+      "path": "public/assets/images/tex-render-2400.jpg",
+      "bytes": 526931,
+      "sha256": "6c822b120b9881be4e33ccd02222eb561b588566e0bf404bd389f2b4850a8cb7"
+    },
+    {
+      "path": "public/assets/images/tex-render-480.jpg",
+      "bytes": 34223,
+      "sha256": "00c6ee0052e02316a559c3e680ce070260ca44a527309f4e10f4f416c9dcd651"
+    },
+    {
+      "path": "public/assets/images/tex-render-960.jpg",
+      "bytes": 107490,
+      "sha256": "a4eae7105e82572b36ffd09932eb558a2c29736210de172e066fa890033a11e8"
+    },
+    {
+      "path": "public/assets/images/tungsten-facade-1600.jpg",
+      "bytes": 238816,
+      "sha256": "b17d34f67579c7fa67aa91e7b49916e2faef0584c00a328ac7fd2dd41e9af089"
+    },
+    {
+      "path": "public/assets/images/tungsten-facade-2400.jpg",
+      "bytes": 524349,
+      "sha256": "92e8725d03fa927cbf2e128ab3b35ea4bca5746b7c098b4bbb4406029bad3b9a"
+    },
+    {
+      "path": "public/assets/images/tungsten-facade-480.jpg",
+      "bytes": 24437,
+      "sha256": "9589387d92c99696207ccdf6969bef9bf6bad396d429dbd2da8b2c4e28f67872"
+    },
+    {
+      "path": "public/assets/images/tungsten-facade-960.jpg",
+      "bytes": 85978,
+      "sha256": "3bf4070e70fc0db5bc3ccb2d9f630ed434704a716e87a3433ff902a7bb4160c4"
+    },
+    {
+      "path": "public/assets/images/vendor-1600.jpg",
+      "bytes": 130633,
+      "sha256": "3cdd154f62810543d87eb50906a64dad0fbb16b161814705bebcdd61b627ad2c"
+    },
+    {
+      "path": "public/assets/images/vendor-480.jpg",
+      "bytes": 17074,
+      "sha256": "64b569f95e6aa3dd97c26f1ada92af7b04c687061de3fbff6d5bd943402fa665"
+    },
+    {
+      "path": "public/assets/images/vendor-960.jpg",
+      "bytes": 53406,
+      "sha256": "dd72a56872e5a6ff3c796c58364eac8154aaefbbfeb41764f281b5d39d52ff16"
+    },
+    {
+      "path": "public/assets/js/site.js",
+      "bytes": 9472,
+      "sha256": "7ed472e348f4699b2283ac1b164123b350bae9bb213eb261e35688cf997cc8ce"
+    },
+    {
+      "path": "public/assets/motifs/contours.svg",
+      "bytes": 469,
+      "sha256": "6c7d454dc1c4d6afdf57c043058193be22767d3f5dc399bf4d41fa71a60cce5a"
+    },
+    {
+      "path": "public/assets/motifs/horizon.svg",
+      "bytes": 359,
+      "sha256": "c4859bde7c7eba6a97f3e57311d0f5e82197ac9639c63a6cf80f14ec6ba07e0b"
+    },
+    {
+      "path": "public/assets/partners/formslive.svg",
+      "bytes": 2614,
+      "sha256": "206eb7ee2be9f477eeaa14fc82175ded13a39e4ac31ac6e0ce92abd78b8c98f2"
+    },
+    {
+      "path": "public/assets/partners/inspectionexpress.png",
+      "bytes": 32739,
+      "sha256": "4f4e48c4d40fa31741571c88094c9529e68d16c811caae57357d75992044853f"
+    },
+    {
+      "path": "public/assets/partners/realtyassist.svg",
+      "bytes": 5009,
+      "sha256": "9bff8692735572a3eee13ddc80aa624f309ab7b6ac36b25424f828228d10613c"
+    },
+    {
+      "path": "public/buy.html",
+      "bytes": 19992,
+      "sha256": "d52ee7bb23c39429ab85ae26c34d8126a9b8d82df47402997fa25645ed8b46e1"
+    },
+    {
+      "path": "public/contact.html",
+      "bytes": 11508,
+      "sha256": "a4d1dc1caf991fdb583de810d9ed34ff274adc98d41784712a3d091ca83c01b4"
+    },
+    {
+      "path": "public/data/properties.json",
+      "bytes": 5794,
+      "sha256": "04d74b724903bad80e37521a54e23d29417bd3ad2efd81e7410b5b6a96cb2aae"
+    },
+    {
+      "path": "public/image-credits.html",
+      "bytes": 12316,
+      "sha256": "ef87d76ac9ce9a55117956e719f0e94313e27551ea1ac9fd6b2f6b0afadcf9f8"
+    },
+    {
+      "path": "public/index.html",
+      "bytes": 37488,
+      "sha256": "3921d98b5767508b6a8e4da084fdffa5a9bec10db55e9fb7d58e00ad054422d9"
+    },
+    {
+      "path": "public/insight-northern-corridor.html",
+      "bytes": 9872,
+      "sha256": "6555aa1e168e85ba2fda99c38945cb48df0c07e4e3d7b49a64b05dbc6d3bec14"
+    },
+    {
+      "path": "public/insight-preparing-to-sell.html",
+      "bytes": 9953,
+      "sha256": "6311973c7545a956e1907068fc7592192055744a229b8e0cc628d952e5b8c5b3"
+    },
+    {
+      "path": "public/insights.html",
+      "bytes": 10924,
+      "sha256": "273e2b0c62b876af4a1638bf618145800e5cc2a50ee056deb0a6ca10bcb91a10"
+    },
+    {
+      "path": "public/privacy.html",
+      "bytes": 9804,
+      "sha256": "f9ca00c94a7cff0db9cb54800b1eb4c1ad649619619560b0ca7b69713f159ddd"
+    },
+    {
+      "path": "public/property-105-tungsten-drive-kalkallo.html",
+      "bytes": 15873,
+      "sha256": "79c3048aa34f2743ddab04dbc8fce11df8df5b2d30a429aa34f3fde3472a369c"
+    },
+    {
+      "path": "public/property-27-design-way-kalkallo.html",
+      "bytes": 16312,
+      "sha256": "1fc26697d807033a561deb9054571e356b0e83c5aa8e7f239b1749bb08059971"
+    },
+    {
+      "path": "public/property-31-roseneath-way-mickleham.html",
+      "bytes": 16121,
+      "sha256": "183d9bc1f08294078dadbe67a8ba8b0ab66c18434acc3eccfeafc0d001463a45"
+    },
+    {
+      "path": "public/property-6-alisterus-road-kalkallo.html",
+      "bytes": 14953,
+      "sha256": "de726a854ae826d32e2a195cb22ebf795fd5166bb096f0da2b75ea62ba1b116f"
+    },
+    {
+      "path": "public/property-management.html",
+      "bytes": 13091,
+      "sha256": "ae4c70dbe31367e6cf7192ae0ca4fcb3e11c3580b58ea5bc8dd23aa53601cc95"
+    },
+    {
+      "path": "public/property-mathoura-road-mickleham.html",
+      "bytes": 15852,
+      "sha256": "bb3ae5d06bace347324105a1b1762cafc3fe0f015e0b73003bbf3e3993a2f285"
+    },
+    {
+      "path": "public/property-rullinga-road-donnybrook.html",
+      "bytes": 15504,
+      "sha256": "cb2060a21097603ad924138717f8a76fe95e9bb869c5d3fc6ba87f83fda698ed"
+    },
+    {
+      "path": "public/referral.html",
+      "bytes": 11458,
+      "sha256": "1346325eca20d9c3d3dff6977387f5062412029356810f8b32a0b5e5eb8eb659"
+    },
+    {
+      "path": "public/rent.html",
+      "bytes": 11766,
+      "sha256": "92f8110bd72be6285e8f80e8d35d89b4a35fe59ceb830300358d8c652b76d73d"
+    },
+    {
+      "path": "public/robots.txt",
+      "bytes": 79,
+      "sha256": "236ccb61bae8a68d9507fb04f5d105ef4da7fbcf0e13e188a74840684c15d1c5"
+    },
+    {
+      "path": "public/sell.html",
+      "bytes": 13843,
+      "sha256": "38a2026008ca772bf0bfc3ae0faeceb2bfe9eda83de928cbb2453142528bd704"
+    },
+    {
+      "path": "public/site.webmanifest",
+      "bytes": 299,
+      "sha256": "e056e78b43f24b4bb8d7cf93a5e64a094683a98d6ecddf3c997d0c34f0c1a203"
+    },
+    {
+      "path": "public/sitemap.xml",
+      "bytes": 3517,
+      "sha256": "69bc3a59f04833dce54e54f8887e7d5491e77b3f26de76c3953488351c373ba2"
+    },
+    {
+      "path": "public/sold.html",
+      "bytes": 13482,
+      "sha256": "441cde4fb981307fa64dfe7f7b1805254c41d4c32671e794e7bc42d460ea1a13"
+    },
+    {
+      "path": "public/terms.html",
+      "bytes": 9291,
+      "sha256": "78e849ddb0e8ab7cd4aba8aa491ed3cb843633f5ca33504a756c8ec5e22654e3"
+    },
+    {
+      "path": "schema/leads.sql",
+      "bytes": 406,
+      "sha256": "631767685a4b563bea47eafbcad45f56c8618d5cf219c55434a1cbf2836615fa"
+    },
+    {
+      "path": "tools/serve.py",
+      "bytes": 301,
+      "sha256": "42c7d366ea901f75f8331321877f5d2cf45250a912cbee505822b87334c6a600"
+    }
+  ]
+}

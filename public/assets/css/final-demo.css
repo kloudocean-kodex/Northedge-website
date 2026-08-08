@@ -1,0 +1,355 @@
+/* NORTHEDGE CLIENT DEMO — FINAL SURGICAL PASS
+   Corrects the polished-build regressions, unifies all interior heroes,
+   closes the remaining accessibility gaps, and installs the reduced footer. */
+
+/* Accessible colour floor and controls */
+.button-brass{
+  background:#815B25;
+  color:#fff;
+  border-color:#815B25;
+  box-shadow:0 12px 30px rgba(70,45,17,.18);
+}
+.button-brass:hover{
+  background:#684719;
+  border-color:#684719;
+  color:#fff;
+}
+.status-tab,.estate-tab{font-size:10px!important;line-height:1.2}
+
+/* Claude's broad `label` override made labels inside the dark appraisal bands
+   too dim. Scope light and dark form labels deliberately. */
+.form-field label,.field label{color:#5F6560!important}
+.appraisal-band .form-field label,
+.appraisal-band label{
+  color:rgba(255,255,255,.78)!important;
+}
+.appraisal-band .form-consent,
+.appraisal-band .form-consent a{
+  color:rgba(255,255,255,.70)!important;
+}
+.appraisal-band .form-consent a{text-decoration-color:rgba(217,185,122,.72)}
+
+/* One consistent, centred interior-page hero system. The previous override
+   set margin-inline:0 auto on an element that is itself `.shell`, pinning copy
+   to the viewport edge. */
+.page-hero.page-hero-image{
+  min-height:clamp(620px,72svh,790px);
+  align-items:flex-end;
+}
+.page-hero .page-hero-inner,
+.buy-hero .page-hero-inner,
+.sold-page-hero .page-hero-inner{
+  width:var(--shell)!important;
+  max-width:1440px!important;
+  margin-inline:auto!important;
+  padding:0 0 clamp(68px,8vh,102px)!important;
+  text-align:left!important;
+}
+.page-hero-copy{
+  width:min(760px,100%);
+  position:relative;
+  z-index:3;
+}
+.page-hero-copy:before{
+  content:"";
+  display:block;
+  width:44px;
+  height:1px;
+  margin-bottom:24px;
+  background:var(--brass-light);
+  opacity:.86;
+}
+.page-hero .page-hero-copy h1{
+  max-width:760px;
+  margin-inline:0!important;
+  text-align:left!important;
+  font-size:clamp(64px,7vw,108px);
+  line-height:.89;
+  letter-spacing:-.045em;
+  text-wrap:balance;
+}
+.page-hero .page-hero-copy p:not(.eyebrow){
+  max-width:620px;
+  margin:26px 0 0!important;
+  color:rgba(255,255,255,.82);
+  font-size:17px;
+  line-height:1.75;
+  text-align:left!important;
+}
+.page-hero .page-hero-copy .eyebrow{
+  margin-inline:0!important;
+  text-align:left!important;
+}
+.page-hero .page-actions{margin-top:30px}
+.page-hero-shade{
+  background:
+    linear-gradient(90deg,rgba(6,25,35,.94) 0%,rgba(7,30,42,.78) 38%,rgba(7,30,42,.26) 72%,rgba(7,30,42,.08) 100%),
+    linear-gradient(0deg,rgba(7,30,42,.45),transparent 55%);
+}
+.buy-hero .page-hero-bg{object-position:63% 51%;filter:saturate(.82) contrast(1.04) brightness(.92)}
+.rent-hero .page-hero-bg{object-position:61% 50%}
+.sell-hero .page-hero-bg{object-position:62% 48%}
+.manage-hero .page-hero-bg{object-position:60% 52%}
+.sold-page-hero .page-hero-bg{object-position:66% 37%;filter:saturate(.76) contrast(1.03)}
+.sold-page-hero .page-hero-copy{width:min(720px,100%)}
+.sold-page-hero .page-hero-copy h1{font-size:clamp(62px,6.5vw,101px);max-width:700px}
+.areas-page-hero .page-hero-bg{object-position:62% 53%}
+.about-hero .page-hero-bg{object-position:60% 47%}
+
+/* Reduced, high-contrast footer */
+.footer.footer-v3{
+  position:relative;
+  overflow:hidden;
+  padding:0;
+  background:
+    radial-gradient(70% 80% at 4% 0%,rgba(207,166,111,.10),transparent 58%),
+    radial-gradient(55% 70% at 96% 100%,rgba(91,119,99,.16),transparent 65%),
+    linear-gradient(165deg,#223027 0%,#1A251F 52%,#151C18 100%)!important;
+  color:rgba(255,255,255,.84);
+  border:0;
+}
+.footer.footer-v3:before{
+  content:"";
+  position:absolute;
+  inset:0 0 auto;
+  height:1px;
+  background:linear-gradient(90deg,transparent,#CFA66F 15%,#CFA66F 55%,transparent 92%);
+  opacity:.72;
+}
+.footer.footer-v3:after{display:none!important}
+.footer-v3-glow{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+  background-size:120px 120px;
+  -webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,.28),transparent 78%);mask-image:linear-gradient(to bottom,rgba(0,0,0,.28),transparent 78%);
+}
+.footer-v3-statement{
+  position:relative;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:end;
+  gap:64px;
+  padding:100px 0 76px;
+  border-bottom:1px solid rgba(207,166,111,.18);
+}
+.footer-v3-statement .eyebrow{color:#D8B37F;margin-bottom:22px}
+.footer-v3-statement h2{
+  margin:0;
+  color:#fff;
+  font:300 clamp(58px,6.2vw,100px)/.86 var(--serif);
+  letter-spacing:-.045em;
+}
+.footer-v3-statement h2 em{font-weight:300;color:#D8B37F}
+.footer-v3-cta{
+  align-self:center;
+  min-width:250px;
+  background:#CFA66F;
+  border-color:#CFA66F;
+  color:#172019;
+}
+.footer-v3-cta:hover{background:#E0BF91;border-color:#E0BF91;color:#111812}
+.footer-v3-main{
+  position:relative;
+  display:grid;
+  grid-template-columns:1.05fr 1.25fr 1fr;
+  gap:clamp(52px,7vw,110px);
+  padding:72px 0 78px;
+}
+.footer-v3-brand img{
+  width:min(310px,100%);
+  height:auto;
+  filter:none;
+  opacity:1;
+  background:#fff;
+  padding:8px 12px;
+  border-radius:2px;
+}
+.footer-v3-social{
+  display:flex;
+  flex-wrap:wrap;
+  gap:28px;
+  margin-top:34px;
+}
+.footer-v3-social a{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  min-height:38px;
+  color:rgba(255,255,255,.78)!important;
+  font-size:11px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  border-bottom:1px solid rgba(207,166,111,.30);
+  transition:color .3s ease,border-color .3s ease,transform .3s ease;
+}
+.footer-v3-social a:hover{
+  color:#D8B37F!important;
+  border-color:#D8B37F;
+  transform:translateY(-2px);
+}
+.footer-v3-social svg{
+  width:18px;
+  height:18px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.35;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.footer-v3-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px}
+.footer-v3-column,.footer-v3-office{display:flex;flex-direction:column;align-items:flex-start}
+.footer-v3-column h3,.footer-v3-office h3{
+  margin:0 0 22px;
+  color:#D8B37F!important;
+  font:600 10px/1 var(--sans);
+  letter-spacing:.22em;
+  text-transform:uppercase;
+}
+.footer-v3-column a{
+  min-height:34px;
+  color:rgba(255,255,255,.78)!important;
+  font-size:14px;
+  font-weight:300;
+  transition:color .25s ease,transform .25s ease;
+}
+.footer-v3-column a:hover{color:#fff!important;transform:translateX(4px)}
+.footer-v3-office{min-width:0}
+.footer-v3-office>a{
+  width:100%;
+  display:grid!important;
+  grid-template-columns:52px minmax(0,1fr) 18px;
+  align-items:center;
+  gap:12px;
+  min-height:50px;
+  padding:10px 0;
+  color:rgba(255,255,255,.84)!important;
+  border-bottom:1px solid rgba(255,255,255,.10);
+  font-size:13px;
+  transition:border-color .25s ease,color .25s ease;
+}
+.footer-v3-office>a:hover{color:#fff!important;border-color:rgba(207,166,111,.52)}
+.footer-v3-office>a svg{
+  width:16px;height:16px;fill:none;stroke:#D8B37F;stroke-width:1.4;
+  stroke-linecap:round;stroke-linejoin:round;transition:transform .25s ease;
+}
+.footer-v3-office>a:hover svg{transform:translateX(3px)}
+.footer-v3-label{
+  color:#D8B37F!important;
+  font-size:9px!important;
+  letter-spacing:.16em!important;
+  text-transform:uppercase;
+}
+.footer-v3-bottom{
+  position:relative;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:32px;
+  padding:25px 0 30px;
+  border-top:1px solid rgba(255,255,255,.10);
+  color:rgba(255,255,255,.56);
+  font-size:10px;
+  letter-spacing:.08em;
+}
+.footer-v3-bottom>span{color:rgba(255,255,255,.56)!important}
+.footer-v3-legal{display:flex;gap:22px;justify-content:center;flex-wrap:wrap}
+.footer-v3-legal a{color:rgba(255,255,255,.62)!important;min-height:32px}
+.footer-v3-legal a:hover{color:#fff!important}
+.proddyg-v3{
+  justify-self:end;
+  display:inline-flex!important;
+  align-items:center;
+  gap:5px;
+  min-height:32px;
+  color:#fff!important;
+  letter-spacing:.06em;
+}
+.proddyg-v3 span{color:#fff!important;font-size:10px!important}
+.proddyg-v3 strong{
+  position:relative;
+  color:#D8B37F;
+  font-weight:600;
+  letter-spacing:.08em;
+  transition:color .25s ease,text-shadow .25s ease;
+}
+.proddyg-v3 strong:after{
+  content:"";
+  position:absolute;
+  left:0;right:100%;bottom:-4px;
+  height:1px;background:#D8B37F;
+  transition:right .3s var(--ease);
+}
+.proddyg-v3:hover strong{color:#F0D2A5;text-shadow:0 0 18px rgba(216,179,127,.28)}
+.proddyg-v3:hover strong:after{right:0}
+
+/* Do not let the previous footer selectors leak into the reconstructed footer. */
+.footer-v3 p,.footer-v3 span{color:inherit}
+.footer-v3 a:focus-visible,.footer-v3 button:focus-visible{outline-color:#D8B37F}
+
+@media(max-width:980px){
+  .page-hero .page-hero-inner,.buy-hero .page-hero-inner,.sold-page-hero .page-hero-inner{margin-inline:auto!important}
+  .page-hero-copy{width:min(700px,100%)}
+  .footer-v3-main{grid-template-columns:1fr 1fr;gap:58px}
+  .footer-v3-brand{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:36px}
+  .footer-v3-social{margin-top:0}
+  .footer-v3-office{max-width:none}
+}
+
+@media(max-width:700px){
+  .page-hero.page-hero-image{min-height:650px}
+  .page-hero .page-hero-inner,.buy-hero .page-hero-inner,.sold-page-hero .page-hero-inner{
+    width:calc(100vw - 28px)!important;
+    padding-bottom:52px!important;
+  }
+  .page-hero-copy:before{margin-bottom:18px;width:34px}
+  .page-hero .page-hero-copy h1,.sold-page-hero .page-hero-copy h1{
+    font-size:clamp(52px,15vw,68px);
+    line-height:.91;
+  }
+  .page-hero .page-hero-copy p:not(.eyebrow){font-size:15px;line-height:1.65;margin-top:20px!important}
+  .page-hero .page-actions{display:grid;grid-template-columns:1fr;width:100%;gap:9px;margin-top:24px}
+  .page-hero .page-actions .button{width:100%;min-height:50px;padding-inline:16px}
+  .buy-hero .page-hero-bg{object-position:65% center}
+  .sold-page-hero .page-hero-bg{object-position:69% 38%}
+
+  .footer-v3-statement{grid-template-columns:1fr;align-items:start;padding:76px 0 58px;gap:32px}
+  .footer-v3-statement h2{font-size:clamp(54px,16vw,76px)}
+  .footer-v3-cta{width:100%;min-width:0}
+  .footer-v3-main{grid-template-columns:1fr;gap:48px;padding:56px 0 58px}
+  .footer-v3-brand{grid-column:auto;display:block}
+  .footer-v3-social{margin-top:28px;gap:22px}
+  .footer-v3-nav{grid-template-columns:1fr 1fr;gap:26px}
+  .footer-v3-column a{font-size:13px}
+  .footer-v3-bottom{grid-template-columns:1fr;justify-items:start;gap:14px;padding:24px 0 30px}
+  .footer-v3-legal{justify-content:flex-start;gap:16px}
+  .proddyg-v3{justify-self:start}
+}
+
+@media(max-width:430px){
+  .footer-v3-nav{grid-template-columns:1fr;gap:40px}
+  .footer-v3-social{flex-direction:column;align-items:flex-start;gap:12px}
+  .footer-v3-office>a{grid-template-columns:48px minmax(0,1fr) 16px;font-size:12px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .footer-v3 *,.page-hero *{transition-duration:.001ms!important;animation-duration:.001ms!important}
+}
+/* Restore intended readable sizes after the prior broad `.footer span` rule. */
+.footer-v3-social span{font-size:11px!important;letter-spacing:.12em!important}
+.footer-v3-office>a>span:not(.footer-v3-label){font-size:13px!important;letter-spacing:0!important;text-transform:none}
+.footer-v3-bottom>span{font-size:10px!important;letter-spacing:.08em!important}
+
+
+/* Cutover R1: original NorthEdge identity + live form feedback */
+.brand img{width:min(300px,100%);height:auto;object-fit:contain}
+.footer-v3-brand>a:first-child{display:inline-block;background:#fff;padding:3px;border-radius:2px}
+.footer-v3-brand img{display:block;background:#fff;padding:6px 8px}
+.hp-field{position:absolute!important;left:-10000px!important;width:1px!important;height:1px!important;overflow:hidden!important;opacity:0!important;pointer-events:none!important}
+.form-status{grid-column:1/-1;margin:4px 0 0;font-size:13px;line-height:1.5;color:var(--slate)}
+.form-status.is-success{color:#2f6644}
+.form-status.is-error{color:#8a2f2f}
+button[aria-busy="true"]{cursor:wait;opacity:.75}
