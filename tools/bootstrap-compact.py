@@ -25,27 +25,27 @@ def extract_encoded_tar(encoded:str):
             t.extractall(ROOT)
     finally: os.unlink(name)
 
+def restore_xz_file(payload_name:str,target:str):
+    payload=PAYLOAD_DIR/payload_name
+    if not payload.is_file(): raise RuntimeError(f'Missing pinned payload: {payload_name}')
+    out=ROOT/target; out.parent.mkdir(parents=True,exist_ok=True)
+    out.write_bytes(lzma.decompress(base64.b64decode(payload.read_text().strip())))
+
 def run(*args:str): subprocess.run(args,cwd=ROOT,check=True)
 
-# Restore all Cutover R1 changed/new text/config/code.
 names=['final.00','final.01','final.02','final.03','final.04','final.rest']
 parts=[PAYLOAD_DIR/n for n in names]
 missing=[str(p) for p in parts if not p.is_file()]
 if missing: raise RuntimeError('Bootstrap payload parts missing: '+', '.join(missing))
 extract_encoded_tar(''.join(p.read_text().strip() for p in parts))
 
-# The old Netlify preview is not byte-identical to canonical R3 for several
-# unchanged text assets. Restore the complete canonical unchanged-text set
-# from the locally verified Cutover package rather than trusting the preview.
-canonical=PAYLOAD_DIR/'canonical-text.xz.b64'
-if not canonical.is_file(): raise RuntimeError('Canonical text payload missing')
-extract_encoded_tar(canonical.read_text().strip())
+# The old preview serves stale copies of these two canonical stylesheets.
+# Pin the exact bytes from the locally verified Cutover R1 package.
+restore_xz_file('sitecss.xz.b64','public/assets/css/site.css')
+restore_xz_file('v2css.xz.b64','public/assets/css/v2.css')
 
 manifest=json.loads(MANIFEST.read_text(encoding='utf-8')); entries=manifest['files']
 print(f'Manifest entries: {len(entries)}')
-
-# Only unresolved binary/public media is retrieved from the approved preview,
-# and every byte is rejected unless it exactly matches Cutover R1's manifest.
 for e in entries:
     rel=e['path']; p=ROOT/rel
     if p.exists() and p.is_file() and p.stat().st_size==e['bytes'] and sha256(p)==e['sha256']: continue
