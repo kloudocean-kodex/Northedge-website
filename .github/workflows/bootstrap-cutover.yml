@@ -15,4 +15,4 @@ jobs:
           fetch-depth: 0
       - name: Reconstruct and verify exact Cutover R1 tree
         run: python tools/bootstrap-compact.py
-# trigger with pinned six-part payload sequence
+# trigger with canonical site stylesheet pinned
