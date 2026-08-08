@@ -27,13 +27,13 @@
     },
     {
       "path": "docs/QA_REPORT.md",
-      "bytes": 3105,
-      "sha256": "821db37e9ca823febf5fdd6d69a517783a04207ccc014500b83cbfe765ea64b2"
+      "bytes": 4122,
+      "sha256": "79d2d6ae9ba8cead17c6d554c0c9faeceb6097b606981d03d36ce82d6e41c2fb"
     },
     {
       "path": "docs/SOURCE_PROVENANCE.md",
-      "bytes": 731,
-      "sha256": "2cdc997813228224fe6f31892ca63834c10d9b0842715e29df6208a2208b4d28"
+      "bytes": 1089,
+      "sha256": "ca640ff7521c6a33866dee0770235bd662ebdc9602ecfe3a021cc1620e5769b5"
     },
     {
       "path": "functions/api/health.js",
@@ -42,8 +42,8 @@
     },
     {
       "path": "functions/api/leads.js",
-      "bytes": 5842,
-      "sha256": "d7e3637f0ef3ae8fda80f518790210add01594fdbc69d32a5b29e1354a1582c4"
+      "bytes": 5846,
+      "sha256": "e67d9025c91293ba3220d785b94f0756a85a6ae9caa23e1324131264d702cdae"
     },
     {
       "path": "public/404.html",
@@ -57,8 +57,8 @@
     },
     {
       "path": "public/_redirects",
-      "bytes": 185,
-      "sha256": "7aec76abcc7020ca71d7e77b1876a1c46cbe3e566405b48d1055a07cf816b67a"
+      "bytes": 355,
+      "sha256": "8cdc43ac84539dc286fde975d34fd0d1027cf5ac9d101a61d7d683e8927d1457"
     },
     {
       "path": "public/about.html",
@@ -82,18 +82,18 @@
     },
     {
       "path": "public/area-donnybrook.html",
-      "bytes": 12219,
-      "sha256": "d7c193429a0a1e33d4d4625b4308bfcd9491e18f3efb4f47c51fc76e13cc0fc6"
+      "bytes": 12354,
+      "sha256": "eca94dd779a5388e948df94c05095a2d9fb24cc15a8aebd96e79052efd70b140"
     },
     {
       "path": "public/area-kalkallo.html",
-      "bytes": 15240,
-      "sha256": "03c7d6b55486f20df4b9249ef6b613156112fd461ba3a707e0fe57a45cf287a1"
+      "bytes": 15271,
+      "sha256": "198598b051099d1ceb5d8f26c9f85313a483e5504b27da0573eed9b72abbe027"
     },
     {
       "path": "public/area-mickleham.html",
-      "bytes": 13890,
-      "sha256": "f77d87190211287631365765c7a21ec56dd7c1ddd50fab1d30a3b765479acc30"
+      "bytes": 14025,
+      "sha256": "311e989dfe3060541628214013a664e4b38a766eafddcf5249ee38197463bd1f"
     },
     {
       "path": "public/areas.html",
@@ -752,8 +752,8 @@
     },
     {
       "path": "public/buy.html",
-      "bytes": 19992,
-      "sha256": "d52ee7bb23c39429ab85ae26c34d8126a9b8d82df47402997fa25645ed8b46e1"
+      "bytes": 20262,
+      "sha256": "bd5d92cb32fb9ddaab5d373045c2707144641c6a10966e719afabb3446c6e822"
     },
     {
       "path": "public/contact.html",
@@ -762,8 +762,8 @@
     },
     {
       "path": "public/data/properties.json",
-      "bytes": 5794,
-      "sha256": "04d74b724903bad80e37521a54e23d29417bd3ad2efd81e7410b5b6a96cb2aae"
+      "bytes": 5888,
+      "sha256": "5ffcb2ec2659e7213418485a5f3a3560c6fca917e726e41cf6c1f260363ffce9"
     },
     {
       "path": "public/image-credits.html",
@@ -772,8 +772,8 @@
     },
     {
       "path": "public/index.html",
-      "bytes": 37488,
-      "sha256": "3921d98b5767508b6a8e4da084fdffa5a9bec10db55e9fb7d58e00ad054422d9"
+      "bytes": 37775,
+      "sha256": "c1c4e6f742a0ae3a1a18d8660bca91f1a14663883913d493f2bd6938ce716084"
     },
     {
       "path": "public/insight-northern-corridor.html",
@@ -797,8 +797,8 @@
     },
     {
       "path": "public/property-105-tungsten-drive-kalkallo.html",
-      "bytes": 15873,
-      "sha256": "79c3048aa34f2743ddab04dbc8fce11df8df5b2d30a429aa34f3fde3472a369c"
+      "bytes": 15930,
+      "sha256": "f4738968728fe20693f7e533726c02f3f07136d574c573eacf700c6def8b17c4"
     },
     {
       "path": "public/property-27-design-way-kalkallo.html",
@@ -816,19 +816,19 @@
       "sha256": "de726a854ae826d32e2a195cb22ebf795fd5166bb096f0da2b75ea62ba1b116f"
     },
     {
+      "path": "public/property-6-mathoura-road-mickleham.html",
+      "bytes": 16013,
+      "sha256": "1bc4c5d70025dcc6a4e397d7b7101b2d02ebdce870ae03406dc020957230ff94"
+    },
+    {
+      "path": "public/property-7-rulingia-road-donnybrook.html",
+      "bytes": 15663,
+      "sha256": "4c559a589ebd92e8b30f15efe3924b73620838ca7dc68353a0bf0e9afc84b64f"
+    },
+    {
       "path": "public/property-management.html",
       "bytes": 13091,
       "sha256": "ae4c70dbe31367e6cf7192ae0ca4fcb3e11c3580b58ea5bc8dd23aa53601cc95"
-    },
-    {
-      "path": "public/property-mathoura-road-mickleham.html",
-      "bytes": 15852,
-      "sha256": "bb3ae5d06bace347324105a1b1762cafc3fe0f015e0b73003bbf3e3993a2f285"
-    },
-    {
-      "path": "public/property-rullinga-road-donnybrook.html",
-      "bytes": 15504,
-      "sha256": "cb2060a21097603ad924138717f8a76fe95e9bb869c5d3fc6ba87f83fda698ed"
     },
     {
       "path": "public/referral.html",
@@ -857,8 +857,8 @@
     },
     {
       "path": "public/sitemap.xml",
-      "bytes": 3517,
-      "sha256": "69bc3a59f04833dce54e54f8887e7d5491e77b3f26de76c3953488351c373ba2"
+      "bytes": 3521,
+      "sha256": "69147d4571507f35972482aa6384473f528de6164ed174e3d53ff5c2be96b815"
     },
     {
       "path": "public/sold.html",

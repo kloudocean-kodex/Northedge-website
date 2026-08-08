@@ -29,8 +29,8 @@
     ]
   },
   {
-    "slug": "rullinga-road-donnybrook",
-    "address": "Rullinga Road",
+    "slug": "7-rulingia-road-donnybrook",
+    "address": "7 Rulingia Road",
     "suburb": "Donnybrook",
     "postcode": "3064",
     "estate": "Olivine Estate",
@@ -39,7 +39,7 @@
     "beds": 4,
     "baths": 2,
     "cars": 2,
-    "land": "—",
+    "land": "392 m²",
     "hero": "donnybrook-drone",
     "gallery": [
       "donnybrook-drone",
@@ -57,8 +57,8 @@
     ]
   },
   {
-    "slug": "mathoura-road-mickleham",
-    "address": "Mathoura Road",
+    "slug": "6-mathoura-road-mickleham",
+    "address": "6 Mathoura Road",
     "suburb": "Mickleham",
     "postcode": "3064",
     "estate": "Merrifield Estate",
@@ -67,7 +67,7 @@
     "beds": 4,
     "baths": 2,
     "cars": 2,
-    "land": "—",
+    "land": "448 m²",
     "hero": "mickleham-kitchen",
     "gallery": [
       "mickleham-kitchen",
@@ -120,8 +120,8 @@
     "suburb": "Kalkallo",
     "postcode": "3064",
     "estate": "Cloverton Estate",
-    "price": "Contact agent",
-    "note": "Private price guidance",
+    "price": "$660,000 – $690,000",
+    "note": "NorthEdge current campaign",
     "beds": 4,
     "baths": 2,
     "cars": 2,
@@ -133,14 +133,14 @@
       "kalkallo-kitchen"
     ],
     "featured": false,
-    "description": "A modern four-bedroom residence in Kalkallo with a strong architectural façade and an open family plan. Price guidance is available directly from the NorthEdge team so buyers can discuss the home and campaign context properly.",
+    "description": "A modern four-bedroom residence in Kalkallo with a strong architectural façade and an open family plan. The current NorthEdge campaign is guided at $660,000 – $690,000. Buyers should confirm availability, inspections and campaign documents directly with the agency before acting.",
     "highlights": [
       "Contemporary architectural façade",
       "Four bedrooms",
       "Open-plan living",
       "Double garage",
       "Cloverton Estate setting",
-      "Direct agent price guidance"
+      "Current NorthEdge price guide"
     ]
   },
   {
@@ -149,8 +149,8 @@
     "suburb": "Kalkallo",
     "postcode": "3064",
     "estate": "Cloverton Estate",
-    "price": "Contact agent",
-    "note": "Inspection by arrangement",
+    "price": "$660,000 – $689,000",
+    "note": "NorthEdge current campaign",
     "beds": 4,
     "baths": 2,
     "cars": 2,

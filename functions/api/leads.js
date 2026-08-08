@@ -1,7 +1,7 @@
 const LIMIT_WINDOW_MS=10*60*1000;
 const LIMIT_COUNT=8;
 const buckets=new Map();
-const allowedForms=new Set(['appraisal','contact','property-management','rental-register','referral','property-105-tungsten-drive-kalkallo','property-27-design-way-kalkallo','property-31-roseneath-way-mickleham','property-6-alisterus-road-kalkallo','property-mathoura-road-mickleham','property-rullinga-road-donnybrook']);
+const allowedForms=new Set(['appraisal','contact','property-management','rental-register','referral','property-105-tungsten-drive-kalkallo','property-27-design-way-kalkallo','property-31-roseneath-way-mickleham','property-6-alisterus-road-kalkallo','property-6-mathoura-road-mickleham','property-7-rulingia-road-donnybrook']);
 
 const clean=(value,max=2000)=>String(value??'').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,'').trim().slice(0,max);
 const esc=s=>clean(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

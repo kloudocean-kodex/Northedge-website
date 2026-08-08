@@ -22,6 +22,17 @@
 - Header, footer and browser-icon references use the supplied original NorthEdge logo assets.
 - Old Netlify preview URLs are not referenced by public pages.
 
+## Current campaign data correction pass
+
+Before PR creation, the release candidate was cross-checked on 8 August 2026 against NorthEdge's current public sale feed and independent current listing evidence. The following consistency corrections were applied across listing cards, property data, property routes, canonicals, sitemap references and enquiry form identifiers:
+
+- `105 Tungsten Drive, Kalkallo`: `$660,000 – $690,000`.
+- `6 Alisterus Road, Kalkallo`: `$660,000 – $689,000`.
+- Donnybrook campaign corrected from the incomplete/misspelled `Rullinga Road` label to `7 Rulingia Road, Donnybrook`; verified land size `392 m²`.
+- Mickleham campaign corrected from `Mathoura Road` to `6 Mathoura Road, Mickleham`; verified land size `448 m²`.
+
+These are point-in-time campaign facts. They must still be reverified against NorthEdge's authoritative listing source immediately before public-domain cutover. Statements of Information, inspection times and legal/compliance facts remain separate launch gates.
+
 ## Form behaviour
 
 Public forms submit JSON to `/api/leads`. The browser does not clear a form or claim delivery unless the endpoint returns success. On failure, the entered data remains in the form and the user is directed to call NorthEdge.
