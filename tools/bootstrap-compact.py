@@ -2,43 +2,50 @@ from __future__ import annotations
 import base64, hashlib, json, lzma, os, shutil, subprocess, tarfile, tempfile, time, urllib.request
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-PAYLOAD_DIR = ROOT / '.bootstrap'
-PAYLOAD_NAMES = ['final.00', 'final.01', 'final.02', 'final.03', 'final.04', 'final.rest']
-PREVIEW = 'https://northedge-rebirth.netlify.app/'
-MANIFEST = ROOT / 'RELEASE_MANIFEST.json'
-REMOVE = [ROOT / '.bootstrap', ROOT / '.github' / 'workflows' / 'bootstrap-cutover.yml', ROOT / 'tools' / 'bootstrap-compact.py']
+ROOT=Path(__file__).resolve().parents[1]
+PAYLOAD_DIR=ROOT/'.bootstrap'
+PREVIEW='https://northedge-rebirth.netlify.app/'
+MANIFEST=ROOT/'RELEASE_MANIFEST.json'
+REMOVE=[ROOT/'.bootstrap',ROOT/'.github'/'workflows'/'bootstrap-cutover.yml',ROOT/'tools'/'bootstrap-compact.py']
 
-def sha256(p: Path) -> str:
+def sha256(p:Path)->str:
     h=hashlib.sha256()
     with p.open('rb') as f:
-        for b in iter(lambda:f.read(1024*1024), b''): h.update(b)
+        for b in iter(lambda:f.read(1024*1024),b''): h.update(b)
     return h.hexdigest()
 
-def run(*args: str): subprocess.run(args, cwd=ROOT, check=True)
+def extract_encoded_tar(encoded:str):
+    raw=lzma.decompress(base64.b64decode(encoded))
+    with tempfile.NamedTemporaryFile(suffix='.tar',delete=False) as tf: tf.write(raw); name=tf.name
+    try:
+        with tarfile.open(name,'r:') as t:
+            for m in t.getmembers():
+                dest=(ROOT/m.name).resolve()
+                if ROOT.resolve() not in dest.parents and dest!=ROOT.resolve(): raise RuntimeError(f'Unsafe payload member: {m.name}')
+            t.extractall(ROOT)
+    finally: os.unlink(name)
 
-parts=[PAYLOAD_DIR / name for name in PAYLOAD_NAMES]
+def run(*args:str): subprocess.run(args,cwd=ROOT,check=True)
+
+# Restore all Cutover R1 changed/new text/config/code.
+names=['final.00','final.01','final.02','final.03','final.04','final.rest']
+parts=[PAYLOAD_DIR/n for n in names]
 missing=[str(p) for p in parts if not p.is_file()]
-if missing: raise RuntimeError('Bootstrap payload parts missing: ' + ', '.join(missing))
-encoded=''.join(p.read_text().strip() for p in parts)
-raw=lzma.decompress(base64.b64decode(encoded))
-with tempfile.NamedTemporaryFile(suffix='.tar', delete=False) as tf: tf.write(raw); name=tf.name
-try:
-    with tarfile.open(name,'r:') as t:
-        for m in t.getmembers():
-            dest=(ROOT/m.name).resolve()
-            if ROOT.resolve() not in dest.parents and dest != ROOT.resolve(): raise RuntimeError(f'Unsafe payload member: {m.name}')
-        t.extractall(ROOT)
-finally: os.unlink(name)
+if missing: raise RuntimeError('Bootstrap payload parts missing: '+', '.join(missing))
+extract_encoded_tar(''.join(p.read_text().strip() for p in parts))
 
-# The old preview serves a stale site.css. Pin the exact locally-verified Cutover R1 stylesheet.
-sitecss_payload=PAYLOAD_DIR/'sitecss.xz.b64'
-sitecss=ROOT/'public/assets/css/site.css'
-sitecss.parent.mkdir(parents=True,exist_ok=True)
-sitecss.write_bytes(lzma.decompress(base64.b64decode(sitecss_payload.read_text().strip())))
+# The old Netlify preview is not byte-identical to canonical R3 for several
+# unchanged text assets. Restore the complete canonical unchanged-text set
+# from the locally verified Cutover package rather than trusting the preview.
+canonical=PAYLOAD_DIR/'canonical-text.xz.b64'
+if not canonical.is_file(): raise RuntimeError('Canonical text payload missing')
+extract_encoded_tar(canonical.read_text().strip())
 
 manifest=json.loads(MANIFEST.read_text(encoding='utf-8')); entries=manifest['files']
 print(f'Manifest entries: {len(entries)}')
+
+# Only unresolved binary/public media is retrieved from the approved preview,
+# and every byte is rejected unless it exactly matches Cutover R1's manifest.
 for e in entries:
     rel=e['path']; p=ROOT/rel
     if p.exists() and p.is_file() and p.stat().st_size==e['bytes'] and sha256(p)==e['sha256']: continue
@@ -64,12 +71,13 @@ if problems: raise RuntimeError('Manifest verification failed: '+'; '.join(probl
 print('All manifest entries verified.')
 package_files=[p for p in ROOT.rglob('*') if p.is_file() and '.git' not in p.parts and '.bootstrap' not in p.parts and not ('.github' in p.parts and 'workflows' in p.parts and p.name=='bootstrap-cutover.yml') and p.name!='bootstrap-compact.py']
 if len(package_files)!=manifest['fileCount']: raise RuntimeError(f'Package file count mismatch: {len(package_files)} != {manifest["fileCount"]}')
+
 for p in REMOVE:
     if p.is_dir(): shutil.rmtree(p,ignore_errors=True)
     elif p.exists(): p.unlink()
 for d in [ROOT/'.github'/'workflows',ROOT/'.github']:
-    try: d.rmdir()
-    except OSError: pass
+    try:d.rmdir()
+    except OSError:pass
 run('git','config','user.name','github-actions[bot]'); run('git','config','user.email','41898282+github-actions[bot]@users.noreply.github.com')
 run('git','add','-A'); run('git','commit','-m','release: NorthEdge Cutover R1'); run('git','push','origin','HEAD:release/northedge-cutover-r1')
 print('Cutover R1 committed and pushed after full integrity verification.')
