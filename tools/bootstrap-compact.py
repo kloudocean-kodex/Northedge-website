@@ -4,7 +4,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PAYLOAD_DIR = ROOT / '.bootstrap'
-PAYLOAD_GLOB = 'final.*'
+PAYLOAD_NAMES = ['final.00', 'final.01', 'final.02', 'final.03', 'final.04', 'final.rest']
 PREVIEW = 'https://northedge-rebirth.netlify.app/'
 MANIFEST = ROOT / 'RELEASE_MANIFEST.json'
 REMOVE = [
@@ -22,9 +22,10 @@ def sha256(p: Path) -> str:
 def run(*args: str):
     subprocess.run(args, cwd=ROOT, check=True)
 
-parts=sorted(PAYLOAD_DIR.glob(PAYLOAD_GLOB))
-if not parts:
-    raise RuntimeError('Bootstrap payload parts missing')
+parts=[PAYLOAD_DIR / name for name in PAYLOAD_NAMES]
+missing=[str(p) for p in parts if not p.is_file()]
+if missing:
+    raise RuntimeError('Bootstrap payload parts missing: ' + ', '.join(missing))
 encoded=''.join(p.read_text().strip() for p in parts)
 raw = lzma.decompress(base64.b64decode(encoded))
 with tempfile.NamedTemporaryFile(suffix='.tar', delete=False) as tf:
