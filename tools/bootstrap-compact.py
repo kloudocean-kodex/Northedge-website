@@ -31,6 +31,14 @@ def restore_xz_file(payload_name:str,target:str):
     out=ROOT/target; out.parent.mkdir(parents=True,exist_ok=True)
     out.write_bytes(lzma.decompress(base64.b64decode(payload.read_text().strip())))
 
+def restore_xz_chunks(prefix:str,count:int,target:str):
+    parts=[PAYLOAD_DIR/f'{prefix}.{i:02d}' for i in range(count)]
+    missing=[str(p) for p in parts if not p.is_file()]
+    if missing: raise RuntimeError('Missing pinned payload chunks: '+', '.join(missing))
+    encoded=''.join(p.read_text().strip() for p in parts)
+    out=ROOT/target; out.parent.mkdir(parents=True,exist_ok=True)
+    out.write_bytes(lzma.decompress(base64.b64decode(encoded)))
+
 def run(*args:str): subprocess.run(args,cwd=ROOT,check=True)
 
 names=['final.00','final.01','final.02','final.03','final.04','final.rest']
@@ -39,10 +47,10 @@ missing=[str(p) for p in parts if not p.is_file()]
 if missing: raise RuntimeError('Bootstrap payload parts missing: '+', '.join(missing))
 extract_encoded_tar(''.join(p.read_text().strip() for p in parts))
 
-# The old preview serves stale copies of these two canonical stylesheets.
-# Pin the exact bytes from the locally verified Cutover R1 package.
+# The old preview serves stale copies of these canonical stylesheets.
+# Pin exact bytes from the locally verified Cutover R1 package.
 restore_xz_file('sitecss.xz.b64','public/assets/css/site.css')
-restore_xz_file('v2css.xz.b64','public/assets/css/v2.css')
+restore_xz_chunks('v2',4,'public/assets/css/v2.css')
 
 manifest=json.loads(MANIFEST.read_text(encoding='utf-8')); entries=manifest['files']
 print(f'Manifest entries: {len(entries)}')
