@@ -33,6 +33,8 @@ Before PR creation, the release candidate was cross-checked on 8 August 2026 aga
 
 These are point-in-time campaign facts. They must still be reverified against NorthEdge's authoritative listing source immediately before public-domain cutover. Statements of Information, inspection times and legal/compliance facts remain separate launch gates.
 
+For that reason, property pages do not claim that a Statement of Information is currently available; they instruct users to confirm current document status with the agent before acting.
+
 ## Form behaviour
 
 Public forms submit JSON to `/api/leads`. The browser does not clear a form or claim delivery unless the endpoint returns success. On failure, the entered data remains in the form and the user is directed to call NorthEdge.

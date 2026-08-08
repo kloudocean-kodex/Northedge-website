@@ -27,8 +27,8 @@
     },
     {
       "path": "docs/QA_REPORT.md",
-      "bytes": 4122,
-      "sha256": "79d2d6ae9ba8cead17c6d554c0c9faeceb6097b606981d03d36ce82d6e41c2fb"
+      "bytes": 4309,
+      "sha256": "4cf9723031455c4655798de889b0a285485f27994a434796f72f0df8a62cfe25"
     },
     {
       "path": "docs/SOURCE_PROVENANCE.md",
@@ -762,8 +762,8 @@
     },
     {
       "path": "public/data/properties.json",
-      "bytes": 5888,
-      "sha256": "5ffcb2ec2659e7213418485a5f3a3560c6fca917e726e41cf6c1f260363ffce9"
+      "bytes": 5896,
+      "sha256": "aa31959e0e0da4d7514fca395a7d5f4d52c9a19c5fc32e4988fa34642920acc8"
     },
     {
       "path": "public/image-credits.html",
@@ -797,33 +797,33 @@
     },
     {
       "path": "public/property-105-tungsten-drive-kalkallo.html",
-      "bytes": 15930,
-      "sha256": "f4738968728fe20693f7e533726c02f3f07136d574c573eacf700c6def8b17c4"
+      "bytes": 15942,
+      "sha256": "d3121377c31f4865e90ebe90a1e7067aa79016b97858f7adbef5b6ca1050b69b"
     },
     {
       "path": "public/property-27-design-way-kalkallo.html",
-      "bytes": 16312,
-      "sha256": "1fc26697d807033a561deb9054571e356b0e83c5aa8e7f239b1749bb08059971"
+      "bytes": 16324,
+      "sha256": "b38dab5f3abe5e8b075e0b44789973c6a5c34d7486c72054dab55a41b1111042"
     },
     {
       "path": "public/property-31-roseneath-way-mickleham.html",
-      "bytes": 16121,
-      "sha256": "183d9bc1f08294078dadbe67a8ba8b0ab66c18434acc3eccfeafc0d001463a45"
+      "bytes": 16133,
+      "sha256": "c89e700507350320edf5eb51f03f6cce06efe5c37ae579e453c9446e5135aa15"
     },
     {
       "path": "public/property-6-alisterus-road-kalkallo.html",
-      "bytes": 14953,
-      "sha256": "de726a854ae826d32e2a195cb22ebf795fd5166bb096f0da2b75ea62ba1b116f"
+      "bytes": 14973,
+      "sha256": "1cfac591d471dfbe87b4b8d2e9510668f588b501d97e4e5cb423ed0719d7c592"
     },
     {
       "path": "public/property-6-mathoura-road-mickleham.html",
-      "bytes": 16013,
-      "sha256": "1bc4c5d70025dcc6a4e397d7b7101b2d02ebdce870ae03406dc020957230ff94"
+      "bytes": 16025,
+      "sha256": "bd8b789ef72ba90d57e613378560d2b368d143d4d4fc6dd9bbf64deb6f2dc30f"
     },
     {
       "path": "public/property-7-rulingia-road-donnybrook.html",
-      "bytes": 15663,
-      "sha256": "4c559a589ebd92e8b30f15efe3924b73620838ca7dc68353a0bf0e9afc84b64f"
+      "bytes": 15675,
+      "sha256": "98a4dbd61f8dab6937471f823da4614917c9e6ebb785444f6270c6721aa7d132"
     },
     {
       "path": "public/property-management.html",
