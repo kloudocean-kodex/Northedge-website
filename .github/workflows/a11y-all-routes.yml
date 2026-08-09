@@ -1,0 +1,53 @@
+name: NorthEdge all-route accessibility sweep
+on:
+  push:
+    branches: [cutover/legacy-routing-preview]
+    paths: [.github/workflows/a11y-all-routes.yml]
+permissions:
+  contents: write
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    env:
+      BASE: https://cutover-legacy-routing-previ.northedge-website.pages.dev
+      EXPECTED_CLEAN_TREE: 62ad93af02c8fd3854e6b726b27ca83884d170b5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: cutover/legacy-routing-preview
+          fetch-depth: 0
+      - name: Wait for corrected Cloudflare CSS
+        run: |
+          for i in $(seq 1 40); do
+            CSS=$(curl -fsS "$BASE/assets/css/final-demo.css?qa=$GITHUB_SHA" || true)
+            if printf '%s' "$CSS" | grep -q '.form-field label,.field label{color:#3F4742!important}'; then exit 0; fi
+            sleep 6
+          done
+          exit 1
+      - name: Install test dependencies
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install --no-save playwright-core@1.54.2 axe-core@4.10.2 >/dev/null
+      - name: Scan 28 routes
+        run: |
+          cat > a11y-all.cjs <<'NODE'
+          const {chromium}=require('playwright-core'); const fs=require('fs');
+          const BASE=process.env.BASE;
+          const paths=[...fs.readFileSync('public/sitemap.xml','utf8').matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>new URL(m[1]).pathname||'/');
+          const axeSource=fs.readFileSync(require.resolve('axe-core/axe.min.js'),'utf8');
+          (async()=>{if(paths.length!==28)throw new Error(`Expected 28; got ${paths.length}`);
+            const b=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});
+            const c=await b.newContext({viewport:{width:1440,height:1000},bypassCSP:true});const p=await c.newPage();const failures=[];
+            for(const path of paths){const r=await p.goto(BASE+path,{waitUntil:'networkidle',timeout:30000});if(!r||r.status()!==200){failures.push({path,http:r?.status()});continue}await p.addScriptTag({content:axeSource});const a=await p.evaluate(()=>axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']}}));const severe=a.violations.filter(v=>['serious','critical'].includes(v.impact));if(severe.length)failures.push({path,violations:severe.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.map(n=>({target:n.target,html:n.html,failureSummary:n.failureSummary}))}))});console.log(`${path}: ${severe.length?'FAIL':'PASS'}`)}
+            fs.writeFileSync('a11y-results.json',JSON.stringify({routeCount:paths.length,failures},null,2));await b.close();if(failures.length){console.log(fs.readFileSync('a11y-results.json','utf8'));process.exit(1)}})().catch(e=>{console.error(e);process.exit(1)});
+          NODE
+          node a11y-all.cjs
+      - name: Clean transport and prove tree
+        run: |
+          rm -f .github/workflows/a11y-all-routes.yml a11y-all.cjs a11y-results.json
+          rmdir .github/workflows 2>/dev/null || true; rmdir .github 2>/dev/null || true
+          rm -rf node_modules package.json package-lock.json
+          git add -A; git diff --cached --check
+          TREE=$(git write-tree); echo "$TREE"; test "$TREE" = "$EXPECTED_CLEAN_TREE"
+          git config user.name 'github-actions[bot]'; git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'qa: pass all-route accessibility sweep'; git push origin HEAD:cutover/legacy-routing-preview
