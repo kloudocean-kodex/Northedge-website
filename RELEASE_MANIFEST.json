@@ -1,9 +1,9 @@
 {
   "release": "NorthEdge Cutover R1 — Cloudflare-ready candidate",
-  "date": "2026-08-09",
   "baseRelease": "NorthEdge R3",
   "baseSha256": "7003c5932d9b96ed5113c93008578b990a50c490f8d5e985f587396372d3cb1c",
-  "fileCount": 179,
+  "date": "2026-08-10",
+  "fileCount": 180,
   "files": [
     {
       "path": ".env.example",
@@ -26,14 +26,19 @@
       "sha256": "b2883d2bc40af3559909a24c152954225af0476ad2802f43ee52d51bbbaa8685"
     },
     {
+      "path": "docs/PROPERTY_MEDIA_AUDIT.md",
+      "bytes": 3313,
+      "sha256": "a3e7bdb6ae08e8f087de0a428d1603f4104dce1ffbd33a198b93ef675439bbd5"
+    },
+    {
       "path": "docs/QA_REPORT.md",
       "bytes": 7087,
       "sha256": "9ac4f3caa05f598e7ebb7a4a8f2564ace02656f92099e2fc14c8746f12638d41"
     },
     {
       "path": "docs/SOURCE_PROVENANCE.md",
-      "bytes": 1089,
-      "sha256": "ca640ff7521c6a33866dee0770235bd662ebdc9602ecfe3a021cc1620e5769b5"
+      "bytes": 1859,
+      "sha256": "694854c3a7ffa3780b76af4c48322227232e454ed5e50ae30dcdc50cf85cd297"
     },
     {
       "path": "functions/api/health.js",
@@ -97,8 +102,8 @@
     },
     {
       "path": "public/area-kalkallo.html",
-      "bytes": 15096,
-      "sha256": "a07b977a45aaa550e59137f802fdda4a11d115cdc44bcca2d9548cfd271c3bbf"
+      "bytes": 12181,
+      "sha256": "cddd8df63ebec5dbb9aadb07a235d9371b19bc72c7f1ce473914065803884f26"
     },
     {
       "path": "public/area-mickleham.html",
@@ -117,8 +122,8 @@
     },
     {
       "path": "public/assets/css/final-demo.css",
-      "bytes": 12650,
-      "sha256": "bea7c2011e162fab642496950dc040193404bd84eff83b63b8edd0f3bc29c9b5"
+      "bytes": 13169,
+      "sha256": "a44097a09b1fc32c80694d3ddbefc700f8c134ee1487532abc6edb2e1753382b"
     },
     {
       "path": "public/assets/css/site.css",
@@ -762,8 +767,8 @@
     },
     {
       "path": "public/buy.html",
-      "bytes": 20037,
-      "sha256": "c1a638fee4ea8721e98b4c75af16d992dedb4411c5be277da17548f1c049a581"
+      "bytes": 17122,
+      "sha256": "d0dfffffa4ad045e413d03960fea5b6d4576502bed98e0b18ef850c541b5c9ef"
     },
     {
       "path": "public/contact.html",
@@ -772,8 +777,8 @@
     },
     {
       "path": "public/data/properties.json",
-      "bytes": 5896,
-      "sha256": "aa31959e0e0da4d7514fca395a7d5f4d52c9a19c5fc32e4988fa34642920acc8"
+      "bytes": 5841,
+      "sha256": "6c41274db623f580b5f9cba0b2267d4c774d04c99f4ff7346b4ec98d02f67b60"
     },
     {
       "path": "public/image-credits.html",
@@ -782,8 +787,8 @@
     },
     {
       "path": "public/index.html",
-      "bytes": 37700,
-      "sha256": "ab73032d1948f2e4f4643a4f9cbbedf580e81e0223304bec638b755437899ee6"
+      "bytes": 36303,
+      "sha256": "f6afca98f090bd91017c581bfce51f62375ed39709cf097b95b83c72957fdab4"
     },
     {
       "path": "public/insight-northern-corridor.html",
@@ -807,8 +812,8 @@
     },
     {
       "path": "public/property-105-tungsten-drive-kalkallo.html",
-      "bytes": 16024,
-      "sha256": "0b100a674b238275ea7e6eac9b4d6963ad4f2d8f84912f8b41d27e4d78635d5e"
+      "bytes": 15181,
+      "sha256": "41864d1debfe37686ef38f65edb706f102cabb1d4dad200aeaaf3dfdbdac2de8"
     },
     {
       "path": "public/property-27-design-way-kalkallo.html",
@@ -822,8 +827,8 @@
     },
     {
       "path": "public/property-6-alisterus-road-kalkallo.html",
-      "bytes": 15053,
-      "sha256": "539138f3df4687979ccabe1beaef28dae42613ef247939a90d7413ce4270af26"
+      "bytes": 15171,
+      "sha256": "41a0cac8c8e11216dce99c79f9344664b4de5ba81015e870397fa9069a0d6e7c"
     },
     {
       "path": "public/property-6-mathoura-road-mickleham.html",
@@ -867,8 +872,8 @@
     },
     {
       "path": "public/sitemap.xml",
-      "bytes": 3386,
-      "sha256": "7789b73ff6d25f20d28bad30408d693d4d86a7f2a336bf9cfcf0b8cad99e194d"
+      "bytes": 3112,
+      "sha256": "1137c9052efbc993bcb3005ee97211a3300610d13d66ee4fda967b667eb2c8a3"
     },
     {
       "path": "public/sold.html",

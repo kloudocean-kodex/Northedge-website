@@ -26,7 +26,9 @@
       "Double garage and low-maintenance grounds",
       "Established tenancy history",
       "Cloverton Estate address"
-    ]
+    ],
+    "status": "active",
+    "mediaStatus": "awaiting-authoritative-vaultre-gallery"
   },
   {
     "slug": "7-rulingia-road-donnybrook",
@@ -54,7 +56,9 @@
       "Double garage",
       "Olivine Estate setting",
       "Close to developing local amenity"
-    ]
+    ],
+    "status": "active",
+    "mediaStatus": "awaiting-authoritative-vaultre-gallery"
   },
   {
     "slug": "6-mathoura-road-mickleham",
@@ -83,7 +87,9 @@
       "Family living and dining zones",
       "Double garage",
       "Merrifield Estate position"
-    ]
+    ],
+    "status": "active",
+    "mediaStatus": "awaiting-authoritative-vaultre-gallery"
   },
   {
     "slug": "31-roseneath-way-mickleham",
@@ -112,7 +118,9 @@
       "Single garage",
       "Low-maintenance presentation",
       "Merrifield access"
-    ]
+    ],
+    "status": "active",
+    "mediaStatus": "awaiting-authoritative-vaultre-gallery"
   },
   {
     "slug": "105-tungsten-drive-kalkallo",
@@ -120,28 +128,19 @@
     "suburb": "Kalkallo",
     "postcode": "3064",
     "estate": "Cloverton Estate",
-    "price": "$660,000 – $690,000",
-    "note": "NorthEdge current campaign",
+    "price": "—",
+    "note": "No current NorthEdge campaign",
     "beds": 4,
     "baths": 2,
     "cars": 2,
     "land": "—",
     "hero": "tungsten-facade",
-    "gallery": [
-      "tungsten-facade",
-      "kalkallo-living",
-      "kalkallo-kitchen"
-    ],
+    "gallery": [],
     "featured": false,
-    "description": "A modern four-bedroom residence in Kalkallo with a strong architectural façade and an open family plan. The current NorthEdge campaign is guided at $660,000 – $690,000. Buyers should confirm availability, inspections and campaign documents directly with the agency before acting.",
-    "highlights": [
-      "Contemporary architectural façade",
-      "Four bedrooms",
-      "Open-plan living",
-      "Double garage",
-      "Cloverton Estate setting",
-      "Current NorthEdge price guide"
-    ]
+    "description": "This permanent property record is retained for URL continuity. NorthEdge is not presenting 105 Tungsten Drive, Kalkallo as a current NorthEdge campaign. Confirm current campaign status and representation from an authoritative listing source before acting.",
+    "highlights": [],
+    "status": "archived",
+    "mediaStatus": "not-published-as-current-campaign"
   },
   {
     "slug": "6-alisterus-road-kalkallo",
@@ -149,25 +148,18 @@
     "suburb": "Kalkallo",
     "postcode": "3064",
     "estate": "Cloverton Estate",
-    "price": "$660,000 – $689,000",
-    "note": "NorthEdge current campaign",
+    "price": "—",
+    "note": "No current NorthEdge campaign",
     "beds": 4,
     "baths": 2,
     "cars": 2,
     "land": "—",
     "hero": "alisterus-facade",
-    "gallery": [
-      "alisterus-facade"
-    ],
+    "gallery": [],
     "featured": false,
-    "description": "A four-bedroom Kalkallo campaign positioned for buyers seeking a contemporary family home within the established Cloverton community. Contact NorthEdge for the current photography, document status and inspection arrangements before acting.",
-    "highlights": [
-      "Four-bedroom accommodation",
-      "Two bathrooms",
-      "Double garage",
-      "Cloverton Estate address",
-      "Current campaign documents to be confirmed",
-      "Private inspection coordination"
-    ]
+    "description": "This permanent property record is retained for URL continuity. NorthEdge is not presenting 6 Alisterus Road, Kalkallo as a current NorthEdge campaign. Confirm current campaign status and representation from an authoritative listing source before acting.",
+    "highlights": [],
+    "status": "archived",
+    "mediaStatus": "not-published-as-current-campaign"
   }
 ]
