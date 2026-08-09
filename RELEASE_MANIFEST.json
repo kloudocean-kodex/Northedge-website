@@ -1,9 +1,9 @@
 {
-  "release": "NorthEdge Cutover R1",
-  "date": "2026-08-08",
+  "release": "NorthEdge Cutover R1 — Cloudflare-ready candidate",
+  "date": "2026-08-09",
   "baseRelease": "NorthEdge R3",
   "baseSha256": "7003c5932d9b96ed5113c93008578b990a50c490f8d5e985f587396372d3cb1c",
-  "fileCount": 178,
+  "fileCount": 179,
   "files": [
     {
       "path": ".env.example",
@@ -37,13 +37,13 @@
     },
     {
       "path": "functions/api/health.js",
-      "bytes": 336,
-      "sha256": "5e247765948d03f0af5e65f52cf164408553426a38d70e5defcb8a7ae9e09024"
+      "bytes": 1811,
+      "sha256": "7cbe6e996ad5fec2ceda38f24aa1a36bc22085d1b09b06cd04f9324c531d95d0"
     },
     {
       "path": "functions/api/leads.js",
-      "bytes": 5846,
-      "sha256": "e67d9025c91293ba3220d785b94f0756a85a6ae9caa23e1324131264d702cdae"
+      "bytes": 12095,
+      "sha256": "fb2c8ae0ac08e1981f24cc940c68ef482a6a226576df8a106cb75524f52da7b5"
     },
     {
       "path": "functions/my-properties-main.js",
@@ -57,8 +57,8 @@
     },
     {
       "path": "public/404.html",
-      "bytes": 8107,
-      "sha256": "60be4156781a7ed11e4fb9ea58fe40cfa7b8d2a858b83f43b87af8385bd0b281"
+      "bytes": 8137,
+      "sha256": "ba546fe3683e7b16df107fd78325a11538cae2dbd68e20b09c8e1ac0b576a528"
     },
     {
       "path": "public/_headers",
@@ -82,8 +82,8 @@
     },
     {
       "path": "public/agent-gurinder-sandhu.html",
-      "bytes": 13011,
-      "sha256": "628c93ebb4329f0cc06012cb55f47d2e68320132cb48c7e075d20e2b2a43461f"
+      "bytes": 13201,
+      "sha256": "a0927e9b655da6005a2a90dae4da55bd4b7ebe636e1bb1ed60f8605abc82235c"
     },
     {
       "path": "public/area-beveridge.html",
@@ -732,8 +732,8 @@
     },
     {
       "path": "public/assets/js/site.js",
-      "bytes": 9468,
-      "sha256": "a29c398ea344143356742f51763e1f717630c5ac1a01a360a0a1686e064e1285"
+      "bytes": 9511,
+      "sha256": "58d0f54fad9499a425078aac948521fbd936bb5a606af3718b2354f114c22894"
     },
     {
       "path": "public/assets/motifs/contours.svg",
@@ -767,8 +767,8 @@
     },
     {
       "path": "public/contact.html",
-      "bytes": 11323,
-      "sha256": "1feff4e52146dd7bdcf3c742ad90f6064adf039dfd7949e7de83f60cc94148bb"
+      "bytes": 11511,
+      "sha256": "29e956f1f698e1dc7df3a919fc87a3c5fc0d20942f7a06817720c05543bb8827"
     },
     {
       "path": "public/data/properties.json",
@@ -782,8 +782,8 @@
     },
     {
       "path": "public/index.html",
-      "bytes": 37455,
-      "sha256": "732ceb28d8a5147beba9df44a39b1c2e3b9d015370481000de78ad574ed7d146"
+      "bytes": 37645,
+      "sha256": "adae5ef69bb99ef3978251edb189bbf5b075a13f690d1d32f05e0020199eb84a"
     },
     {
       "path": "public/insight-northern-corridor.html",
@@ -807,48 +807,48 @@
     },
     {
       "path": "public/property-105-tungsten-drive-kalkallo.html",
-      "bytes": 15752,
-      "sha256": "2ca02a9fe9a3ce0c623dc3faffd421990732dccab16ee41fe5779111861d3e16"
+      "bytes": 15969,
+      "sha256": "9135dc0dd3781d38ce8949c078bbc2ec13578254ab99be742ee7311383741ea7"
     },
     {
       "path": "public/property-27-design-way-kalkallo.html",
-      "bytes": 16134,
-      "sha256": "b9b485912374e6c83d9ae45c3f81eab5a308767ded3fa6699150ae54a156036d"
+      "bytes": 16346,
+      "sha256": "3c263fd5ee1076f0947acc05fbc58ef06a4710aaeb55cacbfecba22ecb4a4d82"
     },
     {
       "path": "public/property-31-roseneath-way-mickleham.html",
-      "bytes": 15943,
-      "sha256": "fd0a14ede7ccae6d8fc665be1703ed144d143ee98ba092cec7a5db3d313603ad"
+      "bytes": 16159,
+      "sha256": "9506396d349d19fd00fb76f1c202bdd722c9428a900a85531432c0ef7c8697ea"
     },
     {
       "path": "public/property-6-alisterus-road-kalkallo.html",
-      "bytes": 14783,
-      "sha256": "802c2f74a3b438aefb054d032db3270c18b0c3f29d82398a3f658d564f26350c"
+      "bytes": 14998,
+      "sha256": "f0cfef091c8bc907bcea40b7a3a1bdd55ef3df757b5039bc47b235f5d162aed5"
     },
     {
       "path": "public/property-6-mathoura-road-mickleham.html",
-      "bytes": 15835,
-      "sha256": "426e3225f1ae541daa0afb8f0e985509ce922d9fa3560e787bd11f595b74d50f"
+      "bytes": 16050,
+      "sha256": "3e0d43e04ec864be4c9b654358984f211c181d53ec4f78de02cb6a96ac0b5ac7"
     },
     {
       "path": "public/property-7-rulingia-road-donnybrook.html",
-      "bytes": 15485,
-      "sha256": "23960d22ed24896e6cd1c490949bb847498382ac358cb5c98c6ce99ab2256b0f"
+      "bytes": 15706,
+      "sha256": "115d4067b622ab0bc43bd7dcec8addb2586e83f300fff0396f1766d33db9ed47"
     },
     {
       "path": "public/property-management.html",
-      "bytes": 12901,
-      "sha256": "32c3e6775121650a90f3b4eb483fb65576990777c96d4732ca1bfa61c44060e0"
+      "bytes": 13101,
+      "sha256": "dc137fe347b004dee973280bf900148d97ee86bd535cf5d0a0a7f809726cfa0d"
     },
     {
       "path": "public/referral.html",
-      "bytes": 11278,
-      "sha256": "0708e667009bfa6b75413b55239166be853b999f92c3b5ec5ffb5736c515af2f"
+      "bytes": 11509,
+      "sha256": "3b9809bb3882410ad164d3736ec6cf54489b829191fa461339010b9690ddc16d"
     },
     {
       "path": "public/rent.html",
-      "bytes": 11578,
-      "sha256": "e8db5c50f323b3b91cb9044ccbaf97c94ce35f292521780fc94e23daa70f479a"
+      "bytes": 11774,
+      "sha256": "975d3539a024100823316502500bd9eb8f4dd7ab9cfccc4a52f6d0488b4d02a5"
     },
     {
       "path": "public/robots.txt",
@@ -857,8 +857,8 @@
     },
     {
       "path": "public/sell.html",
-      "bytes": 13658,
-      "sha256": "4a5142589a47836056e2dae2b8ff4b53fa6d35e4ade3d06f7b2200d86d9e8f46"
+      "bytes": 13848,
+      "sha256": "fd8655456450e71bbd8f135fa3825d7c279c9e05bff1a932cbccd9f24772477b"
     },
     {
       "path": "public/site.webmanifest",
@@ -872,8 +872,8 @@
     },
     {
       "path": "public/sold.html",
-      "bytes": 13292,
-      "sha256": "d323dd2ae11e932d47a5ab33423fcbb50995e24ccefe711eb0b9b3d06c2a3631"
+      "bytes": 13482,
+      "sha256": "7b6d0de7010f123fcfc93efd1640746183879835ae8f58b63d33fc0ada2f852f"
     },
     {
       "path": "public/terms.html",
@@ -881,9 +881,14 @@
       "sha256": "1ffa8d08b8e402aeea5794b630bdbe6ddf19be26be40ceedb4c2f4394c11c532"
     },
     {
+      "path": "public/thank-you.html",
+      "bytes": 1054,
+      "sha256": "85b9885a1dd20cdd9b96fb43024ae13e4a5d88f33839d76780403b3b967649b4"
+    },
+    {
       "path": "schema/leads.sql",
-      "bytes": 406,
-      "sha256": "631767685a4b563bea47eafbcad45f56c8618d5cf219c55434a1cbf2836615fa"
+      "bytes": 676,
+      "sha256": "dde8ae3169f2083c92632044ba2b6aaf1a68ca4d9a6a9f9c046c63a38b2e5b53"
     },
     {
       "path": "tools/serve.py",
