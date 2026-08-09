@@ -3,7 +3,7 @@
   "baseRelease": "NorthEdge R3",
   "baseSha256": "7003c5932d9b96ed5113c93008578b990a50c490f8d5e985f587396372d3cb1c",
   "date": "2026-08-10",
-  "fileCount": 183,
+  "fileCount": 185,
   "files": [
     {
       "path": ".env.example",
@@ -21,6 +21,11 @@
       "sha256": "060e35eccdb9c786716e3f474c0d1dcfb2ec5badd9b5f0f02f69410f24a09bf4"
     },
     {
+      "path": "docs/CURRENT_STATE.md",
+      "bytes": 5317,
+      "sha256": "86f66b0414b0366ebea2f1271c9b358de2e15309906c395ee809d5008a1c1cb0"
+    },
+    {
       "path": "docs/DEPLOYMENT.md",
       "bytes": 2360,
       "sha256": "b2883d2bc40af3559909a24c152954225af0476ad2802f43ee52d51bbbaa8685"
@@ -34,6 +39,11 @@
       "path": "docs/QA_REPORT.md",
       "bytes": 8059,
       "sha256": "2d7050e49d972c6aa88b372dd273b892b7871cda3ac3284be44c75fdfabf0d45"
+    },
+    {
+      "path": "docs/SESSION_HANDOFF.md",
+      "bytes": 6562,
+      "sha256": "6afecf42709fc37b086fd0407db2476d7dcd67fe12cd761f901fa66d8d2b105f"
     },
     {
       "path": "docs/SOURCE_PROVENANCE.md",
