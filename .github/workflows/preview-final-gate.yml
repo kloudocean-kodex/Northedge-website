@@ -1,0 +1,214 @@
+name: NorthEdge final replacement preview gate
+
+on:
+  push:
+    branches: [cutover/legacy-routing-preview]
+    paths: [.github/workflows/preview-final-gate.yml]
+
+permissions:
+  contents: write
+
+jobs:
+  final-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      BASE: https://cutover-legacy-routing-previ.northedge-website.pages.dev
+      QA_KEY: 2026-08-09-cutover-r1-final
+      BATCH: final-${{ github.run_id }}
+      EXPECTED_CLEAN_TREE: f4a85c1e15c327f350cf4f0e44d920ab7f2200f6
+      CHROME_PATH: /usr/bin/google-chrome
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: cutover/legacy-routing-preview
+          fetch-depth: 0
+
+      - name: Wait for exact branch deployment and verify infrastructure
+        shell: bash
+        run: |
+          set -euo pipefail
+          ok=0
+          for i in $(seq 1 60); do
+            if curl -fsS "$BASE/api/_qa-migrate?qa=$QA_KEY&action=state" -o state.json; then
+              if python - <<'PY'
+          import json
+          d=json.load(open('state.json'))
+          assert d.get('ok') is True and d.get('schemaHealthy') is True
+          assert set(d.get('tables',[])) >= {'leads','lead_rate_limits'}
+          assert int(d.get('leadCount',0)) >= 15
+          print('D1 state:',d)
+          PY
+              then ok=1; break; fi
+            fi
+            echo "Waiting for Cloudflare branch deployment ($i/60)";sleep 5
+          done
+          test "$ok" = 1
+          python - <<'PY'
+          import json
+          d=json.load(open('state.json'));open('baseline.txt','w').write(str(int(d['leadCount'])))
+          PY
+          curl -fsS "$BASE/api/health" -D health.headers -o health.json
+          python - <<'PY'
+          import json
+          d=json.load(open('health.json'))
+          assert d['ok'] and d['leadDatabase'] and d['leadDatabaseHealthy'] and d['leadSchemaHealthy']
+          print('Health:',d)
+          PY
+          grep -qi '^x-content-type-options: nosniff' health.headers
+          grep -qi '^x-frame-options: DENY' health.headers
+          grep -qi '^content-security-policy:' health.headers
+          grep -qi '^x-robots-tag:.*noindex' health.headers
+
+      - name: Route redirect asset and 404 regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY' > routes.txt
+          import re
+          from pathlib import Path
+          from urllib.parse import urlparse
+          p=[urlparse(x).path or '/' for x in re.findall(r'<loc>(.*?)</loc>',Path('public/sitemap.xml').read_text())]
+          assert len(p)==28,len(p)
+          print('\n'.join(p))
+          PY
+          while IFS= read -r p; do
+            c=$(curl -sS -o /dev/null -w '%{http_code}' "$BASE$p");test "$c" = 200 || { echo "$p => $c";exit 1; }
+          done < routes.txt
+          for p in /buy /rent /sell /sold /areas /about /contact /buy.html /rent.html /sell.html /sold.html /areas.html /about.html /contact.html /about-us/ /contacts/ /appraisal/ /property-rullinga-road-donnybrook.html /property-mathoura-road-mickleham.html; do
+            r=$(curl -sS -L --max-redirs 8 -o /dev/null -w '%{http_code} %{url_effective} %{num_redirects}' "$BASE$p");echo "$p => $r";test "${r%% *}" = 200
+          done
+          for u in "$BASE/my-properties-main/?r=available&v=residential&x=sale" "$BASE/my-properties-main/?r=sold&v=residential&x=sale" "$BASE/my-properties-main/?r=available&v=residential&x=lease" "$BASE/property-listing-details/?v=41733004&type=sale" "$BASE/property-listing-details/?v=35074581&type=sale"; do
+            r=$(curl -sS -L --max-redirs 8 -o /dev/null -w '%{http_code} %{url_effective} %{num_redirects}' "$u");echo "$u => $r";test "${r%% *}" = 200
+          done
+          c=$(curl -sS -o deep404.html -w '%{http_code}' "$BASE/qa/deep/final-missing");test "$c" = 404
+          grep -q 'href="/assets/css/site.css"' deep404.html
+          grep -q 'src="/assets/images/logo-640.png"' deep404.html
+          curl -fsS "$BASE/assets/css/site.css" -o /dev/null
+          curl -fsS "$BASE/assets/images/logo-640.png" -o /dev/null
+          curl -fsS "$BASE/assets/images/donnybrook-living-960.jpg" -o /dev/null
+          curl -fsS "$BASE/" -D home.headers -o /dev/null
+          grep -qi '^x-content-type-options: nosniff' home.headers
+          grep -qi '^x-frame-options: DENY' home.headers
+          grep -qi '^content-security-policy:' home.headers
+          grep -qi '^x-robots-tag:.*noindex' home.headers
+
+      - name: Install lightweight browser QA dependencies
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install --no-save playwright-core@1.54.2 axe-core@4.10.2 lighthouse@12.8.2
+
+      - name: Chromium route accessibility interaction and form gate
+        shell: bash
+        run: |
+          cat > final-e2e.cjs <<'NODE'
+          const {chromium}=require('playwright-core');
+          const fs=require('fs'),assert=require('assert');
+          const BASE=process.env.BASE,BATCH=process.env.BATCH;
+          const paths=[...fs.readFileSync('public/sitemap.xml','utf8').matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>new URL(m[1]).pathname||'/');
+          const axeSource=fs.readFileSync(require.resolve('axe-core/axe.min.js'),'utf8');
+          async function fill(form,email,label){
+            const controls=form.locator('input,textarea,select');
+            for(let j=0;j<await controls.count();j++){
+              const el=controls.nth(j),tag=await el.evaluate(e=>e.tagName.toLowerCase());
+              const type=((await el.getAttribute('type'))||'').toLowerCase(),name=await el.getAttribute('name');
+              const req=(await el.getAttribute('required'))!==null;
+              if(type==='hidden'||type==='submit'||type==='button'||(type==='text'&&name==='website'))continue;
+              if(type==='checkbox'){if(req)await el.check();continue;}
+              if(type==='radio'){if(req)await el.check();continue;}
+              if(tag==='select'){
+                if(req&&!(await el.inputValue())){const vals=await el.locator('option').evaluateAll(os=>os.map(o=>o.value).filter(Boolean));if(vals.length)await el.selectOption(vals[0]);}
+                continue;
+              }
+              if(!req&&!['address','property_context','message'].includes(name||''))continue;
+              let v='QA TEST — NorthEdge final preview';
+              if(name==='email'||name==='referrer_email')v=email;
+              else if(name==='phone'||name==='referrer_phone')v='0400000000';
+              else if(name==='name'||name==='referrer_name')v=`QA TEST ${label}`;
+              else if(name==='address')v='QA TEST — 1 Example Street, Mickleham VIC 3064';
+              else if(type==='number')v='1';
+              await el.fill(v);
+            }
+          }
+          (async()=>{
+            assert.strictEqual(paths.length,28);
+            const browser=await chromium.launch({executablePath:process.env.CHROME_PATH,headless:true,args:['--no-sandbox']});
+            const ctx=await browser.newContext({viewport:{width:1440,height:1000},bypassCSP:true});
+            const page=await ctx.newPage();const errors=[];
+            page.on('console',m=>{if(m.type()==='error')errors.push(`${page.url()}: ${m.text()}`)});page.on('pageerror',e=>errors.push(`${page.url()}: ${e.message}`));
+            for(const path of paths){
+              const r=await page.goto(BASE+path,{waitUntil:'networkidle',timeout:30000});assert(r&&r.status()===200,`${path}: ${r?.status()}`);
+              await page.addScriptTag({content:axeSource});
+              const a=await page.evaluate(()=>axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']}}));
+              const severe=a.violations.filter(v=>['serious','critical'].includes(v.impact));
+              if(severe.length)throw new Error(`${path}: ${severe.map(v=>`${v.id}:${v.nodes.map(n=>n.target.join(' ')).join('|')}`).join(';')}`);
+            }
+            let formCount=0,seq=0;
+            for(const path of paths){
+              await page.goto(BASE+path,{waitUntil:'domcontentloaded'});const forms=page.locator('form[data-lead-form]');
+              for(let i=0;i<await forms.count();i++){
+                formCount++;seq++;const form=forms.nth(i),id=await form.getAttribute('data-lead-form');const email=`qa-northedge-preview-${BATCH}-${String(seq).padStart(2,'0')}@example.com`;
+                await fill(form,email,id);
+                const wait=page.waitForResponse(r=>r.url().includes('/api/leads')&&r.request().method()==='POST',{timeout:20000});await form.locator('button[type="submit"],input[type="submit"]').first().click();const resp=await wait;
+                assert([201,202].includes(resp.status()),`${id}: HTTP ${resp.status()}`);const body=await resp.json();assert(body.ok&&body.stored,`${id}: not stored`);const t=await form.locator('[data-form-status]').textContent();assert(/stored|received|sent/i.test(t||''),`${id}: bad status`);
+              }
+            }
+            assert.strictEqual(formCount,14,`Expected 14 lead forms, got ${formCount}`);
+            await page.goto(BASE+'/',{waitUntil:'domcontentloaded'});await page.selectOption('[data-property-search] select[name="journey"]','rent');await Promise.all([page.waitForURL(u=>u.pathname==='/rent'&&u.hash==='#rent-register',{timeout:10000}),page.locator('[data-property-search] button[type="submit"]').click()]);
+            await page.goto(BASE+'/property-7-rulingia-road-donnybrook',{waitUntil:'domcontentloaded'});const gs=page.locator('[data-gallery-open]');assert((await gs.count())>=2);await gs.nth(1).click();const im=page.locator('[data-lightbox] img');await im.waitFor({state:'visible'});assert((await im.getAttribute('src')||'').includes('donnybrook-living-960.jpg'));await page.waitForFunction(()=>{const i=document.querySelector('[data-lightbox] img');return i&&i.complete&&i.naturalWidth>0});
+            const mc=await browser.newContext({viewport:{width:390,height:844}}),mp=await mc.newPage();await mp.goto(BASE+'/',{waitUntil:'domcontentloaded'});assert((await mp.locator('[data-mobile-nav]').getAttribute('inert'))!==null);for(let i=0;i<15;i++){await mp.keyboard.press('Tab');assert(!(await mp.evaluate(()=>!!document.activeElement?.closest?.('[data-mobile-nav]'))),'focus entered closed mobile nav');}await mp.locator('[data-menu-toggle]').click();assert((await mp.locator('[data-mobile-nav]').getAttribute('inert'))===null);await mp.keyboard.press('Tab');assert(await mp.evaluate(()=>!!document.activeElement?.closest?.('[data-mobile-nav]')),'focus did not enter open menu');await mp.keyboard.press('Escape');assert((await mp.locator('[data-mobile-nav]').getAttribute('inert'))!==null);await mc.close();
+            const d=await page.goto(BASE+'/qa/deep/browser-final-missing',{waitUntil:'domcontentloaded'});assert.strictEqual(d.status(),404);assert(await page.locator('img[alt="NorthEdge Real Estate"]').first().evaluate(i=>i.complete&&i.naturalWidth>0));
+            const nc=await browser.newContext({javaScriptEnabled:false,viewport:{width:1280,height:900}}),np=await nc.newPage();await np.goto(BASE+'/contact',{waitUntil:'domcontentloaded'});const nf=np.locator('form[data-lead-form="contact"]').first();seq++;await fill(nf,`qa-northedge-preview-${BATCH}-${String(seq).padStart(2,'0')}@example.com`,'no-JS contact');await Promise.all([np.waitForURL(u=>u.pathname==='/thank-you',{timeout:15000}),nf.locator('button[type="submit"],input[type="submit"]').first().click()]);await nc.close();
+            const realErrors=errors.filter(e=>!e.includes('/qa/deep/browser-final-missing')&&!e.includes('Failed to load resource: the server responded with a status of 404'));
+            assert.strictEqual(realErrors.length,0,realErrors.join(' | '));
+            fs.writeFileSync('browser-summary.json',JSON.stringify({routes:28,leadForms:formCount,submissions:seq,consoleErrors:realErrors},null,2));await ctx.close();await browser.close();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          NODE
+          node final-e2e.cjs
+          cat browser-summary.json
+
+      - name: Verify D1 persistence and referral coverage then clean only test batch
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsS "$BASE/api/_qa-migrate?qa=$QA_KEY&action=batch&batch=$BATCH" -o batch.json
+          cat batch.json
+          python - <<'PY'
+          import json
+          d=json.load(open('batch.json'));assert d['ok'];assert d['total']==15,d;assert len(d['forms'])==11,d;assert sum(x['count'] for x in d['forms'])==15,d;assert any(x['form']=='referral' for x in d['forms'])
+          PY
+          curl -fsS -X POST "$BASE/api/_qa-migrate?qa=$QA_KEY&action=cleanup&batch=$BATCH" -o cleanup.json
+          python - <<'PY'
+          import json
+          d=json.load(open('cleanup.json'));assert d['ok'] and d['deleted']==15 and d['remaining']==0,d
+          PY
+          curl -fsS "$BASE/api/_qa-migrate?qa=$QA_KEY&action=state" -o after.json
+          python - <<'PY'
+          import json
+          b=int(open('baseline.txt').read());d=json.load(open('after.json'));assert d['leadCount']==b,(b,d);print('Preserved prior rows:',b)
+          PY
+
+      - name: Lighthouse lab performance accessibility best-practices gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx lighthouse "$BASE/" --quiet --chrome-flags='--headless --no-sandbox' --only-categories=performance,accessibility,best-practices --output=json --output-path=lighthouse.json
+          python - <<'PY'
+          import json
+          d=json.load(open('lighthouse.json'));c=d['categories'];a=d['audits'];s={k:round(v['score']*100) for k,v in c.items()};print('Lighthouse:',s)
+          assert c['performance']['score']>=.80,s;assert c['accessibility']['score']>=.95,s;assert c['best-practices']['score']>=.90,s
+          l=a['largest-contentful-paint']['numericValue'];cl=a['cumulative-layout-shift']['numericValue'];t=a['total-blocking-time']['numericValue'];print({'LCP_ms':l,'CLS':cl,'TBT_ms':t});assert l<=3000;assert cl<=.10;assert t<=300
+          PY
+
+      - name: Remove QA transport and prove exact clean candidate tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f functions/api/_qa-migrate.js .github/workflows/preview-final-gate.yml
+          rmdir .github/workflows 2>/dev/null || true;rmdir .github 2>/dev/null || true
+          rm -rf node_modules package.json package-lock.json final-e2e.cjs state.json baseline.txt health.headers health.json routes.txt deep404.html home.headers browser-summary.json batch.json cleanup.json after.json lighthouse.json
+          git add -A
+          TREE=$(git write-tree);echo "Final clean tree: $TREE";test "$TREE" = "$EXPECTED_CLEAN_TREE"
+          git config user.name 'github-actions[bot]';git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'qa: pass final NorthEdge Cloudflare preview gate'
+          git push origin HEAD:cutover/legacy-routing-preview
