@@ -1,0 +1,39 @@
+name: NorthEdge legacy route diagnostic
+
+on:
+  push:
+    branches:
+      - cutover/legacy-routing-preview
+    paths:
+      - .github/workflows/legacy-debug.yml
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Probe legacy paths
+        shell: bash
+        env:
+          BASE: https://cutover-legacy-routing-previ.northedge-website.pages.dev
+        run: |
+          set -u
+          sleep 8
+          fail=0
+          for path in "/about-us/" "/contacts/" "/appraisal/" "/property-rullinga-road-donnybrook.html" "/property-mathoura-road-mickleham.html"; do
+            result=$(curl -sS -L --max-redirs 8 -o /dev/null -w '%{http_code} %{url_effective} %{num_redirects}' "$BASE$path") || true
+            echo "$path => $result"
+            code=${result%% *}
+            [ "$code" = 200 ] || fail=1
+          done
+          for url in \
+            "$BASE/my-properties-main/?r=available&v=residential&x=sale" \
+            "$BASE/my-properties-main/?r=sold&v=residential&x=sale" \
+            "$BASE/my-properties-main/?r=available&v=residential&x=lease" \
+            "$BASE/property-listing-details/?v=41733004&type=sale" \
+            "$BASE/property-listing-details/?v=35074581&type=sale"; do
+            result=$(curl -sS -L --max-redirs 8 -o /dev/null -w '%{http_code} %{url_effective} %{num_redirects}' "$url") || true
+            echo "$url => $result"
+            code=${result%% *}
+            [ "$code" = 200 ] || fail=1
+          done
+          exit $fail
