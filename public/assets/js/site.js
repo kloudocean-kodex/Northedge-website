@@ -7,12 +7,14 @@ const menu=$('[data-menu-toggle]'), mobile=$('[data-mobile-nav]');
 const setMenuState=(open)=>{
   if(!menu||!mobile)return;
   mobile.classList.toggle('is-open',open);
+  mobile.toggleAttribute('inert',!open);
   menu.setAttribute('aria-expanded',String(open));
   menu.setAttribute('aria-label',open?'Close menu':'Open menu');
   menu.innerHTML=open
     ? '<svg aria-hidden="true" class="icon" viewBox="0 0 20 20"><path d="m5 5 10 10M15 5 5 15"/></svg>'
     : '<svg aria-hidden="true" class="icon" viewBox="0 0 20 20"><path d="M3 6h14M3 10h14M3 14h14"/></svg>';
 };
+if(mobile)mobile.setAttribute('inert','');
 menu?.addEventListener('click',()=>setMenuState(!mobile?.classList.contains('is-open')));
 $$('a',mobile||document.createElement('div')).forEach(link=>link.addEventListener('click',()=>setMenuState(false)));
 
@@ -24,12 +26,6 @@ if('IntersectionObserver' in window){
 const toast=(msg)=>{const t=$('[data-toast]');if(!t)return;t.textContent=msg;t.classList.add('is-visible');clearTimeout(window.__tt);window.__tt=setTimeout(()=>t.classList.remove('is-visible'),5000)};
 
 $$('form[data-lead-form]').forEach(form=>{
-  // Low-friction bot trap; ignored by people and assistive technology.
-  if(!form.querySelector('[name="website"]')){
-    const hp=document.createElement('input');
-    hp.type='text';hp.name='website';hp.tabIndex=-1;hp.autocomplete='off';hp.setAttribute('aria-hidden','true');hp.className='hp-field';
-    form.append(hp);
-  }
   let status=form.querySelector('[data-form-status]');
   if(!status){status=document.createElement('p');status.dataset.formStatus='';status.className='form-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');form.append(status)}
   form.addEventListener('submit',async e=>{
@@ -41,18 +37,22 @@ $$('form[data-lead-form]').forEach(form=>{
     status.textContent='Sending your enquiry securely…';status.classList.remove('is-error','is-success');
     const payload=Object.fromEntries(new FormData(form).entries());
     payload.form=form.dataset.leadForm;
-    payload.page=location.href;
+    payload.page=location.origin+location.pathname;
     try{
       const response=await fetch('/api/leads',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)});
       let result={};try{result=await response.json()}catch{}
       if(!response.ok)throw new Error(result.error||'Delivery failed');
       form.reset();
-      status.textContent='Thank you. Your request has been received by NorthEdge.';status.classList.add('is-success');
-      toast('Thank you. Your request has been securely received and the NorthEdge team will follow up.');
-      const success=form.querySelector('[data-success]');if(success){success.hidden=false;success.textContent='Your request has been received.'}
+      const delivered=result.delivered===true;
+      const message=delivered
+        ? 'Thank you. Your enquiry has been received by NorthEdge and sent to the team.'
+        : 'Thank you. Your enquiry has been securely stored by NorthEdge. For anything time-sensitive, please call 0430 595 481.';
+      status.textContent=message;status.classList.add('is-success');
+      toast(message);
+      const success=form.querySelector('[data-success]');if(success){success.hidden=false;success.textContent=message}
     }catch(err){
-      status.textContent='We could not send this enquiry. Your details have not been cleared. Please try again or call 0430 595 481.';status.classList.add('is-error');
-      toast('We could not send this enquiry. Please try again or call 0430 595 481.');
+      status.textContent='We could not securely receive this enquiry. Your details have not been cleared. Please try again or call 0430 595 481.';status.classList.add('is-error');
+      toast('We could not securely receive this enquiry. Please try again or call 0430 595 481.');
     }finally{
       if(button){button.disabled=false;button.removeAttribute('aria-busy');button.innerHTML=original}
     }
@@ -60,7 +60,18 @@ $$('form[data-lead-form]').forEach(form=>{
 });
 
 const searchForm=$('[data-property-search]');
-searchForm?.addEventListener('submit',e=>{e.preventDefault();const p=new URLSearchParams(new FormData(searchForm));location.href='/buy?'+p.toString()});
+searchForm?.addEventListener('submit',e=>{
+  e.preventDefault();
+  const p=new URLSearchParams(new FormData(searchForm));
+  const journey=p.get('journey')||'buy';
+  p.delete('journey');
+  if(journey==='rent'){
+    location.href='/rent#rent-register';
+    return;
+  }
+  const query=p.toString();
+  location.href='/buy'+(query?'?'+query:'');
+});
 
 function filterProperties(){
   const cards=$$('[data-property]'),empty=$('[data-empty]');
@@ -136,7 +147,6 @@ addEventListener('keydown',e=>{
   }
 });
 
-// NorthEdge client demo: cinematic area intelligence exchange without layout shifts.
 const areaVisual=$('[data-area-visual]'),areaCaption=$('[data-area-caption]'),areaRows=$$('[data-area-image]');
 let areaRequest=0;
 const activateArea=row=>{
