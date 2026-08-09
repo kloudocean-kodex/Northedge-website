@@ -1,0 +1,184 @@
+name: NorthEdge property truth and media readiness
+on:
+  push:
+    branches: [cutover/legacy-routing-preview]
+    paths: [.github/workflows/property-truth-media-audit.yml]
+permissions:
+  contents: write
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: cutover/legacy-routing-preview
+          fetch-depth: 0
+      - name: Reconcile current campaign truth
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,re,xml.etree.ElementTree as ET
+          root=Path('.')
+          pub=root/'public'
+          stale={
+            '105 Tungsten Drive':'property-105-tungsten-drive-kalkallo',
+            '6 Alisterus Road':'property-6-alisterus-road-kalkallo',
+          }
+          # Remove stale campaign cards from every public HTML surface.
+          for p in pub.glob('*.html'):
+            s=p.read_text(encoding='utf-8'); old=s
+            for address in stale:
+              while True:
+                i=s.find(address)
+                if i<0: break
+                a=s.rfind('<article class="property-card',0,i)
+                b=s.find('</article>',i)
+                if a<0 or b<0: break
+                # Only remove when this address occurs inside that property-card.
+                b+=len('</article>')
+                if i>b: break
+                s=s[:a]+s[b:]
+            if p.name=='index.html':
+              s=s.replace('Six homes.<br/><em>One northern postcode.</em>','Four current homes.<br/><em>Across Melbourne’s north.</em>')
+              s=s.replace('Six different buyer stories, each presented with price, estate, scale and campaign detail visible before the first enquiry.','Four current campaigns, each presented with price, estate, scale and campaign detail visible before the first enquiry.')
+            if s!=old:p.write_text(s,encoding='utf-8')
+
+          # Structured listing data: retain permanent records, explicitly separate active vs archival.
+          dp=pub/'data/properties.json'; data=json.loads(dp.read_text(encoding='utf-8'))
+          for prop in data:
+            prop['status']='active'
+            prop['mediaStatus']='awaiting-authoritative-vaultre-gallery'
+            if prop['slug'] in stale.values():
+              prop['status']='archived'
+              prop['mediaStatus']='not-published-as-current-campaign'
+              prop['featured']=False
+              prop['price']='—'
+              prop['note']='No current NorthEdge campaign'
+              prop['gallery']=[]
+              prop['description']=f"This permanent property record is retained for URL continuity. NorthEdge is not presenting {prop['address']}, {prop['suburb']} as a current NorthEdge campaign. Confirm current campaign status and representation from an authoritative listing source before acting."
+              prop['highlights']=[]
+          dp.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+
+          # Remove non-current property records from the public sitemap while preserving their routes.
+          sm=pub/'sitemap.xml'; tree=ET.parse(sm); rt=tree.getroot(); ns={'s':'http://www.sitemaps.org/schemas/sitemap/0.9'}
+          removed=[]
+          for node in list(rt):
+            loc=node.find('s:loc',ns)
+            if loc is not None and any(loc.text.rstrip('/').endswith('/'+slug) for slug in stale.values()):
+              removed.append(loc.text);rt.remove(node)
+          ET.register_namespace('', 'http://www.sitemaps.org/schemas/sitemap/0.9')
+          tree.write(sm,encoding='utf-8',xml_declaration=True)
+
+          # Convert stale property pages to conservative, non-current records.
+          archive_copy={
+            'property-105-tungsten-drive-kalkallo':{
+              'address':'105 Tungsten Drive','suburb':'Kalkallo','estate':'Cloverton Estate',
+              'oldprice':'$660,000 – $690,000',
+            },
+            'property-6-alisterus-road-kalkallo':{
+              'address':'6 Alisterus Road','suburb':'Kalkallo','estate':'Cloverton Estate',
+              'oldprice':'$660,000 – $689,000',
+            },
+          }
+          for slug,x in archive_copy.items():
+            p=pub/(slug+'.html');s=p.read_text(encoding='utf-8')
+            if 'name="robots"' not in s:
+              s=s.replace('<meta content="#F7F4EE" name="theme-color"/>','<meta content="#F7F4EE" name="theme-color"/><meta content="noindex,follow" name="robots"/>',1)
+            s=re.sub(r'<meta content="[^"]*" name="description"/>',f'<meta content="Permanent property record for {x["address"]}, {x["suburb"]}. This address is not presented as a current NorthEdge campaign." name="description"/>',s,count=1)
+            s=re.sub(r'<meta content="[^"]*" property="og:description"/>',f'<meta content="Permanent property record for {x["address"]}, {x["suburb"]}. Not a current NorthEdge campaign." property="og:description"/>',s,count=1)
+            # Remove property gallery rather than risk misattributed or incomplete campaign photography.
+            s=re.sub(r'<section class="property-gallery">.*?</section>',f'<section class="property-gallery property-gallery-archived"><div class="shell"><div class="property-archive-notice"><p class="eyebrow">Property record</p><h2>Campaign photography withheld.</h2><p>NorthEdge is not presenting this address as a current campaign. This permanent route remains available for URL continuity without implying current representation or media status.</p></div></div></section>',s,count=1,flags=re.S)
+            s=s.replace(f'<p class="eyebrow">For sale · {x["estate"]}</p>',f'<p class="eyebrow">Property record · {x["estate"]}</p>',1)
+            s=re.sub(r'<div class="property-head-price"><strong>.*?</strong><span>.*?</span></div>','<div class="property-head-price"><strong>Not a current NorthEdge campaign</strong><span>Permanent property URL retained</span></div>',s,count=1,flags=re.S)
+            # First marketing paragraph and active campaign language.
+            marker='<p class="eyebrow">The property</p><h2>'
+            mi=s.find(marker)
+            if mi>=0:
+              ps=s.find('<p>',mi+len(marker)); pe=s.find('</p>',ps)
+              if ps>=0 and pe>=0:
+                neutral=f'<p>This permanent property record is retained for continuity. NorthEdge is not presenting {x["address"]}, {x["suburb"]} as a current NorthEdge campaign. Confirm the current selling status, representative and campaign documents from an authoritative source before acting.</p>'
+                s=s[:ps]+neutral+s[pe+4:]
+            s=s.replace('<dt>Inspection</dt><dd>Contact agent</dd>','<dt>Inspection</dt><dd>Not presented as a current NorthEdge campaign</dd>',1)
+            s=s.replace('<dt>Statement of Information</dt><dd>Confirm with agent before acting</dd>','<dt>Statement of Information</dt><dd>Not presented as a current NorthEdge campaign</dd>',1)
+            s=s.replace('<dt>Agency</dt><dd>NorthEdge Real Estate</dd>','<dt>Record status</dt><dd>Permanent URL retained</dd>',1)
+            s=s.replace('<h2>Ask about this property.</h2><p>Enquire without creating an account. The NorthEdge team will respond directly.</p>','<h2>Ask NorthEdge about this address.</h2><p>This page is not a current NorthEdge sale campaign. You may contact the team about its historical involvement or other property services.</p>',1)
+            # Remove obvious stale price/current-campaign phrases that may occur elsewhere in the archived page.
+            s=s.replace(x['oldprice'],'—')
+            s=s.replace('Current NorthEdge campaign','No current NorthEdge campaign')
+            s=s.replace('NorthEdge current campaign','No current NorthEdge campaign')
+            s=s.replace('Current NorthEdge price guide','No current NorthEdge campaign')
+            p.write_text(s,encoding='utf-8')
+
+          # Add restrained archived-gallery styling to the existing production stylesheet.
+          css=pub/'assets/css/final-demo.css'; cs=css.read_text(encoding='utf-8')
+          marker='/* Property record: conservative non-current state */'
+          if marker not in cs:
+            cs += '''\n\n/* Property record: conservative non-current state */\n.property-gallery-archived{background:var(--paper,#F6F3ED);padding:clamp(90px,11vw,150px) 0 48px}\n.property-archive-notice{max-width:820px;border-top:1px solid rgba(129,91,37,.45);border-bottom:1px solid var(--hairline,#D8D0C4);padding:42px 0}\n.property-archive-notice h2{margin:10px 0 14px;font:300 clamp(40px,5vw,68px)/.95 var(--serif);color:var(--ink,#20272B)}\n.property-archive-notice p:last-child{max-width:680px;color:var(--slate,#485158);line-height:1.75}\n'''
+            css.write_text(cs,encoding='utf-8')
+
+          # Media/provenance audit. Portal sources corroborate campaign size/status only; they are not asset sources.
+          audit=root/'docs/PROPERTY_MEDIA_AUDIT.md'
+          audit.write_text('''# NorthEdge Property Media Audit\n\n**Audit date:** 10 August 2026  
+**Release branch:** `cutover/legacy-routing-preview`  
+**Policy:** actual property media only; production masters must come from NorthEdge-controlled VaultRE/agency sources and be mirrored locally. Portal-hosted copies are corroborating evidence only and must not be scraped or hotlinked.\n\n| Property | Current representation evidence | Current campaign media evidence | Local distinct gallery subjects before production ingest | Production decision |\n|---|---|---:|---:|---|\n| 27 Design Way, Kalkallo | Current sale by Northedge Real Estate / Gurinder Sandhu | 20 current-listing images + 1 floorplan; property record contains 35 images total | 3 | **Active. Full authorised VaultRE gallery required.** |\n| 31 Roseneath Way, Mickleham | Current NorthEdge sale; Arsalan Basharat lead, Gurinder Sandhu supporting | 18 images + 1 floorplan on current agency listing evidence | 3 | **Active. Full authorised VaultRE gallery required.** |\n| 6 Mathoura Road, Mickleham | Current NorthEdge sale / Gurinder Sandhu | 20 current-sale images + 1 floorplan; property record contains 34 images total | 3, but two generic `mickleham-*` subjects require provenance confirmation | **Active. Full authorised VaultRE gallery required.** |\n| 7 Rulingia Road, Donnybrook | Current sale evidence from realestate.com.au / Soho identifies Northedge / Gurinder | 13 campaign photos + 1 floorplan in current sale evidence | 2 | **Active pending final cutover-day recheck. Full authorised VaultRE gallery required.** |\n| 105 Tungsten Drive, Kalkallo | Fresher public evidence identifies another current selling agency | Not applicable to a current NorthEdge campaign | 3, including generic Kalkallo interiors whose attribution is not safe to assume | **Remove from current campaigns; retain `noindex` permanent record without gallery.** |\n| 6 Alisterus Road, Kalkallo | Current property data reports off-market; no reliable current NorthEdge sale evidence found | Not applicable | 1 | **Remove from current campaigns; retain `noindex` permanent record without gallery.** |\n\n## Authoritative production source\n\nVaultRE's official API exposes `GET /properties/{id}/photos` for ordered property photography. VaultRE's technical guide requires integrators to download image files and host them locally rather than hotlinking. API access requires a client access token and API key; credentials must remain in an approved secret store and must never be committed to Git or pasted into project documentation.\n\nThe existing NorthEdge WordPress listing pages could not be used as an unattended media source during this audit because the host returned its SiteGround CAPTCHA challenge to server-side requests. That is not permission to bypass the challenge or to source media from third-party portals instead.\n\n## Required gallery acceptance standard\n\nFor each active campaign, ingest the ordered, published VaultRE originals; preserve the source ordering as evidence; art-direct a premium lead sequence (exterior, living, kitchen, bedrooms/bathrooms, outdoor/garage, floorplan/aerial where available); generate responsive local derivatives without upscaling; use the actual lead photo for social sharing; and verify every image, lightbox control, keyboard action and mobile crop on the Cloudflare preview.\n\n**Current media readiness:** NO-GO for live-domain cutover until authorised VaultRE masters for the four active campaigns are obtained and the complete galleries pass QA.\n''',encoding='utf-8')
+
+          # Record why this truth change exists.
+          prov=root/'docs/SOURCE_PROVENANCE.md'; pr=prov.read_text(encoding='utf-8')
+          note='''\n## 10 August 2026 current-campaign and media revalidation\n\nCutover review separated current NorthEdge campaigns from stale legacy-feed records. `105 Tungsten Drive` is no longer presented as a current NorthEdge campaign because fresher public evidence identifies another current selling agency. `6 Alisterus Road` is no longer presented as current because current property data reports it off-market and no reliable current NorthEdge sale evidence was found. Their permanent routes are retained as `noindex` records without campaign galleries.\n\nThe four retained active campaigns require full NorthEdge/VaultRE-controlled gallery ingestion before live-domain cutover. Third-party portal images are evidence of campaign depth only and are not a production asset source.\n'''
+          if '## 10 August 2026 current-campaign and media revalidation' not in pr:
+            prov.write_text(pr.rstrip()+'\n'+note,encoding='utf-8')
+          print('Removed sitemap URLs:',removed)
+          PY
+      - name: Verify campaign truth invariants
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,re,xml.etree.ElementTree as ET
+          pub=Path('public');data=json.loads((pub/'data/properties.json').read_text())
+          active=[p for p in data if p.get('status')=='active'];arch=[p for p in data if p.get('status')=='archived']
+          assert len(active)==4,(len(active),[p['slug'] for p in active])
+          assert {p['slug'] for p in arch}=={'105-tungsten-drive-kalkallo','6-alisterus-road-kalkallo'}
+          for html in pub.glob('*.html'):
+            s=html.read_text(encoding='utf-8')
+            for address in ['105 Tungsten Drive','6 Alisterus Road']:
+              for m in re.finditer(re.escape(address),s):
+                a=s.rfind('<article class="property-card',0,m.start());b=s.find('</article>',m.start())
+                assert not(a>=0 and b>=m.start()),f'stale current card {address} in {html}'
+          for slug in ['105-tungsten-drive-kalkallo','6-alisterus-road-kalkallo']:
+            s=(pub/(slug+'.html')).read_text(encoding='utf-8')
+            assert 'noindex,follow' in s
+            assert 'data-gallery-open' not in s
+            assert 'Not a current NorthEdge campaign' in s or 'No current NorthEdge campaign' in s
+          home=(pub/'index.html').read_text(encoding='utf-8')
+          assert 'Four current homes.' in home
+          assert home.count('<article class="property-card')==4,home.count('<article class="property-card')
+          root=ET.parse(pub/'sitemap.xml').getroot();locs=[n.text for n in root.iter() if n.tag.endswith('loc')]
+          assert len(locs)==26,len(locs)
+          assert not any('105-tungsten' in x or '6-alisterus' in x for x in locs)
+          assert any('27-design-way' in x for x in locs) and any('31-roseneath' in x for x in locs) and any('6-mathoura' in x for x in locs) and any('7-rulingia' in x for x in locs)
+          print('Campaign truth gate PASS:',[p['slug'] for p in active])
+          PY
+      - name: Remove workflow, regenerate release manifest and commit clean candidate
+        run: |
+          rm -f .github/workflows/property-truth-media-audit.yml
+          rmdir .github/workflows 2>/dev/null || true
+          rmdir .github 2>/dev/null || true
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          root=Path('.');old=json.loads((root/'RELEASE_MANIFEST.json').read_text())
+          entries=[]
+          for p in sorted(root.rglob('*')):
+            if not p.is_file() or '.git' in p.parts or p.name=='RELEASE_MANIFEST.json':continue
+            b=p.read_bytes();entries.append({'path':p.as_posix(),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()})
+          out={k:old.get(k) for k in ['release','date','baseRelease','baseSha256'] if old.get(k) is not None}
+          out['date']='2026-08-10';out['fileCount']=len(entries)+1;out['files']=entries
+          (root/'RELEASE_MANIFEST.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n')
+          print('Clean release file count',out['fileCount'])
+          PY
+          git add -A
+          git diff --cached --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'fix: reconcile current campaigns and property media readiness'
+          git push origin HEAD:cutover/legacy-routing-preview
