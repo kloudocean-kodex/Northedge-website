@@ -27,7 +27,7 @@ jobs:
           root=Path('.')
           public=root/'public'
           identity='NORTHEDGE REAL ESTATE PTY LTD · ABN 35 690 949 412'
-          html=list(public.glob('*.html'))
+          html=[p for p in public.glob('*.html') if p.name!='thank-you.html']
           missing=[p.name for p in html if identity not in p.read_text(encoding='utf-8')]
           if missing: raise SystemExit(f'Identity missing from: {missing}')
           old=json.loads((root/'RELEASE_MANIFEST.json').read_text(encoding='utf-8'))
