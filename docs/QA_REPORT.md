@@ -69,3 +69,7 @@ The following cannot be honestly certified from a static local package alone and
 10. Back up the existing site/database and record rollback instructions.
 
 **Cutover status:** Repository-ready; custom-domain cutover remains gated by the items above.
+
+## Preview accessibility correction — 9 August 2026
+
+Automated Chromium + axe testing on the Cloudflare branch preview identified insufficient contrast for the large italic brass title accents on the About page. The affected text used `#D9B97A` against `#F7F4EE` / `#EEE8DE`, producing 1.71:1 / 1.54:1 where WCAG requires 3:1 for large text. Light-surface About title accents now use the established darker NorthEdge brass `#815B25`. The complete route-level accessibility gate must pass again on the replacement preview before merge.

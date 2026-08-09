@@ -353,3 +353,10 @@
 .form-status.is-success{color:#2f6644}
 .form-status.is-error{color:#8a2f2f}
 button[aria-busy="true"]{cursor:wait;opacity:.75}
+
+/* Production QA: accessible brass on light editorial surfaces */
+.split-copy .section-title em,
+.content-section.is-stone .section-title em{
+  color:#815B25;
+}
+
