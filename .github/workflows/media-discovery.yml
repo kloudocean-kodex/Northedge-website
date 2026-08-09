@@ -1,0 +1,102 @@
+name: NorthEdge authoritative media discovery
+on:
+  push:
+    branches: [cutover/legacy-routing-preview]
+    paths: [.github/workflows/media-discovery.yml]
+permissions:
+  contents: write
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: cutover/legacy-routing-preview
+          fetch-depth: 0
+      - name: Fetch NorthEdge listing pages and inspect media/API origins
+        run: |
+          python - <<'PY'
+          import html, json, re, urllib.parse, urllib.request
+          listings={
+            '27-design-way-kalkallo':('34688552','39835309'),
+            '7-rulingia-road-donnybrook':('35074581','40243735'),
+            '6-mathoura-road-mickleham':('35680034','40905535'),
+            '31-roseneath-way-mickleham':('36424213','41675613'),
+            '105-tungsten-drive-kalkallo':('36479751','41733004'),
+            '6-alisterus-road-kalkallo':('36459858','41711139'),
+          }
+          base='https://northedgerealestate.com.au/property-listing-details/'
+          ua={'User-Agent':'Mozilla/5.0 ProddyG-NorthEdge-Media-Audit/1.0'}
+          out={}
+          for slug,(v,x) in listings.items():
+            url=base+'?'+urllib.parse.urlencode({'stype':'available','type':'sale','v':v,'x':x})
+            req=urllib.request.Request(url,headers=ua)
+            try:
+              with urllib.request.urlopen(req,timeout=30) as r:
+                raw=r.read(); final=r.geturl(); status=r.status; ctype=r.headers.get('content-type','')
+            except Exception as e:
+              print(f'### {slug}\nFETCH_ERROR {type(e).__name__}: {e}')
+              out[slug]={'error':repr(e)}; continue
+            text=raw.decode('utf-8','replace')
+            decoded=html.unescape(text).replace('\\/','/')
+            urls=set()
+            # absolute URL candidates, including CDN/API/media links embedded in JSON or markup
+            for m in re.finditer(r'https?://[^\s"\'<>\\)]+',decoded,re.I):
+              u=m.group(0).rstrip(';,]})')
+              urls.add(u)
+            # src/href/srcset-relative candidates resolved against final page
+            for attr in re.findall(r'(?:src|href|data-src|data-full|content)=["\']([^"\']+)["\']',decoded,re.I):
+              if attr.startswith(('data:','javascript:','#','mailto:','tel:')): continue
+              urls.add(urllib.parse.urljoin(final,attr))
+            image_ext=re.compile(r'\.(?:jpe?g|png|webp|avif)(?:[?#].*)?$',re.I)
+            media=[]; api=[]; hosts={}
+            for u in sorted(urls):
+              try:p=urllib.parse.urlparse(u)
+              except:continue
+              host=p.hostname or ''
+              if host:hosts[host]=hosts.get(host,0)+1
+              low=u.lower()
+              if image_ext.search(low) or any(k in low for k in ['/image/','/images/','/photo/','/photos/','media']): media.append(u)
+              if any(k in low for k in ['vault','api','property','listing','feed','crm']): api.append(u)
+            # contexts around known listing IDs, VaultRE/API/media references
+            contexts=[]
+            for token in [v,x,'vaultre','vault','api','gallery','photos','images']:
+              for m in list(re.finditer(re.escape(token),decoded,re.I))[:8]:
+                s=max(0,m.start()-180);e=min(len(decoded),m.end()+260)
+                contexts.append(re.sub(r'\s+',' ',decoded[s:e]))
+            print(f'\n### {slug}')
+            print('STATUS',status,'FINAL',final,'TYPE',ctype,'BYTES',len(raw))
+            print('HOST_COUNTS',json.dumps(hosts,sort_keys=True))
+            print('MEDIA_URL_COUNT',len(media))
+            for u in media[:120]: print('MEDIA',u)
+            print('API_REFERENCE_COUNT',len(api))
+            for u in api[:80]: print('APIREF',u)
+            print('CONTEXTS')
+            for c in contexts[:40]: print('CTX',c[:700])
+            out[slug]={'status':status,'final':final,'bytes':len(raw),'hosts':hosts,'media':media,'api':api}
+          with open('media-discovery.json','w',encoding='utf-8') as f:json.dump(out,f,indent=2)
+          PY
+      - name: Summarise discovered media hosts
+        run: |
+          python - <<'PY'
+          import json,urllib.parse,collections
+          d=json.load(open('media-discovery.json'))
+          h=collections.Counter()
+          for x in d.values():
+            for u in x.get('media',[]):
+              host=urllib.parse.urlparse(u).hostname
+              if host:h[host]+=1
+          print('=== MEDIA HOST SUMMARY ===')
+          for host,n in h.most_common():print(n,host)
+          PY
+      - name: Remove discovery transport
+        run: |
+          rm -f .github/workflows/media-discovery.yml media-discovery.json
+          rmdir .github/workflows 2>/dev/null || true
+          rmdir .github 2>/dev/null || true
+          git add -A
+          git diff --cached --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'qa: remove authoritative media discovery transport'
+          git push origin HEAD:cutover/legacy-routing-preview
