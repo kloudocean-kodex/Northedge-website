@@ -1,19 +1,19 @@
 {
-  "release": "NorthEdge Cutover R1",
-  "date": "2026-08-08",
+  "release": "NorthEdge Cutover R1 — Cloudflare-ready candidate",
   "baseRelease": "NorthEdge R3",
   "baseSha256": "7003c5932d9b96ed5113c93008578b990a50c490f8d5e985f587396372d3cb1c",
-  "fileCount": 176,
+  "date": "2026-08-10",
+  "fileCount": 185,
   "files": [
     {
       "path": ".env.example",
-      "bytes": 302,
-      "sha256": "d01ae3e859715f219a2cd7f756cecb7985ee61f97a21127f4a2fedfc40640f3e"
+      "bytes": 567,
+      "sha256": "d2993fe2b39df7c4c5b501bfcd67b6aa391b9c10f1a0800e571ff944f1ee4a60"
     },
     {
       "path": ".gitignore",
-      "bytes": 61,
-      "sha256": "56062225c683dac505a192908db787d22acd9efe77f656350b659b8328a157fa"
+      "bytes": 77,
+      "sha256": "3dbac51ae7fc969fe347bf456a82d6b3139285840f6315d4de2a0b09e1d48cba"
     },
     {
       "path": "README.md",
@@ -21,84 +21,114 @@
       "sha256": "060e35eccdb9c786716e3f474c0d1dcfb2ec5badd9b5f0f02f69410f24a09bf4"
     },
     {
+      "path": "docs/CURRENT_STATE.md",
+      "bytes": 5317,
+      "sha256": "86f66b0414b0366ebea2f1271c9b358de2e15309906c395ee809d5008a1c1cb0"
+    },
+    {
       "path": "docs/DEPLOYMENT.md",
       "bytes": 2360,
       "sha256": "b2883d2bc40af3559909a24c152954225af0476ad2802f43ee52d51bbbaa8685"
     },
     {
+      "path": "docs/PROPERTY_MEDIA_AUDIT.md",
+      "bytes": 3847,
+      "sha256": "4d9ba22f4aa00e192a9dfb5217653e5a1ad371217731b561940a0e81f252282e"
+    },
+    {
       "path": "docs/QA_REPORT.md",
-      "bytes": 4309,
-      "sha256": "4cf9723031455c4655798de889b0a285485f27994a434796f72f0df8a62cfe25"
+      "bytes": 8059,
+      "sha256": "2d7050e49d972c6aa88b372dd273b892b7871cda3ac3284be44c75fdfabf0d45"
+    },
+    {
+      "path": "docs/SESSION_HANDOFF.md",
+      "bytes": 6562,
+      "sha256": "6afecf42709fc37b086fd0407db2476d7dcd67fe12cd761f901fa66d8d2b105f"
     },
     {
       "path": "docs/SOURCE_PROVENANCE.md",
-      "bytes": 1089,
-      "sha256": "ca640ff7521c6a33866dee0770235bd662ebdc9602ecfe3a021cc1620e5769b5"
+      "bytes": 1859,
+      "sha256": "694854c3a7ffa3780b76af4c48322227232e454ed5e50ae30dcdc50cf85cd297"
+    },
+    {
+      "path": "docs/VAULTRE_MEDIA_SYNC.md",
+      "bytes": 4406,
+      "sha256": "19d29971f91a570f638f20bc1a6c6432cd231d9ac3b6949b42f3b5169a86eef8"
     },
     {
       "path": "functions/api/health.js",
-      "bytes": 336,
-      "sha256": "5e247765948d03f0af5e65f52cf164408553426a38d70e5defcb8a7ae9e09024"
+      "bytes": 1811,
+      "sha256": "7cbe6e996ad5fec2ceda38f24aa1a36bc22085d1b09b06cd04f9324c531d95d0"
     },
     {
       "path": "functions/api/leads.js",
-      "bytes": 5846,
-      "sha256": "e67d9025c91293ba3220d785b94f0756a85a6ae9caa23e1324131264d702cdae"
+      "bytes": 12095,
+      "sha256": "fb2c8ae0ac08e1981f24cc940c68ef482a6a226576df8a106cb75524f52da7b5"
+    },
+    {
+      "path": "functions/my-properties-main.js",
+      "bytes": 673,
+      "sha256": "0d7e9ad5b867ec14b2cfe35e8526f5c69457c12e47244d36e819724ff7ec3291"
+    },
+    {
+      "path": "functions/property-listing-details.js",
+      "bytes": 1363,
+      "sha256": "9bc011d54030672ce435265fd5e49f518fab8174b2a32baf214797b4edcd11e0"
     },
     {
       "path": "public/404.html",
-      "bytes": 8297,
-      "sha256": "08b826db791dbf4acc43a57ecc7a43aa3328159d4eb03b6c4a304258aaea5dcd"
+      "bytes": 8192,
+      "sha256": "b5303c1bc58f2c7a8f980940a0df49d258af33f79af8fa5d10bfa5394566429b"
     },
     {
       "path": "public/_headers",
-      "bytes": 639,
-      "sha256": "ce7314e979fc47aa9ddb9c0bc165f10df36277f58bd4515dd02edf8419cf0810"
+      "bytes": 912,
+      "sha256": "5be9edf33688b87dd75590e49c9c9d1030ec8cfadc04b9abb59e314a01fd099f"
     },
     {
       "path": "public/_redirects",
-      "bytes": 355,
-      "sha256": "8cdc43ac84539dc286fde975d34fd0d1027cf5ac9d101a61d7d683e8927d1457"
+      "bytes": 268,
+      "sha256": "2a8810a2b71f1d4e20943d105138267adfc894a84fc2e3223aa35f77f39e490a"
     },
     {
       "path": "public/about.html",
-      "bytes": 11746,
-      "sha256": "e238c93d376b0e602db6927f3870504f731f9a455ad51ee3c79f3e18e6d323bb"
+      "bytes": 11611,
+      "sha256": "536c6dec288a22d2b48273e4ea15df5ba3193bc4127aeb900ead08756165617b"
     },
     {
       "path": "public/accessibility.html",
-      "bytes": 8968,
-      "sha256": "9684116b57d6c6ab4c6c7ec4564fe3a78fafcc734dcd1677179df4dbfe91dfba"
+      "bytes": 8843,
+      "sha256": "25c2366b27819576f288c62820c723ab593b557c626e913689622ff3ca068ed1"
     },
     {
       "path": "public/agent-gurinder-sandhu.html",
-      "bytes": 13196,
-      "sha256": "d28b72077fca25f998c80909256a345956d4ac0b7b696c2b6788023bc473930a"
+      "bytes": 13256,
+      "sha256": "a9220eacda2c3cfda5428c65e6cb2ee0b7e2e61918e41f596dffb5a752b29132"
     },
     {
       "path": "public/area-beveridge.html",
-      "bytes": 10960,
-      "sha256": "3ae21bb2660e29a4dfab6c28ad9b3cec5f51b170c75194fb4d81d9c2230eb6a0"
+      "bytes": 10825,
+      "sha256": "0cbbd73ff571b90dd7d70bbb962a820200ba3a34e2cdc78ea7c917ab5a3e0de2"
     },
     {
       "path": "public/area-donnybrook.html",
-      "bytes": 12354,
-      "sha256": "eca94dd779a5388e948df94c05095a2d9fb24cc15a8aebd96e79052efd70b140"
+      "bytes": 12209,
+      "sha256": "2349db3c05d92927b060621ff67e5c972616c721a6c682db108074a5b2629133"
     },
     {
       "path": "public/area-kalkallo.html",
-      "bytes": 15271,
-      "sha256": "198598b051099d1ceb5d8f26c9f85313a483e5504b27da0573eed9b72abbe027"
+      "bytes": 12181,
+      "sha256": "cddd8df63ebec5dbb9aadb07a235d9371b19bc72c7f1ce473914065803884f26"
     },
     {
       "path": "public/area-mickleham.html",
-      "bytes": 14025,
-      "sha256": "311e989dfe3060541628214013a664e4b38a766eafddcf5249ee38197463bd1f"
+      "bytes": 13865,
+      "sha256": "a83584315a663975ffcb6bd412e03b4c0f944a67f810c10f9df93577c3a332cd"
     },
     {
       "path": "public/areas.html",
-      "bytes": 12148,
-      "sha256": "13bd1a3565c530f63f4ecfd32f9928c6005336a6d46f1c1570d6adce7bc193fb"
+      "bytes": 11998,
+      "sha256": "76f5b348e7b193a123c5a67970a2e7684dbf5c8ffd6bab3687250a78381e6210"
     },
     {
       "path": "public/assets/css/client-demo.css",
@@ -107,8 +137,8 @@
     },
     {
       "path": "public/assets/css/final-demo.css",
-      "bytes": 12016,
-      "sha256": "cd7ef70213934fd7294b08eded47e3d1dbedfea9e62cf9740c1306f4d7871e0b"
+      "bytes": 14893,
+      "sha256": "4d03f7d31a393327bda3891a89da66182a789a168f21c92ea3b0c0ca301fbbd7"
     },
     {
       "path": "public/assets/css/site.css",
@@ -721,9 +751,14 @@
       "sha256": "dd72a56872e5a6ff3c796c58364eac8154aaefbbfeb41764f281b5d39d52ff16"
     },
     {
+      "path": "public/assets/js/property-gallery.js",
+      "bytes": 3690,
+      "sha256": "cb1c6ee0c7ca5b3ff3e6be89e561050a9bb0adfcef15529ae0f8e7dc6b848fe9"
+    },
+    {
       "path": "public/assets/js/site.js",
-      "bytes": 9472,
-      "sha256": "7ed472e348f4699b2283ac1b164123b350bae9bb213eb261e35688cf997cc8ce"
+      "bytes": 9511,
+      "sha256": "58d0f54fad9499a425078aac948521fbd936bb5a606af3718b2354f114c22894"
     },
     {
       "path": "public/assets/motifs/contours.svg",
@@ -752,93 +787,93 @@
     },
     {
       "path": "public/buy.html",
-      "bytes": 20262,
-      "sha256": "bd5d92cb32fb9ddaab5d373045c2707144641c6a10966e719afabb3446c6e822"
+      "bytes": 17122,
+      "sha256": "d0dfffffa4ad045e413d03960fea5b6d4576502bed98e0b18ef850c541b5c9ef"
     },
     {
       "path": "public/contact.html",
-      "bytes": 11508,
-      "sha256": "a4d1dc1caf991fdb583de810d9ed34ff274adc98d41784712a3d091ca83c01b4"
+      "bytes": 11566,
+      "sha256": "111eb4c59e425ab26ac8c23018e2604992f3885ce2f573195fb455b455adc5d4"
     },
     {
       "path": "public/data/properties.json",
-      "bytes": 5896,
-      "sha256": "aa31959e0e0da4d7514fca395a7d5f4d52c9a19c5fc32e4988fa34642920acc8"
+      "bytes": 5841,
+      "sha256": "6c41274db623f580b5f9cba0b2267d4c774d04c99f4ff7346b4ec98d02f67b60"
     },
     {
       "path": "public/image-credits.html",
-      "bytes": 12316,
-      "sha256": "ef87d76ac9ce9a55117956e719f0e94313e27551ea1ac9fd6b2f6b0afadcf9f8"
+      "bytes": 12191,
+      "sha256": "ec60487d3f8cae74734f78e446f0a6407ded9cff7875d1905f051236fc0e33c3"
     },
     {
       "path": "public/index.html",
-      "bytes": 37775,
-      "sha256": "c1c4e6f742a0ae3a1a18d8660bca91f1a14663883913d493f2bd6938ce716084"
+      "bytes": 36303,
+      "sha256": "f6afca98f090bd91017c581bfce51f62375ed39709cf097b95b83c72957fdab4"
     },
     {
       "path": "public/insight-northern-corridor.html",
-      "bytes": 9872,
-      "sha256": "6555aa1e168e85ba2fda99c38945cb48df0c07e4e3d7b49a64b05dbc6d3bec14"
+      "bytes": 9742,
+      "sha256": "cd52e3aa3162fdc185b74ec3227929c07b45d695a3b5e4aeec74bae620a94100"
     },
     {
       "path": "public/insight-preparing-to-sell.html",
-      "bytes": 9953,
-      "sha256": "6311973c7545a956e1907068fc7592192055744a229b8e0cc628d952e5b8c5b3"
+      "bytes": 9823,
+      "sha256": "094e0a223a74900711032f122c0106683391675d31017475639857b3a6522b0e"
     },
     {
       "path": "public/insights.html",
-      "bytes": 10924,
-      "sha256": "273e2b0c62b876af4a1638bf618145800e5cc2a50ee056deb0a6ca10bcb91a10"
+      "bytes": 10784,
+      "sha256": "6ebf7e3e1c6ed13fe720de9b29309664aa1df69533d92170d0b1c22e8052f9f2"
     },
     {
       "path": "public/privacy.html",
-      "bytes": 9804,
-      "sha256": "f9ca00c94a7cff0db9cb54800b1eb4c1ad649619619560b0ca7b69713f159ddd"
+      "bytes": 9709,
+      "sha256": "d26ed5d28f6d8b61616c4f1576680b7095429b510bf57377250a2f1b842d4d8c"
     },
     {
       "path": "public/property-105-tungsten-drive-kalkallo.html",
-      "bytes": 15942,
-      "sha256": "d3121377c31f4865e90ebe90a1e7067aa79016b97858f7adbef5b6ca1050b69b"
+      "bytes": 15181,
+      "sha256": "41864d1debfe37686ef38f65edb706f102cabb1d4dad200aeaaf3dfdbdac2de8"
     },
     {
       "path": "public/property-27-design-way-kalkallo.html",
-      "bytes": 16324,
-      "sha256": "b38dab5f3abe5e8b075e0b44789973c6a5c34d7486c72054dab55a41b1111042"
+      "bytes": 16639,
+      "sha256": "44d445d149ec3cfa9c5496ca84bfd8395e1ba48d97c50840a228fada58fea11d"
     },
     {
       "path": "public/property-31-roseneath-way-mickleham.html",
-      "bytes": 16133,
-      "sha256": "c89e700507350320edf5eb51f03f6cce06efe5c37ae579e453c9446e5135aa15"
+      "bytes": 16460,
+      "sha256": "7b770fba0abd4a7297e633d4b99268bda85db9c24332c67a4f7a1f24c3d30dd0"
     },
     {
       "path": "public/property-6-alisterus-road-kalkallo.html",
-      "bytes": 14973,
-      "sha256": "1cfac591d471dfbe87b4b8d2e9510668f588b501d97e4e5cb423ed0719d7c592"
+      "bytes": 15171,
+      "sha256": "41a0cac8c8e11216dce99c79f9344664b4de5ba81015e870397fa9069a0d6e7c"
     },
     {
       "path": "public/property-6-mathoura-road-mickleham.html",
-      "bytes": 16025,
-      "sha256": "bd8b789ef72ba90d57e613378560d2b368d143d4d4fc6dd9bbf64deb6f2dc30f"
+      "bytes": 16348,
+      "sha256": "de66ca3f1378bdd996d8aaf7535f16481e616b9b7fded5474986d78efd55afa7"
     },
     {
       "path": "public/property-7-rulingia-road-donnybrook.html",
-      "bytes": 15675,
-      "sha256": "98a4dbd61f8dab6937471f823da4614917c9e6ebb785444f6270c6721aa7d132"
+      "bytes": 15984,
+      "sha256": "a7b1f5628a9536b207c632c55c7052e5f5b98828ae2af4fc7047988de5481519"
     },
     {
       "path": "public/property-management.html",
-      "bytes": 13091,
-      "sha256": "ae4c70dbe31367e6cf7192ae0ca4fcb3e11c3580b58ea5bc8dd23aa53601cc95"
+      "bytes": 13156,
+      "sha256": "f53995ae8418f05e836b682019bc0219b6e6f72d7943caa64e537b77bc49b4d1"
     },
     {
       "path": "public/referral.html",
-      "bytes": 11458,
-      "sha256": "1346325eca20d9c3d3dff6977387f5062412029356810f8b32a0b5e5eb8eb659"
+      "bytes": 11564,
+      "sha256": "677cb4d5ffdf6f6f98ceebd887e7e137527ea8eb91cfb2c38e5d214bfabd14c0"
     },
     {
       "path": "public/rent.html",
-      "bytes": 11766,
-      "sha256": "92f8110bd72be6285e8f80e8d35d89b4a35fe59ceb830300358d8c652b76d73d"
+      "bytes": 11829,
+      "sha256": "d8cb291bae072d11ad549fcd36cf7e767535609cd9f7d20c85a6c7d886d15b0b"
     },
     {
       "path": "public/robots.txt",
@@ -847,8 +882,8 @@
     },
     {
       "path": "public/sell.html",
-      "bytes": 13843,
-      "sha256": "38a2026008ca772bf0bfc3ae0faeceb2bfe9eda83de928cbb2453142528bd704"
+      "bytes": 13903,
+      "sha256": "f41b796e7b7f4525103d11058135fc3a364f7f6529e68ff89f7915790ad3f452"
     },
     {
       "path": "public/site.webmanifest",
@@ -857,28 +892,38 @@
     },
     {
       "path": "public/sitemap.xml",
-      "bytes": 3521,
-      "sha256": "69147d4571507f35972482aa6384473f528de6164ed174e3d53ff5c2be96b815"
+      "bytes": 3112,
+      "sha256": "1137c9052efbc993bcb3005ee97211a3300610d13d66ee4fda967b667eb2c8a3"
     },
     {
       "path": "public/sold.html",
-      "bytes": 13482,
-      "sha256": "441cde4fb981307fa64dfe7f7b1805254c41d4c32671e794e7bc42d460ea1a13"
+      "bytes": 13537,
+      "sha256": "17481bccce84d13f9189be5e6ad4877b2f782e129fc55d3dca92f92392f09504"
     },
     {
       "path": "public/terms.html",
-      "bytes": 9291,
-      "sha256": "78e849ddb0e8ab7cd4aba8aa491ed3cb843633f5ca33504a756c8ec5e22654e3"
+      "bytes": 9196,
+      "sha256": "d024559b571191b8dff0309130ea5c4ae1121b2fdb568407d0a8d37deb434fc5"
+    },
+    {
+      "path": "public/thank-you.html",
+      "bytes": 1054,
+      "sha256": "85b9885a1dd20cdd9b96fb43024ae13e4a5d88f33839d76780403b3b967649b4"
     },
     {
       "path": "schema/leads.sql",
-      "bytes": 406,
-      "sha256": "631767685a4b563bea47eafbcad45f56c8618d5cf219c55434a1cbf2836615fa"
+      "bytes": 676,
+      "sha256": "dde8ae3169f2083c92632044ba2b6aaf1a68ca4d9a6a9f9c046c63a38b2e5b53"
     },
     {
       "path": "tools/serve.py",
       "bytes": 301,
       "sha256": "42c7d366ea901f75f8331321877f5d2cf45250a912cbee505822b87334c6a600"
+    },
+    {
+      "path": "tools/vaultre_media_sync.py",
+      "bytes": 7769,
+      "sha256": "bc15398395008427cec1865a71e23a66e9c4806b51db8531554692bc8bdc39ed"
     }
   ]
 }

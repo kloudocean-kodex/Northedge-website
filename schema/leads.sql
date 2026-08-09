@@ -11,3 +11,11 @@ CREATE TABLE IF NOT EXISTS leads (
 );
 CREATE INDEX IF NOT EXISTS idx_leads_received_at ON leads(received_at);
 CREATE INDEX IF NOT EXISTS idx_leads_form_type ON leads(form_type);
+
+CREATE TABLE IF NOT EXISTS lead_rate_limits (
+  key TEXT NOT NULL,
+  window_start INTEGER NOT NULL,
+  count INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (key, window_start)
+);
+CREATE INDEX IF NOT EXISTS idx_lead_rate_limits_window_start ON lead_rate_limits(window_start);

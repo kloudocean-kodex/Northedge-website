@@ -13,3 +13,9 @@ Cutover R1 also adds production-safe form handling scaffolding for Cloudflare Pa
 ## 8 August 2026 campaign-data verification
 
 Before PR creation, current public campaign evidence was used to correct two stale price displays and two incomplete property addresses inherited from the demonstration data. This does not replace the requirement to verify all live listing facts and compliance documents again immediately before domain cutover.
+
+## 10 August 2026 current-campaign and media revalidation
+
+Cutover review separated current NorthEdge campaigns from stale legacy-feed records. `105 Tungsten Drive` is no longer presented as a current NorthEdge campaign because fresher public evidence identifies another current selling agency. `6 Alisterus Road` is no longer presented as current because current property data reports it off-market and no reliable current NorthEdge sale evidence was found. Their permanent routes are retained as `noindex` records without campaign galleries.
+
+The four retained active campaigns require full NorthEdge/VaultRE-controlled gallery ingestion before live-domain cutover. Third-party portal images are evidence of campaign depth only and are not a production asset source.

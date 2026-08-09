@@ -1,11 +1,7 @@
 /index.html / 301
 /home / 301
-/buy /buy.html 301
-/rent /rent.html 301
-/sell /sell.html 301
-/sold /sold.html 301
-/areas /areas.html 301
-/about /about.html 301
-/contact /contact.html 301
-/property-rullinga-road-donnybrook.html /property-7-rulingia-road-donnybrook.html 301
-/property-mathoura-road-mickleham.html /property-6-mathoura-road-mickleham.html 301
+/about-us/ /about 301
+/contacts/ /contact 301
+/appraisal/ /sell#appraisal 301
+/property-rullinga-road-donnybrook.html /property-7-rulingia-road-donnybrook 301
+/property-mathoura-road-mickleham.html /property-6-mathoura-road-mickleham 301

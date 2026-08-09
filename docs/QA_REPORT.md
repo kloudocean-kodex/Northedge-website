@@ -69,3 +69,33 @@ The following cannot be honestly certified from a static local package alone and
 10. Back up the existing site/database and record rollback instructions.
 
 **Cutover status:** Repository-ready; custom-domain cutover remains gated by the items above.
+
+## Preview accessibility correction — 9 August 2026
+
+Automated Chromium + axe testing on the Cloudflare branch preview identified insufficient contrast for the large italic brass title accents on the About page. The affected text used `#D9B97A` against `#F7F4EE` / `#EEE8DE`, producing 1.71:1 / 1.54:1 where WCAG requires 3:1 for large text. Light-surface About title accents now use the established darker NorthEdge brass `#815B25`. The complete route-level accessibility gate must pass again on the replacement preview before merge.
+
+## Agent appraisal label contrast correction — 9 August 2026
+
+The full Cloudflare preview axe pass identified insufficient contrast on five labels in the Gurinder appraisal form. Labels on light appraisal surfaces now use `#3F4742`, preserving the restrained visual system while exceeding WCAG AA text contrast requirements. The complete preview gate must pass again before merge.
+
+## Shared form contrast correction — 9 August 2026
+
+A full-route Cloudflare preview sweep showed the same low-contrast label token on light forms and property enquiry cards, plus one Rent section title accent. The shared light-form/enquiry-card label colour is now `#3F4742` and the affected Rent light-surface accent uses `#815B25`. These are shared design-token corrections rather than page-by-page exceptions. A deployment-synchronised 28-route accessibility sweep is required after this change.
+
+## Base form-label contrast correction — 9 August 2026
+
+The deployment-synchronised 28-route axe sweep proved the previous selector was too narrow: several light forms do not carry `.light-form`. The base `.form-field label,.field label` token is now `#3F4742`. The more-specific dark appraisal-band rule remains unchanged and continues to render light labels on dark surfaces.
+
+## Mutable asset cache correction — 9 August 2026
+
+Deployment-synchronised accessibility testing exposed stale CSS on the Cloudflare branch alias: a query-busted CSS request returned the new release while normal page loads could reuse the older `/assets/*` response. Mutable CSS and JavaScript now require revalidation (`max-age=0, must-revalidate`). Images, motifs and partner assets use a one-hour revalidation window rather than a seven-day stale window. This prevents source fixes from being masked by stale client assets.
+
+## Form-label opacity correction — 9 August 2026
+
+The all-route Cloudflare axe sweep traced the remaining label contrast failure to the base `site.css` rule `opacity:.72`. The accessible foreground colour was therefore being alpha-blended back toward the light form background. The production override now sets form/search labels to full opacity; dark appraisal labels retain their intended translucency through their explicit RGBA colour.
+
+## Property gallery interaction readiness — 10 August 2026
+
+The four verified active property routes now use property-specific local lead images for Open Graph previews and neutral address-based gallery labels pending authoritative VaultRE captions. The lightbox has production traversal controls: previous/next buttons, arrow-key navigation, touch swipe, live image count, caption, neighbour preloading, visible focus, and mobile-safe control placement. Existing `site.js` remains responsible for modal opening/closing, Escape handling, focus trapping and focus return. The first fold remains the restrained editorial gallery; future authorised VaultRE images can be added as hidden `.gallery-extra` triggers and remain fully traversable without creating a cluttered thumbnail wall.
+
+This interaction work does not close the property-media completeness gate. Full authorised VaultRE masters for all four active campaigns are still required before live-domain cutover.

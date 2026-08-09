@@ -18,7 +18,7 @@
 
 /* Claude's broad `label` override made labels inside the dark appraisal bands
    too dim. Scope light and dark form labels deliberately. */
-.form-field label,.field label{color:#5F6560!important}
+.form-field label,.field label{color:#3F4742!important}
 .appraisal-band .form-field label,
 .appraisal-band label{
   color:rgba(255,255,255,.78)!important;
@@ -353,3 +353,55 @@
 .form-status.is-success{color:#2f6644}
 .form-status.is-error{color:#8a2f2f}
 button[aria-busy="true"]{cursor:wait;opacity:.75}
+
+/* Production QA: accessible brass on light editorial surfaces */
+.split-copy .section-title em,
+.content-section.is-stone .section-title em{
+  color:#815B25;
+}
+
+/* Production QA: accessible labels on light appraisal forms */
+.content-section.is-stone .light-form .form-field label{
+  color:#3F4742!important;
+}
+
+/* Production QA: shared accessible light-form tokens */
+.light-form .form-field label,
+.enquiry-card .form-field label{
+  color:#3F4742!important;
+}
+.page-rent .content-section .section-title em{
+  color:#815B25;
+}
+
+/* Production QA: form-label opacity correction */
+.form-field label,.field label{opacity:1!important}
+
+
+/* Property record: conservative non-current state */
+.property-gallery-archived{background:var(--paper,#F6F3ED);padding:clamp(90px,11vw,150px) 0 48px}
+.property-archive-notice{max-width:820px;border-top:1px solid rgba(129,91,37,.45);border-bottom:1px solid var(--hairline,#D8D0C4);padding:42px 0}
+.property-archive-notice h2{margin:10px 0 14px;font:300 clamp(40px,5vw,68px)/.95 var(--serif);color:var(--ink,#20272B)}
+.property-archive-notice p:last-child{max-width:680px;color:var(--slate,#485158);line-height:1.75}
+
+
+/* Production property gallery navigation */
+.gallery-grid .gallery-extra{display:none}
+.lightbox{grid-template-rows:minmax(0,1fr) auto auto;grid-template-columns:minmax(0,1fr);align-content:center;justify-items:center}
+.lightbox>img{grid-row:1;grid-column:1;width:auto;height:auto}
+.lightbox-nav{grid-row:2;grid-column:1;display:flex;align-items:center;justify-content:center;gap:18px;margin-top:18px;color:#fff}
+.lightbox-arrow{width:48px;height:48px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.42);background:rgba(7,19,26,.64);color:#fff;transition:background .2s ease,border-color .2s ease,transform .2s ease}
+.lightbox-arrow:hover:not(:disabled){background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.75);transform:translateY(-1px)}
+.lightbox-arrow:disabled{opacity:.32;cursor:default}
+.lightbox-arrow:focus-visible,.lightbox-close:focus-visible{outline:2px solid #D8B37F;outline-offset:3px}
+.lightbox-counter{min-width:72px;text-align:center;font:500 11px/1 var(--sans);letter-spacing:.14em;color:rgba(255,255,255,.88)}
+.lightbox-caption{grid-row:3;grid-column:1;max-width:min(760px,88vw);margin:12px 0 0;text-align:center;color:rgba(255,255,255,.76);font-size:12px;line-height:1.55;letter-spacing:.02em}
+@media(max-width:620px){
+  .lightbox{padding:68px 14px 20px;grid-template-rows:minmax(0,1fr) auto auto}
+  .lightbox>img{max-width:96vw;max-height:68vh}
+  .lightbox-close{right:14px;top:14px;width:44px;height:44px}
+  .lightbox-nav{width:100%;justify-content:space-between;gap:12px;margin-top:14px}
+  .lightbox-arrow{width:52px;height:48px}
+  .lightbox-caption{max-width:92vw;margin-top:9px;font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){.lightbox-arrow{transition:none}}

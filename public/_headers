@@ -5,8 +5,20 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   Content-Security-Policy: default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests
 
-/assets/*
-  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/assets/css/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/assets/js/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/assets/images/*
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/assets/motifs/*
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/assets/partners/*
+  Cache-Control: public, max-age=3600, must-revalidate
 
 /*.html
   Cache-Control: public, max-age=300, must-revalidate
