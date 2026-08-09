@@ -15,7 +15,7 @@ jobs:
         with:
           ref: cutover/legacy-routing-preview
           fetch-depth: 0
-      - name: Correct route/data slug matching
+      - name: Correct route/data slug matching and audit formatting
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -23,6 +23,8 @@ jobs:
           s=p.read_text(encoding='utf-8')
           s=s.replace("if prop['slug'] in stale.values():", "if 'property-'+prop['slug'] in stale.values():")
           s=s.replace("assert {p['slug'] for p in arch}==set(stale.values())", "assert {'property-'+p['slug'] for p in arch}==set(stale.values())")
+          s=s.replace('**Audit date:** 10 August 2026  \\n', '**Audit date:** 10 August 2026\\n')
+          s=s.replace('**Release branch:** `cutover/legacy-routing-preview`  \\n', '**Release branch:** `cutover/legacy-routing-preview`\\n')
           p.write_text(s,encoding='utf-8')
           PY
       - name: Apply and verify current-campaign reconciliation
