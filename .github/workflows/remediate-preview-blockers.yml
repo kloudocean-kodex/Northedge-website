@@ -1,0 +1,95 @@
+name: NorthEdge preview blocker remediation
+
+on:
+  push:
+    branches:
+      - cutover/legacy-routing-preview
+    paths:
+      - .github/workflows/remediate-preview-blockers.yml
+
+permissions:
+  contents: write
+
+jobs:
+  remediate-and-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: cutover/legacy-routing-preview
+          fetch-depth: 0
+
+      - name: Apply deterministic source remediation
+        run: python tools/remediate-preview-blockers.py
+
+      - name: Syntax and source safety checks
+        run: |
+          node --check public/assets/js/site.js
+          node --check functions/api/leads.js
+          node --check functions/api/health.js
+          node --check functions/my-properties-main.js
+          node --check functions/property-listing-details.js
+          python - <<'PY'
+          from pathlib import Path
+          import re, json
+          root=Path('.')
+          html=list((root/'public').glob('*.html'))
+          if len(html) < 30: raise SystemExit(f'Expected at least 30 HTML files, found {len(html)}')
+          forms=[]
+          for p in html:
+              s=p.read_text(encoding='utf-8')
+              for m in re.finditer(r'<form[^>]*data-lead-form="([^"]+)"[^>]*>',s):
+                  tag=m.group(0);forms.append((p.name,m.group(1)))
+                  if 'method="post"' not in tag or 'action="/api/leads"' not in tag:
+                      raise SystemExit(f'Unsafe form fallback in {p}: {m.group(1)}')
+                  tail=s[m.end():m.end()+500]
+                  if f'name="form" value="{m.group(1)}"' not in tail:
+                      raise SystemExit(f'Missing non-JS form id in {p}: {m.group(1)}')
+          if len(forms)!=14: raise SystemExit(f'Expected 14 lead forms, found {len(forms)}')
+          r=(root/'public/referral.html').read_text(encoding='utf-8')
+          if 'name="referral_consent"' not in r: raise SystemExit('Referral consent is not persisted')
+          d=(root/'public/property-7-rulingia-road-donnybrook.html').read_text(encoding='utf-8')
+          if 'donnybrook-living.jpg' in d or 'data-full="/assets/images/donnybrook-living-960.jpg"' not in d: raise SystemExit('Donnybrook gallery fix failed')
+          f=(root/'public/404.html').read_text(encoding='utf-8')
+          for bad in ['href="assets/','src="assets/','href="index"','href="buy"','href="sell"']:
+              if bad in f: raise SystemExit(f'Deep 404 relative reference remains: {bad}')
+          js=(root/'public/assets/js/site.js').read_text(encoding='utf-8')
+          for need in ["mobile.setAttribute('inert','')","location.href='/rent#rent-register'","location.origin+location.pathname"]:
+              if need not in js: raise SystemExit(f'Missing JS remediation: {need}')
+          redirects=(root/'public/_redirects').read_text(encoding='utf-8')
+          for loop in ['/buy /buy.html','/rent /rent.html','/sell /sell.html','/sold /sold.html','/areas /areas.html','/about /about.html','/contact /contact.html']:
+              if loop in redirects: raise SystemExit(f'Redirect loop rule remains: {loop}')
+          json.loads((root/'public/data/properties.json').read_text(encoding='utf-8'))
+          PY
+
+      - name: Regenerate release manifest
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          root=Path('.')
+          old=json.loads((root/'RELEASE_MANIFEST.json').read_text(encoding='utf-8'))
+          exclude={'.github/workflows/remediate-preview-blockers.yml','tools/remediate-preview-blockers.py'}
+          entries=[]
+          for p in sorted(root.rglob('*')):
+              if not p.is_file() or '.git' in p.parts or p.name=='RELEASE_MANIFEST.json' or p.as_posix() in exclude: continue
+              b=p.read_bytes();entries.append({'path':p.as_posix(),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()})
+          manifest={'release':'NorthEdge Cutover R1 — Cloudflare-ready candidate','date':'2026-08-09','baseRelease':old.get('baseRelease','NorthEdge R3'),'baseSha256':old.get('baseSha256','7003c5932d9b96ed5113c93008578b990a50c490f8d5e985f587396372d3cb1c'),'fileCount':len(entries)+1,'files':entries}
+          (root/'RELEASE_MANIFEST.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          if manifest['fileCount']!=179 or len(entries)!=178: raise SystemExit(f'Unexpected final release count {manifest["fileCount"]}/{len(entries)}')
+          PY
+
+      - name: Remove one-time remediation transport
+        run: |
+          rm -f tools/remediate-preview-blockers.py
+          rm -f .github/workflows/remediate-preview-blockers.yml
+          rmdir .github/workflows 2>/dev/null || true
+          rmdir .github 2>/dev/null || true
+
+      - name: Commit verified candidate
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'fix: remediate NorthEdge Cloudflare preview blockers'
+          git push origin HEAD:cutover/legacy-routing-preview
