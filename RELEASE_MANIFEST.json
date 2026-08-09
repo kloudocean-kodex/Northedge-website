@@ -27,8 +27,8 @@
     },
     {
       "path": "docs/QA_REPORT.md",
-      "bytes": 5231,
-      "sha256": "de3c84b91bd0630d080a0d7bf835430c765c89139bfdfe68b3512539794124c0"
+      "bytes": 5733,
+      "sha256": "3938a200ac0dfed7116c901e611883b5bfa417634dfe30405a3465e4c49c251c"
     },
     {
       "path": "docs/SOURCE_PROVENANCE.md",
@@ -117,8 +117,8 @@
     },
     {
       "path": "public/assets/css/final-demo.css",
-      "bytes": 12330,
-      "sha256": "b092c40d13a1e405122a167b222b32630818e0051756c22771433ef40698c101"
+      "bytes": 12546,
+      "sha256": "2c20bb6fee7e5ff9932b78cdf5350a7d645543da4709191e5b6bc6e80d387216"
     },
     {
       "path": "public/assets/css/site.css",

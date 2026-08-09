@@ -77,3 +77,7 @@ Automated Chromium + axe testing on the Cloudflare branch preview identified ins
 ## Agent appraisal label contrast correction — 9 August 2026
 
 The full Cloudflare preview axe pass identified insufficient contrast on five labels in the Gurinder appraisal form. Labels on light appraisal surfaces now use `#3F4742`, preserving the restrained visual system while exceeding WCAG AA text contrast requirements. The complete preview gate must pass again before merge.
+
+## Shared form contrast correction — 9 August 2026
+
+A full-route Cloudflare preview sweep showed the same low-contrast label token on light forms and property enquiry cards, plus one Rent section title accent. The shared light-form/enquiry-card label colour is now `#3F4742` and the affected Rent light-surface accent uses `#815B25`. These are shared design-token corrections rather than page-by-page exceptions. A deployment-synchronised 28-route accessibility sweep is required after this change.

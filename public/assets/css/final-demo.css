@@ -365,3 +365,11 @@ button[aria-busy="true"]{cursor:wait;opacity:.75}
   color:#3F4742!important;
 }
 
+/* Production QA: shared accessible light-form tokens */
+.light-form .form-field label,
+.enquiry-card .form-field label{
+  color:#3F4742!important;
+}
+.page-rent .content-section .section-title em{
+  color:#815B25;
+}
