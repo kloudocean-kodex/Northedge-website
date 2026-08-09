@@ -1,4 +1,4 @@
-name: NorthEdge all-route accessibility sweep
+name: NorthEdge correct base form label contrast
 on:
   push:
     branches: [cutover/legacy-routing-preview]
@@ -6,70 +6,56 @@ on:
 permissions:
   contents: write
 jobs:
-  sweep:
+  correct-clean:
     runs-on: ubuntu-latest
-    env:
-      BASE: https://cutover-legacy-routing-previ.northedge-website.pages.dev
-      EXPECTED_CLEAN_TREE: b6f134239523899c262f2bd19b1f6569081a182d
     steps:
       - uses: actions/checkout@v4
         with:
           ref: cutover/legacy-routing-preview
           fetch-depth: 0
-      - name: Wait for exact corrected Cloudflare CSS
+      - name: Correct production form-label token
         run: |
-          for i in $(seq 1 40); do
-            if curl -fsS "$BASE/assets/css/final-demo.css?qa=$GITHUB_SHA" | grep -q 'Production QA: shared accessible light-form tokens'; then
-              echo 'Corrected Cloudflare deployment is serving.'
-              exit 0
-            fi
-            sleep 6
-          done
-          echo 'Cloudflare branch alias did not serve corrected CSS in time.' >&2
-          exit 1
-      - name: Install test-only accessibility dependencies
+          python - <<'PY'
+          from pathlib import Path
+          css=Path('public/assets/css/final-demo.css')
+          s=css.read_text(encoding='utf-8')
+          old='.form-field label,.field label{color:#5F6560!important}'
+          new='.form-field label,.field label{color:#3F4742!important}'
+          if old not in s and new not in s:
+              raise SystemExit('Base form label token not found')
+          s=s.replace(old,new,1)
+          css.write_text(s,encoding='utf-8')
+          qa=Path('docs/QA_REPORT.md')
+          q=qa.read_text(encoding='utf-8').rstrip()
+          note='## Base form-label contrast correction — 9 August 2026\n\nThe deployment-synchronised 28-route axe sweep proved the previous selector was too narrow: several light forms do not carry `.light-form`. The base `.form-field label,.field label` token is now `#3F4742`. The more-specific dark appraisal-band rule remains unchanged and continues to render light labels on dark surfaces.'
+          if '## Base form-label contrast correction — 9 August 2026' not in q:
+              q += '\n\n'+note
+          qa.write_text(q+'\n',encoding='utf-8')
+          PY
+      - name: Regenerate manifest and remove QA transport
         run: |
-          npm init -y >/dev/null 2>&1
-          npm install --no-save playwright-core@1.54.2 axe-core@4.10.2 >/dev/null
-      - name: Scan all 28 sitemap routes
-        run: |
-          cat > a11y-all.cjs <<'NODE'
-          const {chromium}=require('playwright-core');
-          const fs=require('fs');
-          const BASE=process.env.BASE;
-          const paths=[...fs.readFileSync('public/sitemap.xml','utf8').matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>new URL(m[1]).pathname||'/');
-          const axeSource=fs.readFileSync(require.resolve('axe-core/axe.min.js'),'utf8');
-          (async()=>{
-            if(paths.length!==28)throw new Error(`Expected 28 routes; got ${paths.length}`);
-            const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});
-            const context=await browser.newContext({viewport:{width:1440,height:1000},bypassCSP:true});
-            const page=await context.newPage();
-            const failures=[];
-            for(const path of paths){
-              const response=await page.goto(BASE+path,{waitUntil:'networkidle',timeout:30000});
-              if(!response||response.status()!==200){failures.push({path,http:response?.status()});continue;}
-              await page.addScriptTag({content:axeSource});
-              const result=await page.evaluate(()=>axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']}}));
-              const severe=result.violations.filter(v=>['serious','critical'].includes(v.impact));
-              if(severe.length)failures.push({path,violations:severe.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.map(n=>({target:n.target,html:n.html,failureSummary:n.failureSummary}))}))});
-              console.log(`${path}: ${severe.length?'FAIL':'PASS'}`);
-            }
-            fs.writeFileSync('a11y-results.json',JSON.stringify({routeCount:paths.length,failures},null,2));
-            await browser.close();
-            if(failures.length){console.log(fs.readFileSync('a11y-results.json','utf8'));process.exit(1);}
-          })().catch(e=>{console.error(e);process.exit(1)});
-          NODE
-          node a11y-all.cjs
-      - name: Remove QA transport and prove production tree unchanged
-        run: |
-          rm -f .github/workflows/a11y-all-routes.yml a11y-all.cjs a11y-results.json
+          python - <<'PY'
+          from pathlib import Path
+          import json, hashlib
+          root=Path('.')
+          old=json.loads((root/'RELEASE_MANIFEST.json').read_text(encoding='utf-8'))
+          exclude={'.github/workflows/a11y-all-routes.yml'}
+          entries=[]
+          for p in sorted(root.rglob('*')):
+              rel=p.as_posix()
+              if not p.is_file() or '.git' in p.parts or p.name=='RELEASE_MANIFEST.json' or rel in exclude:
+                  continue
+              b=p.read_bytes(); entries.append({'path':rel,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()})
+          manifest={k:old[k] for k in ['release','date','baseRelease','baseSha256'] if k in old}
+          manifest['fileCount']=len(entries)+1;manifest['files']=entries
+          (root/'RELEASE_MANIFEST.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          PY
+          rm -f .github/workflows/a11y-all-routes.yml
           rmdir .github/workflows 2>/dev/null || true
           rmdir .github 2>/dev/null || true
-          rm -rf node_modules package.json package-lock.json
           git add -A
           git diff --cached --check
-          TREE=$(git write-tree);echo "Clean tree: $TREE";test "$TREE" = "$EXPECTED_CLEAN_TREE"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'qa: pass all-route accessibility sweep'
+          git commit -m 'fix: correct base form label contrast token'
           git push origin HEAD:cutover/legacy-routing-preview
