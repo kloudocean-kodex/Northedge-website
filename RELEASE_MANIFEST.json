@@ -3,17 +3,17 @@
   "baseRelease": "NorthEdge R3",
   "baseSha256": "7003c5932d9b96ed5113c93008578b990a50c490f8d5e985f587396372d3cb1c",
   "date": "2026-08-10",
-  "fileCount": 181,
+  "fileCount": 183,
   "files": [
     {
       "path": ".env.example",
-      "bytes": 302,
-      "sha256": "d01ae3e859715f219a2cd7f756cecb7985ee61f97a21127f4a2fedfc40640f3e"
+      "bytes": 567,
+      "sha256": "d2993fe2b39df7c4c5b501bfcd67b6aa391b9c10f1a0800e571ff944f1ee4a60"
     },
     {
       "path": ".gitignore",
-      "bytes": 61,
-      "sha256": "56062225c683dac505a192908db787d22acd9efe77f656350b659b8328a157fa"
+      "bytes": 77,
+      "sha256": "3dbac51ae7fc969fe347bf456a82d6b3139285840f6315d4de2a0b09e1d48cba"
     },
     {
       "path": "README.md",
@@ -39,6 +39,11 @@
       "path": "docs/SOURCE_PROVENANCE.md",
       "bytes": 1859,
       "sha256": "694854c3a7ffa3780b76af4c48322227232e454ed5e50ae30dcdc50cf85cd297"
+    },
+    {
+      "path": "docs/VAULTRE_MEDIA_SYNC.md",
+      "bytes": 4406,
+      "sha256": "19d29971f91a570f638f20bc1a6c6432cd231d9ac3b6949b42f3b5169a86eef8"
     },
     {
       "path": "functions/api/health.js",
@@ -904,6 +909,11 @@
       "path": "tools/serve.py",
       "bytes": 301,
       "sha256": "42c7d366ea901f75f8331321877f5d2cf45250a912cbee505822b87334c6a600"
+    },
+    {
+      "path": "tools/vaultre_media_sync.py",
+      "bytes": 7769,
+      "sha256": "bc15398395008427cec1865a71e23a66e9c4806b51db8531554692bc8bdc39ed"
     }
   ]
 }
