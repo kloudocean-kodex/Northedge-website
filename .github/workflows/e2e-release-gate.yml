@@ -1,0 +1,162 @@
+name: NorthEdge complete preview release gate
+on:
+  push:
+    branches: [cutover/legacy-routing-preview]
+    paths: [.github/workflows/e2e-release-gate.yml]
+permissions:
+  contents: write
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    env:
+      BASE: https://cutover-legacy-routing-previ.northedge-website.pages.dev
+      QA_KEY: northedge-e2e-20260809-v2
+      EXPECTED_CLEAN_TREE: f42eda054e28ee367c25f9749c8b122796938fcc
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: cutover/legacy-routing-preview
+          fetch-depth: 0
+      - name: Wait for exact Cloudflare QA deployment
+        run: |
+          for i in $(seq 1 60); do
+            if curl -fsS "$BASE/api/_qa-e2e?key=$QA_KEY" | grep -q '"ok":true'; then
+              echo 'QA deployment ready'
+              exit 0
+            fi
+            sleep 6
+          done
+          echo 'Cloudflare did not expose QA endpoint in time' >&2
+          exit 1
+      - name: Install test-only browser tooling
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install --no-save playwright-core@1.54.2 lighthouse@12.8.2 >/dev/null
+      - name: Run complete browser, routing, form and D1 gate
+        run: |
+          cat > e2e.cjs <<'NODE'
+          const {chromium,request:pwRequest}=require('playwright-core');
+          const fs=require('fs');
+          const BASE=process.env.BASE, KEY=process.env.QA_KEY;
+          const batch='B'+Date.now();
+          const qaUrl=(extra='')=>`${BASE}/api/_qa-e2e?key=${encodeURIComponent(KEY)}&batch=${batch}${extra}`;
+          const propertyPaths=['/property-105-tungsten-drive-kalkallo','/property-27-design-way-kalkallo','/property-31-roseneath-way-mickleham','/property-6-alisterus-road-kalkallo','/property-6-mathoura-road-mickleham','/property-7-rulingia-road-donnybrook'];
+          const expectedLegacy={
+            '/about-us/':'/about','/contacts/':'/contact','/appraisal/':'/sell#appraisal',
+            '/property-rullinga-road-donnybrook.html':'/property-7-rulingia-road-donnybrook',
+            '/property-mathoura-road-mickleham.html':'/property-6-mathoura-road-mickleham'
+          };
+          const fail=(m)=>{throw new Error(m)};
+          async function fillForm(form, idx){
+            const els=await form.locator('input,select,textarea').all();
+            for(const el of els){
+              if(!(await el.isVisible()))continue;
+              const tag=await el.evaluate(e=>e.tagName.toLowerCase());
+              const type=(await el.getAttribute('type')||'').toLowerCase();
+              const name=(await el.getAttribute('name')||'').toLowerCase();
+              if(type==='hidden'||name==='website'||type==='submit'||type==='button')continue;
+              if(type==='checkbox'||type==='radio'){if(await el.isChecked().catch(()=>false)===false)await el.check();continue;}
+              if(tag==='select'){
+                const options=await el.locator('option').evaluateAll(os=>os.map(o=>({value:o.value,text:o.textContent,disabled:o.disabled})).filter(x=>!x.disabled&&x.value!==''));
+                if(options.length)await el.selectOption(options[0].value);continue;
+              }
+              let value='QA test';
+              if(name.includes('email'))value=`qa+northedge-${batch}-${idx}@example.com`;
+              else if(name.includes('phone'))value='0400000000';
+              else if(name.includes('name'))value=`QA NorthEdge E2E ${batch} ${idx}`;
+              else if(name.includes('address'))value='QA TEST ONLY — 1 Test Street, Mickleham VIC 3064';
+              else if(name.includes('message')||name.includes('context')||name.includes('introduction'))value=`QA TEST ONLY ${batch} — automated pre-cutover verification. Delete after test.`;
+              else if(name.includes('timeframe'))value='QA testing only';
+              await el.fill(value);
+            }
+          }
+          (async()=>{
+            const api=await pwRequest.newContext({ignoreHTTPSErrors:false});
+            const beforeResp=await api.get(qaUrl()); if(!beforeResp.ok())fail(`D1 evidence endpoint before=${beforeResp.status()}`);
+            const before=await beforeResp.json(); const beforeTotal=before.total;
+            const health=await api.get(BASE+'/api/health');if(!health.ok())fail(`health ${health.status()}`);const hj=await health.json();
+            if(!(hj.leadDatabase&&hj.leadDatabaseHealthy&&hj.leadSchemaHealthy))fail(`health not ready ${JSON.stringify(hj)}`);
+            const sitemap=fs.readFileSync('public/sitemap.xml','utf8');
+            const routes=[...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>new URL(m[1]).pathname||'/');if(routes.length!==28)fail(`sitemap routes=${routes.length}`);
+            for(const route of routes){const r=await api.get(BASE+route,{maxRedirects:5});if(r.status()!==200)fail(`route ${route} => ${r.status()}`)}
+            for(const [old,dest] of Object.entries(expectedLegacy)){
+              const r=await api.get(BASE+old,{maxRedirects:0});if(![301,302,307,308].includes(r.status()))fail(`legacy ${old} status ${r.status()}`);
+              const loc=r.headers()['location']||'';if(!loc.includes(dest))fail(`legacy ${old} => ${loc}, expected ${dest}`);
+            }
+            const wpCases=[
+              ['/my-properties-main/?r=available&v=residential&x=sale','/buy'],
+              ['/my-properties-main/?r=sold&v=residential&x=sale','/sold'],
+              ['/my-properties-main/?r=available&v=residential&x=lease','/rent']
+            ];
+            for(const [old,dest] of wpCases){const r=await api.get(BASE+old,{maxRedirects:0});if(![301,302,307,308].includes(r.status()))fail(`WP route ${old}: ${r.status()}`);if(!(r.headers()['location']||'').includes(dest))fail(`WP route ${old} wrong location`)}
+            const deep=await api.get(BASE+'/qa/deep/not-a-real-page',{maxRedirects:0});if(deep.status()!==404)fail(`deep 404=${deep.status()}`);
+            const css=await api.get(BASE+'/assets/css/final-demo.css');if(!css.ok())fail('final css unavailable');if(!(css.headers()['cache-control']||'').includes('max-age=0'))fail(`CSS cache ${css.headers()['cache-control']}`);
+            const home=await api.get(BASE+'/');const hh=home.headers();for(const h of ['content-security-policy','x-content-type-options','x-frame-options','referrer-policy','permissions-policy'])if(!hh[h])fail(`missing header ${h}`);
+
+            const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});
+            const context=await browser.newContext({viewport:{width:1440,height:1000}});
+            const page=await context.newPage();const errors=[];
+            page.on('console',m=>{if(m.type()==='error')errors.push(`console:${m.text()}`)});page.on('pageerror',e=>errors.push(`pageerror:${e.message}`));
+            const formOccurrences=[];
+            for(const route of routes){
+              await page.goto(BASE+route,{waitUntil:'networkidle'});
+              const forms=page.locator('form[data-lead-form]');
+              const n=await forms.count();for(let i=0;i<n;i++)formOccurrences.push({route,index:i,id:await forms.nth(i).getAttribute('data-lead-form')});
+            }
+            if(formOccurrences.length!==14)fail(`Expected 14 physical lead forms, found ${formOccurrences.length}: ${JSON.stringify(formOccurrences)}`);
+            for(let i=0;i<formOccurrences.length;i++){
+              const f=formOccurrences[i];await page.goto(BASE+f.route,{waitUntil:'networkidle'});const form=page.locator('form[data-lead-form]').nth(f.index);await form.scrollIntoViewIfNeeded();await fillForm(form,i+1);
+              const [resp]=await Promise.all([page.waitForResponse(r=>r.url().includes('/api/leads')&&r.request().method()==='POST',{timeout:15000}),form.evaluate(el=>el.requestSubmit())]);
+              if(![201,202].includes(resp.status()))fail(`form ${f.route}/${f.id} => ${resp.status()} ${await resp.text()}`);
+            }
+            // Homepage Rent search must enter the rental journey.
+            await page.goto(BASE+'/',{waitUntil:'networkidle'});const search=page.locator('form[data-property-search]');
+            if(await search.count()){const journey=search.locator('[name="journey"]');if(await journey.count())await journey.selectOption('rent');await search.evaluate(el=>el.requestSubmit());await page.waitForURL(/\/rent(?:#rent-register)?$/,{timeout:10000});if(!page.url().includes('/rent'))fail(`Rent search => ${page.url()}`)}
+            // Mobile menu: closed links must not enter tab order; open menu must be operable.
+            await page.setViewportSize({width:390,height:844});await page.goto(BASE+'/',{waitUntil:'networkidle'});
+            const mobile=page.locator('[data-mobile-nav]');if(!await mobile.getAttribute('inert'))fail('closed mobile menu missing inert');
+            for(let i=0;i<12;i++){await page.keyboard.press('Tab');const inside=await page.evaluate(()=>document.querySelector('[data-mobile-nav]')?.contains(document.activeElement));if(inside)fail('closed mobile menu received keyboard focus')}
+            await page.locator('[data-menu-toggle]').click();if(await mobile.getAttribute('inert')!==null)fail('open mobile menu still inert');if(await page.locator('[data-menu-toggle]').getAttribute('aria-expanded')!=='true')fail('menu aria-expanded not true');
+            // Property galleries + save state on all six pages.
+            await page.setViewportSize({width:1440,height:1000});
+            for(const pth of propertyPaths){await page.goto(BASE+pth,{waitUntil:'networkidle'});const opens=page.locator('[data-gallery-open]');if(await opens.count()<1)fail(`${pth} no gallery`);await opens.first().click();const lb=page.locator('[data-lightbox]');if(!await lb.evaluate(e=>e.classList.contains('is-open')))fail(`${pth} lightbox did not open`);const ok=await lb.locator('img').evaluate(img=>img.complete&&img.naturalWidth>0);if(!ok)fail(`${pth} lightbox image failed`);await page.keyboard.press('Escape');const fav=page.locator('[data-favourite]').first();if(await fav.count()){const before=await fav.getAttribute('aria-pressed');await fav.click();const after=await fav.getAttribute('aria-pressed');if(before===after)fail(`${pth} save state did not toggle`)}}
+            await browser.close();
+            if(errors.length)fail(`browser errors: ${errors.join(' | ')}`);
+
+            // No-JS fallback creates one additional D1 row and must land at thank-you.
+            const nojsBrowser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});
+            const nojs=await nojsBrowser.newContext({javaScriptEnabled:false,viewport:{width:1280,height:900}});const np=await nojs.newPage();await np.goto(BASE+'/contact',{waitUntil:'load'});const nf=np.locator('form[data-lead-form]').first();await fillForm(nf,15);await Promise.all([np.waitForNavigation({waitUntil:'load',timeout:15000}),nf.evaluate(el=>el.requestSubmit())]);if(!np.url().includes('/thank-you'))fail(`no-JS fallback => ${np.url()}`);await nojsBrowser.close();
+
+            const evidenceResp=await api.get(qaUrl());if(!evidenceResp.ok())fail(`D1 evidence after=${evidenceResp.status()}`);const evidence=await evidenceResp.json();
+            if(evidence.rows.length!==15)fail(`Expected 15 new D1 rows, found ${evidence.rows.length}`);
+            if(evidence.total!==beforeTotal+15)fail(`D1 total expected ${beforeTotal+15}, got ${evidence.total}`);
+            for(const row of evidence.rows){if(!row.source_url||!row.source_url.startsWith(BASE))fail(`bad source ${row.form_type}: ${row.source_url}`);if(!['stored','delivered'].includes(row.delivery_status))fail(`bad delivery status ${row.delivery_status}`);if(row.source_url.includes('?')||row.source_url.includes('#'))fail(`noncanonical source ${row.source_url}`)}
+            const referral=evidence.rows.find(r=>r.form_type==='referral');if(!referral||!JSON.parse(referral.payload_json).referral_consent)fail('Referral consent missing from D1 payload');
+            fs.writeFileSync('e2e-evidence.json',JSON.stringify({batch,beforeTotal,afterTotal:evidence.total,forms:formOccurrences,d1Rows:evidence.rows.map(r=>({form_type:r.form_type,name:r.name,source_url:r.source_url,delivery_status:r.delivery_status})),health:hj},null,2));
+            const del=await api.delete(qaUrl());if(!del.ok())fail(`cleanup ${del.status()}`);const dj=await del.json();if(dj.deleted!==15||dj.total!==beforeTotal)fail(`cleanup mismatch ${JSON.stringify(dj)}`);
+            console.log(`E2E PASS batch=${batch}; original D1 rows preserved=${beforeTotal}`);
+            await api.dispose();
+          })().catch(e=>{console.error(e);process.exit(1)});
+          NODE
+          node e2e.cjs
+      - name: Lighthouse lab gate on representative templates
+        run: |
+          mkdir -p lighthouse-out
+          for route in / /buy /property-27-design-way-kalkallo /sell /contact; do
+            slug=$(echo "$route" | tr '/-' '__' | sed 's/^_*$/home/')
+            npx lighthouse "$BASE$route" --chrome-path=/usr/bin/google-chrome --chrome-flags='--headless --no-sandbox' --only-categories=performance,accessibility,best-practices,seo --output=json --output-path="lighthouse-out/$slug.json" --quiet
+          done
+          node - <<'NODE'
+          const fs=require('fs');let bad=[];
+          for(const f of fs.readdirSync('lighthouse-out')){const j=JSON.parse(fs.readFileSync('lighthouse-out/'+f));const c=j.categories;const scores={performance:c.performance.score*100,accessibility:c.accessibility.score*100,bestPractices:c['best-practices'].score*100,seo:c.seo.score*100};console.log(f,scores);if(scores.accessibility<100||scores.seo<100||scores.performance<90||scores.bestPractices<90)bad.push({f,scores})}
+          if(bad.length){console.error(JSON.stringify(bad,null,2));process.exit(1)}
+          NODE
+      - name: Remove new QA batch endpoint and all test transport
+        run: |
+          rm -f functions/api/_qa-e2e.js .github/workflows/e2e-release-gate.yml e2e.cjs e2e-evidence.json
+          rm -rf lighthouse-out node_modules package.json package-lock.json
+          rmdir .github/workflows 2>/dev/null || true; rmdir .github 2>/dev/null || true
+          git add -A;git diff --cached --check
+          TREE=$(git write-tree);echo "Final clean tree: $TREE";test "$TREE" = "$EXPECTED_CLEAN_TREE"
+          git config user.name 'github-actions[bot]';git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'qa: pass complete Cloudflare preview release gate';git push origin HEAD:cutover/legacy-routing-preview
