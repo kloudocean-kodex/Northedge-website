@@ -60,7 +60,7 @@ $$('form[data-lead-form]').forEach(form=>{
 });
 
 const searchForm=$('[data-property-search]');
-searchForm?.addEventListener('submit',e=>{e.preventDefault();const p=new URLSearchParams(new FormData(searchForm));location.href='buy.html?'+p.toString()});
+searchForm?.addEventListener('submit',e=>{e.preventDefault();const p=new URLSearchParams(new FormData(searchForm));location.href='/buy?'+p.toString()});
 
 function filterProperties(){
   const cards=$$('[data-property]'),empty=$('[data-empty]');

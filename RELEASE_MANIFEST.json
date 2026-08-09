@@ -3,7 +3,7 @@
   "date": "2026-08-08",
   "baseRelease": "NorthEdge R3",
   "baseSha256": "7003c5932d9b96ed5113c93008578b990a50c490f8d5e985f587396372d3cb1c",
-  "fileCount": 176,
+  "fileCount": 178,
   "files": [
     {
       "path": ".env.example",
@@ -46,9 +46,19 @@
       "sha256": "e67d9025c91293ba3220d785b94f0756a85a6ae9caa23e1324131264d702cdae"
     },
     {
+      "path": "functions/my-properties-main.js",
+      "bytes": 673,
+      "sha256": "0d7e9ad5b867ec14b2cfe35e8526f5c69457c12e47244d36e819724ff7ec3291"
+    },
+    {
+      "path": "functions/property-listing-details.js",
+      "bytes": 1363,
+      "sha256": "9bc011d54030672ce435265fd5e49f518fab8174b2a32baf214797b4edcd11e0"
+    },
+    {
       "path": "public/404.html",
-      "bytes": 8297,
-      "sha256": "08b826db791dbf4acc43a57ecc7a43aa3328159d4eb03b6c4a304258aaea5dcd"
+      "bytes": 8107,
+      "sha256": "60be4156781a7ed11e4fb9ea58fe40cfa7b8d2a858b83f43b87af8385bd0b281"
     },
     {
       "path": "public/_headers",
@@ -57,48 +67,48 @@
     },
     {
       "path": "public/_redirects",
-      "bytes": 355,
-      "sha256": "8cdc43ac84539dc286fde975d34fd0d1027cf5ac9d101a61d7d683e8927d1457"
+      "bytes": 268,
+      "sha256": "2a8810a2b71f1d4e20943d105138267adfc894a84fc2e3223aa35f77f39e490a"
     },
     {
       "path": "public/about.html",
-      "bytes": 11746,
-      "sha256": "e238c93d376b0e602db6927f3870504f731f9a455ad51ee3c79f3e18e6d323bb"
+      "bytes": 11556,
+      "sha256": "a3c29fda2b1edac6f4f7e815113f35e71f9fcaa3f8403f76d27e5dd5469e31c3"
     },
     {
       "path": "public/accessibility.html",
-      "bytes": 8968,
-      "sha256": "9684116b57d6c6ab4c6c7ec4564fe3a78fafcc734dcd1677179df4dbfe91dfba"
+      "bytes": 8788,
+      "sha256": "47dc4b07e57ce400d17ff1f046862298a0181c980a37571a2884de4364676446"
     },
     {
       "path": "public/agent-gurinder-sandhu.html",
-      "bytes": 13196,
-      "sha256": "d28b72077fca25f998c80909256a345956d4ac0b7b696c2b6788023bc473930a"
+      "bytes": 13011,
+      "sha256": "628c93ebb4329f0cc06012cb55f47d2e68320132cb48c7e075d20e2b2a43461f"
     },
     {
       "path": "public/area-beveridge.html",
-      "bytes": 10960,
-      "sha256": "3ae21bb2660e29a4dfab6c28ad9b3cec5f51b170c75194fb4d81d9c2230eb6a0"
+      "bytes": 10770,
+      "sha256": "cc3bf4fc33574cf0e1d966ded0315ede38edfa38bbbdcbbb30226d01681bf95c"
     },
     {
       "path": "public/area-donnybrook.html",
-      "bytes": 12354,
-      "sha256": "eca94dd779a5388e948df94c05095a2d9fb24cc15a8aebd96e79052efd70b140"
+      "bytes": 12154,
+      "sha256": "ac3ea1f01d181ed63033cc01d6428fca52d3e48a7d6c7ae3c356b23fb1ca2a5a"
     },
     {
       "path": "public/area-kalkallo.html",
-      "bytes": 15271,
-      "sha256": "198598b051099d1ceb5d8f26c9f85313a483e5504b27da0573eed9b72abbe027"
+      "bytes": 15041,
+      "sha256": "be348505a3500b0bb7676dfac9afafbea8806c0ddb944519ee4121847703c1bb"
     },
     {
       "path": "public/area-mickleham.html",
-      "bytes": 14025,
-      "sha256": "311e989dfe3060541628214013a664e4b38a766eafddcf5249ee38197463bd1f"
+      "bytes": 13810,
+      "sha256": "887189c46620eec09106eb23089bcdfd030661e40acc16d3f8041f2f427ebb18"
     },
     {
       "path": "public/areas.html",
-      "bytes": 12148,
-      "sha256": "13bd1a3565c530f63f4ecfd32f9928c6005336a6d46f1c1570d6adce7bc193fb"
+      "bytes": 11943,
+      "sha256": "ae487f709aab86d0d5508f2e61b13619f9609c7757a939f1eee2d845dc3af941"
     },
     {
       "path": "public/assets/css/client-demo.css",
@@ -722,8 +732,8 @@
     },
     {
       "path": "public/assets/js/site.js",
-      "bytes": 9472,
-      "sha256": "7ed472e348f4699b2283ac1b164123b350bae9bb213eb261e35688cf997cc8ce"
+      "bytes": 9468,
+      "sha256": "a29c398ea344143356742f51763e1f717630c5ac1a01a360a0a1686e064e1285"
     },
     {
       "path": "public/assets/motifs/contours.svg",
@@ -752,13 +762,13 @@
     },
     {
       "path": "public/buy.html",
-      "bytes": 20262,
-      "sha256": "bd5d92cb32fb9ddaab5d373045c2707144641c6a10966e719afabb3446c6e822"
+      "bytes": 19982,
+      "sha256": "fa96e022b2919b02a78310e43686fd70df33f9c343b91c9b6c3b079baced8a54"
     },
     {
       "path": "public/contact.html",
-      "bytes": 11508,
-      "sha256": "a4d1dc1caf991fdb583de810d9ed34ff274adc98d41784712a3d091ca83c01b4"
+      "bytes": 11323,
+      "sha256": "1feff4e52146dd7bdcf3c742ad90f6064adf039dfd7949e7de83f60cc94148bb"
     },
     {
       "path": "public/data/properties.json",
@@ -767,78 +777,78 @@
     },
     {
       "path": "public/image-credits.html",
-      "bytes": 12316,
-      "sha256": "ef87d76ac9ce9a55117956e719f0e94313e27551ea1ac9fd6b2f6b0afadcf9f8"
+      "bytes": 12136,
+      "sha256": "af55f3ec527466644d909a12c1021c0f502a7eae55f2b3cb02e01f099f14de23"
     },
     {
       "path": "public/index.html",
-      "bytes": 37775,
-      "sha256": "c1c4e6f742a0ae3a1a18d8660bca91f1a14663883913d493f2bd6938ce716084"
+      "bytes": 37455,
+      "sha256": "732ceb28d8a5147beba9df44a39b1c2e3b9d015370481000de78ad574ed7d146"
     },
     {
       "path": "public/insight-northern-corridor.html",
-      "bytes": 9872,
-      "sha256": "6555aa1e168e85ba2fda99c38945cb48df0c07e4e3d7b49a64b05dbc6d3bec14"
+      "bytes": 9687,
+      "sha256": "7c4faf55afba631156a7e438e0e0858f9f1c8db95d5951ecd785bd58d8f01aab"
     },
     {
       "path": "public/insight-preparing-to-sell.html",
-      "bytes": 9953,
-      "sha256": "6311973c7545a956e1907068fc7592192055744a229b8e0cc628d952e5b8c5b3"
+      "bytes": 9768,
+      "sha256": "4fbf3fe07029cfe47301e1c9274db662bc226c97f5f1b4fcbfbcf17df4ad5be7"
     },
     {
       "path": "public/insights.html",
-      "bytes": 10924,
-      "sha256": "273e2b0c62b876af4a1638bf618145800e5cc2a50ee056deb0a6ca10bcb91a10"
+      "bytes": 10729,
+      "sha256": "9efa1dc782c62319391cc4d6782e11e2d1719beff30e14fd80d24711635d8bd8"
     },
     {
       "path": "public/privacy.html",
-      "bytes": 9804,
-      "sha256": "f9ca00c94a7cff0db9cb54800b1eb4c1ad649619619560b0ca7b69713f159ddd"
+      "bytes": 9624,
+      "sha256": "b4431b41097d8623b1212edaf7a3ff560279e18666b4abbe89744487e537ec2e"
     },
     {
       "path": "public/property-105-tungsten-drive-kalkallo.html",
-      "bytes": 15942,
-      "sha256": "d3121377c31f4865e90ebe90a1e7067aa79016b97858f7adbef5b6ca1050b69b"
+      "bytes": 15752,
+      "sha256": "2ca02a9fe9a3ce0c623dc3faffd421990732dccab16ee41fe5779111861d3e16"
     },
     {
       "path": "public/property-27-design-way-kalkallo.html",
-      "bytes": 16324,
-      "sha256": "b38dab5f3abe5e8b075e0b44789973c6a5c34d7486c72054dab55a41b1111042"
+      "bytes": 16134,
+      "sha256": "b9b485912374e6c83d9ae45c3f81eab5a308767ded3fa6699150ae54a156036d"
     },
     {
       "path": "public/property-31-roseneath-way-mickleham.html",
-      "bytes": 16133,
-      "sha256": "c89e700507350320edf5eb51f03f6cce06efe5c37ae579e453c9446e5135aa15"
+      "bytes": 15943,
+      "sha256": "fd0a14ede7ccae6d8fc665be1703ed144d143ee98ba092cec7a5db3d313603ad"
     },
     {
       "path": "public/property-6-alisterus-road-kalkallo.html",
-      "bytes": 14973,
-      "sha256": "1cfac591d471dfbe87b4b8d2e9510668f588b501d97e4e5cb423ed0719d7c592"
+      "bytes": 14783,
+      "sha256": "802c2f74a3b438aefb054d032db3270c18b0c3f29d82398a3f658d564f26350c"
     },
     {
       "path": "public/property-6-mathoura-road-mickleham.html",
-      "bytes": 16025,
-      "sha256": "bd8b789ef72ba90d57e613378560d2b368d143d4d4fc6dd9bbf64deb6f2dc30f"
+      "bytes": 15835,
+      "sha256": "426e3225f1ae541daa0afb8f0e985509ce922d9fa3560e787bd11f595b74d50f"
     },
     {
       "path": "public/property-7-rulingia-road-donnybrook.html",
-      "bytes": 15675,
-      "sha256": "98a4dbd61f8dab6937471f823da4614917c9e6ebb785444f6270c6721aa7d132"
+      "bytes": 15485,
+      "sha256": "23960d22ed24896e6cd1c490949bb847498382ac358cb5c98c6ce99ab2256b0f"
     },
     {
       "path": "public/property-management.html",
-      "bytes": 13091,
-      "sha256": "ae4c70dbe31367e6cf7192ae0ca4fcb3e11c3580b58ea5bc8dd23aa53601cc95"
+      "bytes": 12901,
+      "sha256": "32c3e6775121650a90f3b4eb483fb65576990777c96d4732ca1bfa61c44060e0"
     },
     {
       "path": "public/referral.html",
-      "bytes": 11458,
-      "sha256": "1346325eca20d9c3d3dff6977387f5062412029356810f8b32a0b5e5eb8eb659"
+      "bytes": 11278,
+      "sha256": "0708e667009bfa6b75413b55239166be853b999f92c3b5ec5ffb5736c515af2f"
     },
     {
       "path": "public/rent.html",
-      "bytes": 11766,
-      "sha256": "92f8110bd72be6285e8f80e8d35d89b4a35fe59ceb830300358d8c652b76d73d"
+      "bytes": 11578,
+      "sha256": "e8db5c50f323b3b91cb9044ccbaf97c94ce35f292521780fc94e23daa70f479a"
     },
     {
       "path": "public/robots.txt",
@@ -847,8 +857,8 @@
     },
     {
       "path": "public/sell.html",
-      "bytes": 13843,
-      "sha256": "38a2026008ca772bf0bfc3ae0faeceb2bfe9eda83de928cbb2453142528bd704"
+      "bytes": 13658,
+      "sha256": "4a5142589a47836056e2dae2b8ff4b53fa6d35e4ade3d06f7b2200d86d9e8f46"
     },
     {
       "path": "public/site.webmanifest",
@@ -857,18 +867,18 @@
     },
     {
       "path": "public/sitemap.xml",
-      "bytes": 3521,
-      "sha256": "69147d4571507f35972482aa6384473f528de6164ed174e3d53ff5c2be96b815"
+      "bytes": 3386,
+      "sha256": "7789b73ff6d25f20d28bad30408d693d4d86a7f2a336bf9cfcf0b8cad99e194d"
     },
     {
       "path": "public/sold.html",
-      "bytes": 13482,
-      "sha256": "441cde4fb981307fa64dfe7f7b1805254c41d4c32671e794e7bc42d460ea1a13"
+      "bytes": 13292,
+      "sha256": "d323dd2ae11e932d47a5ab33423fcbb50995e24ccefe711eb0b9b3d06c2a3631"
     },
     {
       "path": "public/terms.html",
-      "bytes": 9291,
-      "sha256": "78e849ddb0e8ab7cd4aba8aa491ed3cb843633f5ca33504a756c8ec5e22654e3"
+      "bytes": 9111,
+      "sha256": "1ffa8d08b8e402aeea5794b630bdbe6ddf19be26be40ceedb4c2f4394c11c532"
     },
     {
       "path": "schema/leads.sql",
