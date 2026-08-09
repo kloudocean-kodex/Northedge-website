@@ -81,3 +81,7 @@ The full Cloudflare preview axe pass identified insufficient contrast on five la
 ## Shared form contrast correction — 9 August 2026
 
 A full-route Cloudflare preview sweep showed the same low-contrast label token on light forms and property enquiry cards, plus one Rent section title accent. The shared light-form/enquiry-card label colour is now `#3F4742` and the affected Rent light-surface accent uses `#815B25`. These are shared design-token corrections rather than page-by-page exceptions. A deployment-synchronised 28-route accessibility sweep is required after this change.
+
+## Base form-label contrast correction — 9 August 2026
+
+The deployment-synchronised 28-route axe sweep proved the previous selector was too narrow: several light forms do not carry `.light-form`. The base `.form-field label,.field label` token is now `#3F4742`. The more-specific dark appraisal-band rule remains unchanged and continues to render light labels on dark surfaces.

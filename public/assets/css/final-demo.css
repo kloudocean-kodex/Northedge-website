@@ -18,7 +18,7 @@
 
 /* Claude's broad `label` override made labels inside the dark appraisal bands
    too dim. Scope light and dark form labels deliberately. */
-.form-field label,.field label{color:#5F6560!important}
+.form-field label,.field label{color:#3F4742!important}
 .appraisal-band .form-field label,
 .appraisal-band label{
   color:rgba(255,255,255,.78)!important;
