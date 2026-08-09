@@ -1,0 +1,101 @@
+name: NorthEdge Cloudflare Pages URL readiness
+
+on:
+  push:
+    branches:
+      - cutover/legacy-routing-preview
+    paths:
+      - .github/workflows/cloudflare-url-normalize.yml
+
+permissions:
+  contents: write
+
+jobs:
+  normalize-and-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: cutover/legacy-routing-preview
+          fetch-depth: 0
+
+      - name: Normalize Pages URLs and truth wording
+        run: python tools/cloudflare-url-normalize.py
+
+      - name: Remove one-time transport files
+        run: |
+          rm -f tools/cloudflare-url-normalize.py
+          rm -f .github/workflows/cloudflare-url-normalize.yml
+          rmdir .github/workflows 2>/dev/null || true
+          rmdir .github 2>/dev/null || true
+
+      - name: Regenerate release manifest
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          root=Path('.')
+          old=json.loads((root/'RELEASE_MANIFEST.json').read_text(encoding='utf-8'))
+          entries=[]
+          for p in sorted(root.rglob('*')):
+              if not p.is_file() or '.git' in p.parts or p.name=='RELEASE_MANIFEST.json':
+                  continue
+              b=p.read_bytes()
+              entries.append({'path':p.as_posix(),'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()})
+          manifest={
+              'release':old.get('release','NorthEdge Cutover R1'),
+              'date':old.get('date','2026-08-08'),
+              'baseRelease':old.get('baseRelease','NorthEdge R3'),
+              'baseSha256':old.get('baseSha256','7003c5932d9b96ed5113c93008578b990a50c490f8d5e985f587396372d3cb1c'),
+              'fileCount':len(entries)+1,
+              'files':entries,
+          }
+          if manifest['fileCount']!=178 or len(entries)!=177:
+              raise SystemExit(f'Unexpected file count {manifest["fileCount"]}/{len(entries)}')
+          (root/'RELEASE_MANIFEST.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          PY
+
+      - name: Static Cloudflare readiness checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check functions/api/health.js
+          node --check functions/api/leads.js
+          node --check functions/my-properties-main.js
+          node --check functions/property-listing-details.js
+          node --check public/assets/js/site.js
+
+          ! grep -R -nE 'href="[A-Za-z0-9_-]+\.html([#?][^"]*)?"' public/*.html
+          ! grep -R -nE 'https://northedgerealestate\.com\.au/[A-Za-z0-9_-]+\.html' public/*.html public/sitemap.xml
+          ! grep -R -nF 'production website connects directly to NorthEdge’s rental feed' public/rent.html
+          ! grep -R -nF 'live rental record' public/rent.html
+          ! grep -R -nF 'Statement of Information available' public
+
+          grep -q '/about-us/ /about 301' public/_redirects
+          grep -q '/contacts/ /contact 301' public/_redirects
+          grep -q '/appraisal/ /sell#appraisal 301' public/_redirects
+          grep -q "35074581.*property-7-rulingia-road-donnybrook" functions/property-listing-details.js
+          grep -q "35680034.*property-6-mathoura-road-mickleham" functions/property-listing-details.js
+
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m=json.loads(Path('RELEASE_MANIFEST.json').read_text())
+          assert m['fileCount']==178
+          assert len(m['files'])==177
+          paths={x['path'] for x in m['files']}
+          assert 'functions/my-properties-main.js' in paths
+          assert 'functions/property-listing-details.js' in paths
+          PY
+
+          if grep -R -nE '(ghp_[A-Za-z0-9]{20,}|github_pat_|sk_live_|BEGIN (RSA|OPENSSH) PRIVATE KEY|CLOUDFLARE_API_TOKEN=.+|RESEND_API_KEY=.+)' --exclude='.env.example' .; then
+            echo 'Potential secret found'; exit 1
+          fi
+
+      - name: Commit verified readiness changes
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'fix: prepare legacy routing and canonical URLs for Cloudflare Pages'
+          git push origin HEAD:cutover/legacy-routing-preview
