@@ -373,3 +373,6 @@ button[aria-busy="true"]{cursor:wait;opacity:.75}
 .page-rent .content-section .section-title em{
   color:#815B25;
 }
+
+/* Production QA: form-label opacity correction */
+.form-field label,.field label{opacity:1!important}

@@ -89,3 +89,7 @@ The deployment-synchronised 28-route axe sweep proved the previous selector was 
 ## Mutable asset cache correction — 9 August 2026
 
 Deployment-synchronised accessibility testing exposed stale CSS on the Cloudflare branch alias: a query-busted CSS request returned the new release while normal page loads could reuse the older `/assets/*` response. Mutable CSS and JavaScript now require revalidation (`max-age=0, must-revalidate`). Images, motifs and partner assets use a one-hour revalidation window rather than a seven-day stale window. This prevents source fixes from being masked by stale client assets.
+
+## Form-label opacity correction — 9 August 2026
+
+The all-route Cloudflare axe sweep traced the remaining label contrast failure to the base `site.css` rule `opacity:.72`. The accessible foreground colour was therefore being alpha-blended back toward the light form background. The production override now sets form/search labels to full opacity; dark appraisal labels retain their intended translucency through their explicit RGBA colour.
