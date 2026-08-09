@@ -1,4 +1,4 @@
-name: NorthEdge all-route accessibility sweep
+name: NorthEdge apply shared accessibility tokens
 on:
   push:
     branches: [cutover/legacy-routing-preview]
@@ -6,60 +6,58 @@ on:
 permissions:
   contents: write
 jobs:
-  sweep:
+  apply-clean:
     runs-on: ubuntu-latest
-    env:
-      BASE: https://cutover-legacy-routing-previ.northedge-website.pages.dev
-      EXPECTED_CLEAN_TREE: 502d4e08598e5ac0ed9dd3503cc6dbc48ad2f53c
     steps:
       - uses: actions/checkout@v4
         with:
           ref: cutover/legacy-routing-preview
           fetch-depth: 0
-      - name: Install test-only accessibility dependencies
+      - name: Apply shared production accessibility correction
         run: |
-          npm init -y >/dev/null 2>&1
-          npm install --no-save playwright-core@1.54.2 axe-core@4.10.2 >/dev/null
-      - name: Scan all 28 sitemap routes
-        shell: bash
+          python - <<'PY'
+          from pathlib import Path
+          css=Path('public/assets/css/final-demo.css')
+          s=css.read_text(encoding='utf-8')
+          marker='/* Production QA: shared accessible light-form tokens */'
+          block='''\n\n/* Production QA: shared accessible light-form tokens */\n.light-form .form-field label,\n.enquiry-card .form-field label{\n  color:#3F4742!important;\n}\n.page-rent .content-section .section-title em{\n  color:#815B25;\n}\n'''
+          if marker not in s:
+              s=s.rstrip()+block+'\n'
+          css.write_text(s,encoding='utf-8')
+          qa=Path('docs/QA_REPORT.md')
+          q=qa.read_text(encoding='utf-8')
+          note='''\n## Shared form contrast correction — 9 August 2026\n\nA full-route Cloudflare preview sweep showed the same low-contrast label token on light forms and property enquiry cards, plus one Rent section title accent. The shared light-form/enquiry-card label colour is now `#3F4742` and the affected Rent light-surface accent uses `#815B25`. These are shared design-token corrections rather than page-by-page exceptions. A deployment-synchronised 28-route accessibility sweep is required after this change.\n'''
+          if '## Shared form contrast correction — 9 August 2026' not in q:
+              q=q.rstrip()+'\n'+note+'\n'
+          qa.write_text(q,encoding='utf-8')
+          PY
+      - name: Regenerate release manifest without QA transport
         run: |
-          cat > a11y-all.cjs <<'NODE'
-          const {chromium}=require('playwright-core');
-          const fs=require('fs');
-          const BASE=process.env.BASE;
-          const paths=[...fs.readFileSync('public/sitemap.xml','utf8').matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>new URL(m[1]).pathname||'/');
-          const axeSource=fs.readFileSync(require.resolve('axe-core/axe.min.js'),'utf8');
-          (async()=>{
-            if(paths.length!==28)throw new Error(`Expected 28 routes; got ${paths.length}`);
-            const b=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});
-            const c=await b.newContext({viewport:{width:1440,height:1000},bypassCSP:true});
-            const p=await c.newPage();
-            const failures=[];
-            for(const path of paths){
-              const r=await p.goto(BASE+path,{waitUntil:'networkidle',timeout:30000});
-              if(!r||r.status()!==200){failures.push({path,http:r?.status()});continue;}
-              await p.addScriptTag({content:axeSource});
-              const a=await p.evaluate(()=>axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']}}));
-              const severe=a.violations.filter(v=>['serious','critical'].includes(v.impact));
-              if(severe.length)failures.push({path,violations:severe.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.map(n=>({target:n.target,html:n.html,failureSummary:n.failureSummary,data:n.any.map(x=>x.data)}))}))});
-              console.log(`${path}: ${severe.length?'FAIL':'PASS'}`);
-            }
-            fs.writeFileSync('a11y-results.json',JSON.stringify({routeCount:paths.length,failures},null,2));
-            console.log(JSON.stringify({routeCount:paths.length,failingRoutes:failures.length},null,2));
-            await b.close();
-            if(failures.length){console.log(fs.readFileSync('a11y-results.json','utf8'));process.exit(1);}
-          })().catch(e=>{console.error(e);process.exit(1)});
-          NODE
-          node a11y-all.cjs
-      - name: Remove test transport and prove source tree unchanged
-        shell: bash
+          python - <<'PY'
+          from pathlib import Path
+          import json, hashlib
+          root=Path('.')
+          old=json.loads((root/'RELEASE_MANIFEST.json').read_text(encoding='utf-8'))
+          exclude={'.github/workflows/a11y-all-routes.yml'}
+          entries=[]
+          for p in sorted(root.rglob('*')):
+              rel=p.as_posix()
+              if not p.is_file() or '.git' in p.parts or p.name=='RELEASE_MANIFEST.json' or rel in exclude:
+                  continue
+              b=p.read_bytes();entries.append({'path':rel,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()})
+          manifest={k:old[k] for k in ['release','date','baseRelease','baseSha256'] if k in old}
+          manifest['fileCount']=len(entries)+1;manifest['files']=entries
+          (root/'RELEASE_MANIFEST.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          print('Release files:',manifest['fileCount'])
+          PY
+      - name: Remove one-time workflow and commit clean candidate
         run: |
-          rm -f .github/workflows/a11y-all-routes.yml a11y-all.cjs a11y-results.json
+          rm -f .github/workflows/a11y-all-routes.yml
           rmdir .github/workflows 2>/dev/null || true
           rmdir .github 2>/dev/null || true
-          rm -rf node_modules package.json package-lock.json
           git add -A
-          TREE=$(git write-tree);echo "Clean tree: $TREE";test "$TREE" = "$EXPECTED_CLEAN_TREE"
-          git config user.name 'github-actions[bot]';git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'qa: pass all-route accessibility sweep'
+          git diff --cached --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'fix: apply shared accessible form and rent tokens'
           git push origin HEAD:cutover/legacy-routing-preview
