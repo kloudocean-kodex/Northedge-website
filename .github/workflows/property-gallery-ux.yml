@@ -1,0 +1,135 @@
+name: NorthEdge production property gallery UX
+on:
+  push:
+    branches:
+      - cutover/legacy-routing-preview
+    paths:
+      - .github/workflows/property-gallery-ux.yml
+permissions:
+  contents: write
+jobs:
+  apply-and-test:
+    runs-on: ubuntu-latest
+    env:
+      BASE: https://cutover-legacy-routing-previ.northedge-website.pages.dev
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: cutover/legacy-routing-preview
+          fetch-depth: 0
+      - name: Apply production property gallery UX
+        run: python tools/apply-property-gallery-ux.py
+      - name: Verify JavaScript syntax
+        run: node --check public/assets/js/property-gallery.js
+      - name: Remove one-time transport and commit clean candidate
+        run: |
+          rm -f .github/workflows/property-gallery-ux.yml tools/apply-property-gallery-ux.py
+          rmdir .github/workflows 2>/dev/null || true
+          rmdir .github 2>/dev/null || true
+          git add -A
+          git diff --cached --check
+          TREE=$(git write-tree)
+          echo "CLEAN_TREE=$TREE" >> "$GITHUB_ENV"
+          echo "Clean gallery candidate tree: $TREE"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'feat: ready active property pages for complete galleries'
+          git push origin HEAD:cutover/legacy-routing-preview
+      - name: Wait for exact gallery candidate on Cloudflare
+        run: |
+          for i in $(seq 1 60); do
+            page=$(curl -fsS "$BASE/property-27-design-way-kalkallo" || true)
+            js=$(curl -fsS "$BASE/assets/js/property-gallery.js" || true)
+            if printf '%s' "$page" | grep -q 'assets/js/property-gallery.js' && printf '%s' "$page" | grep -q 'kalkallo-facade-1600.jpg' && printf '%s' "$js" | grep -q 'data-gallery-counter'; then
+              echo 'Cloudflare is serving the gallery candidate.'
+              exit 0
+            fi
+            sleep 6
+          done
+          echo 'Cloudflare did not converge to the gallery candidate.' >&2
+          exit 1
+      - name: Install test-only browser tooling
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install --no-save playwright-core@1.54.2 axe-core@4.10.2 >/dev/null
+      - name: Run all-route accessibility and property-gallery regression
+        run: |
+          cat > gallery-qa.cjs <<'NODE'
+          const {chromium}=require('playwright-core');
+          const fs=require('fs');
+          const BASE=process.env.BASE;
+          const active=[
+            '/property-27-design-way-kalkallo',
+            '/property-31-roseneath-way-mickleham',
+            '/property-6-mathoura-road-mickleham',
+            '/property-7-rulingia-road-donnybrook'
+          ];
+          const archived=['/property-105-tungsten-drive-kalkallo','/property-6-alisterus-road-kalkallo'];
+          const sitemap=[...fs.readFileSync('public/sitemap.xml','utf8').matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>new URL(m[1]).pathname||'/');
+          if(sitemap.length!==26)throw new Error(`Expected 26 sitemap routes, got ${sitemap.length}`);
+          const routes=[...sitemap,...archived];
+          const axe=fs.readFileSync(require.resolve('axe-core/axe.min.js'),'utf8');
+          (async()=>{
+            const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});
+            const ctx=await browser.newContext({viewport:{width:1440,height:1000},bypassCSP:true});
+            const page=await ctx.newPage();const failures=[];const pageErrors=[];
+            page.on('pageerror',e=>pageErrors.push(e.message));
+            for(const route of routes){
+              const r=await page.goto(BASE+route,{waitUntil:'networkidle',timeout:30000});
+              if(!r||r.status()!==200){failures.push({route,http:r?.status()});continue}
+              await page.addScriptTag({content:axe});
+              const result=await page.evaluate(()=>axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']}}));
+              const severe=result.violations.filter(v=>['serious','critical'].includes(v.impact));
+              if(severe.length)failures.push({route,axe:severe.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.map(n=>n.target)}))});
+            }
+            for(const route of active){
+              await page.setViewportSize({width:1440,height:1000});
+              await page.goto(BASE+route,{waitUntil:'networkidle'});
+              if(await page.locator('script[src="assets/js/property-gallery.js"]').count()!==1)failures.push({route,interaction:'gallery script missing'});
+              const og=await page.locator('meta[property="og:image"]').getAttribute('content');
+              if(!og||og.includes('hero-corridor'))failures.push({route,interaction:`bad og:image ${og}`});
+              const triggers=page.locator('[data-gallery-open]');const count=await triggers.count();
+              if(count<1){failures.push({route,interaction:'no gallery triggers'});continue}
+              for(let i=0;i<count;i++){
+                const img=triggers.nth(i).locator('img');
+                const ok=await img.evaluate(async el=>{if(!el.complete)await new Promise(r=>el.addEventListener('load',r,{once:true}));return el.complete&&el.naturalWidth>0});
+                if(!ok)failures.push({route,interaction:`thumbnail ${i+1} failed to decode`});
+                const alt=await img.getAttribute('alt');if(!alt||!alt.includes(`property image ${i+1} of ${count}`))failures.push({route,interaction:`bad alt ${i+1}: ${alt}`});
+              }
+              const first=triggers.first();await first.focus();await first.click();
+              const lb=page.locator('[data-lightbox]');
+              if(!await lb.evaluate(el=>el.classList.contains('is-open')))failures.push({route,interaction:'lightbox did not open'});
+              const counter=page.locator('[data-gallery-counter]');
+              if((await counter.textContent()).trim()!==`1 / ${count}`)failures.push({route,interaction:`counter ${(await counter.textContent()).trim()}`});
+              const cap=page.locator('[data-gallery-caption]');if(!(await cap.textContent()).includes('property image 1'))failures.push({route,interaction:'caption missing'});
+              const full=lb.locator('img');
+              const decoded=await full.evaluate(async el=>{for(let i=0;i<50&&!el.complete;i++)await new Promise(r=>setTimeout(r,50));return el.complete&&el.naturalWidth>0});
+              if(!decoded)failures.push({route,interaction:'full image failed to decode'});
+              if(count>1){
+                const before=await full.getAttribute('src');await page.locator('[data-gallery-next]').click();
+                const after=await full.getAttribute('src');if(after===before)failures.push({route,interaction:'next button did not change image'});
+                await page.keyboard.press('ArrowLeft');const back=await full.getAttribute('src');if(back!==before)failures.push({route,interaction:'ArrowLeft did not restore previous image'});
+                await page.keyboard.press('ArrowRight');const right=await full.getAttribute('src');if(right===before)failures.push({route,interaction:'ArrowRight did not advance image'});
+              }
+              await page.keyboard.press('Escape');
+              if(await lb.evaluate(el=>el.classList.contains('is-open')))failures.push({route,interaction:'Escape did not close lightbox'});
+              const focusReturned=await first.evaluate(el=>document.activeElement===el);if(!focusReturned)failures.push({route,interaction:'focus did not return to gallery trigger'});
+              await page.setViewportSize({width:390,height:844});await page.goto(BASE+route,{waitUntil:'networkidle'});await page.locator('[data-gallery-open]').first().click();
+              const prevBox=await page.locator('[data-gallery-prev]').boundingBox();const nextBox=await page.locator('[data-gallery-next]').boundingBox();
+              if(!prevBox||!nextBox||prevBox.width<44||prevBox.height<44||nextBox.width<44||nextBox.height<44)failures.push({route,interaction:'mobile gallery controls missing or undersized'});
+              await page.keyboard.press('Escape');
+            }
+            for(const route of archived){await page.goto(BASE+route,{waitUntil:'networkidle'});if(await page.locator('[data-gallery-open]').count())failures.push({route,interaction:'archived route exposed gallery'});if(await page.locator('script[src="assets/js/property-gallery.js"]').count())failures.push({route,interaction:'archived route loaded active gallery script'})}
+            await browser.close();
+            console.log(JSON.stringify({sitemapRoutes:sitemap.length,totalAxeRoutes:routes.length,activeGalleryRoutes:active.length,failures,pageErrors},null,2));
+            if(failures.length||pageErrors.length)process.exit(1);
+          })().catch(e=>{console.error(e);process.exit(1)});
+          NODE
+          node gallery-qa.cjs
+      - name: Verify committed clean tree is unchanged by QA
+        run: |
+          rm -rf node_modules package.json package-lock.json gallery-qa.cjs
+          test -z "$(git status --porcelain)"
+          TREE=$(git rev-parse HEAD^{tree})
+          echo "Verified clean tree after QA: $TREE"
+          test "$TREE" = "$CLEAN_TREE"
