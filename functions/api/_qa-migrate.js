@@ -1,11 +1,11 @@
 const QA_HOST='cutover-legacy-routing-previ.northedge-website.pages.dev';
-const QA_HEADER='2026-08-09-cutover-r1';
+const QA_KEY='2026-08-09-cutover-r1';
 const headers={'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','X-Robots-Tag':'noindex, nofollow'};
 const json=(body,status=200)=>Response.json(body,{status,headers});
 
 export async function onRequestGet({request,env}){
   const url=new URL(request.url);
-  if(url.hostname!==QA_HOST||request.headers.get('x-northedge-qa')!==QA_HEADER)return json({ok:false},404);
+  if(url.hostname!==QA_HOST||url.searchParams.get('qa')!==QA_KEY)return json({ok:false},404);
   if(!env.LEADS_DB)return json({ok:false,error:'LEADS_DB not bound'},503);
   try{
     await env.LEADS_DB.prepare(`CREATE TABLE IF NOT EXISTS lead_rate_limits (
@@ -17,7 +17,8 @@ export async function onRequestGet({request,env}){
     await env.LEADS_DB.prepare('CREATE INDEX IF NOT EXISTS idx_lead_rate_limits_window_start ON lead_rate_limits(window_start)').run();
     const rows=await env.LEADS_DB.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name IN ('leads','lead_rate_limits') ORDER BY name").all();
     const names=(rows.results||[]).map(r=>r.name);
-    return json({ok:names.includes('leads')&&names.includes('lead_rate_limits'),tables:names});
+    const count=await env.LEADS_DB.prepare('SELECT COUNT(*) AS n FROM leads').first();
+    return json({ok:names.includes('leads')&&names.includes('lead_rate_limits'),tables:names,leadCount:Number(count?.n||0)});
   }catch(e){
     return json({ok:false,errorClass:e?.name||'DatabaseError'},500);
   }
