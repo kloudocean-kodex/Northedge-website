@@ -93,3 +93,9 @@ Deployment-synchronised accessibility testing exposed stale CSS on the Cloudflar
 ## Form-label opacity correction — 9 August 2026
 
 The all-route Cloudflare axe sweep traced the remaining label contrast failure to the base `site.css` rule `opacity:.72`. The accessible foreground colour was therefore being alpha-blended back toward the light form background. The production override now sets form/search labels to full opacity; dark appraisal labels retain their intended translucency through their explicit RGBA colour.
+
+## Property gallery interaction readiness — 10 August 2026
+
+The four verified active property routes now use property-specific local lead images for Open Graph previews and neutral address-based gallery labels pending authoritative VaultRE captions. The lightbox has production traversal controls: previous/next buttons, arrow-key navigation, touch swipe, live image count, caption, neighbour preloading, visible focus, and mobile-safe control placement. Existing `site.js` remains responsible for modal opening/closing, Escape handling, focus trapping and focus return. The first fold remains the restrained editorial gallery; future authorised VaultRE images can be added as hidden `.gallery-extra` triggers and remain fully traversable without creating a cluttered thumbnail wall.
+
+This interaction work does not close the property-media completeness gate. Full authorised VaultRE masters for all four active campaigns are still required before live-domain cutover.

@@ -3,7 +3,7 @@
   "baseRelease": "NorthEdge R3",
   "baseSha256": "7003c5932d9b96ed5113c93008578b990a50c490f8d5e985f587396372d3cb1c",
   "date": "2026-08-10",
-  "fileCount": 180,
+  "fileCount": 181,
   "files": [
     {
       "path": ".env.example",
@@ -27,13 +27,13 @@
     },
     {
       "path": "docs/PROPERTY_MEDIA_AUDIT.md",
-      "bytes": 3313,
-      "sha256": "a3e7bdb6ae08e8f087de0a428d1603f4104dce1ffbd33a198b93ef675439bbd5"
+      "bytes": 3847,
+      "sha256": "4d9ba22f4aa00e192a9dfb5217653e5a1ad371217731b561940a0e81f252282e"
     },
     {
       "path": "docs/QA_REPORT.md",
-      "bytes": 7087,
-      "sha256": "9ac4f3caa05f598e7ebb7a4a8f2564ace02656f92099e2fc14c8746f12638d41"
+      "bytes": 8059,
+      "sha256": "2d7050e49d972c6aa88b372dd273b892b7871cda3ac3284be44c75fdfabf0d45"
     },
     {
       "path": "docs/SOURCE_PROVENANCE.md",
@@ -122,8 +122,8 @@
     },
     {
       "path": "public/assets/css/final-demo.css",
-      "bytes": 13169,
-      "sha256": "a44097a09b1fc32c80694d3ddbefc700f8c134ee1487532abc6edb2e1753382b"
+      "bytes": 14893,
+      "sha256": "4d03f7d31a393327bda3891a89da66182a789a168f21c92ea3b0c0ca301fbbd7"
     },
     {
       "path": "public/assets/css/site.css",
@@ -736,6 +736,11 @@
       "sha256": "dd72a56872e5a6ff3c796c58364eac8154aaefbbfeb41764f281b5d39d52ff16"
     },
     {
+      "path": "public/assets/js/property-gallery.js",
+      "bytes": 3690,
+      "sha256": "cb1c6ee0c7ca5b3ff3e6be89e561050a9bb0adfcef15529ae0f8e7dc6b848fe9"
+    },
+    {
       "path": "public/assets/js/site.js",
       "bytes": 9511,
       "sha256": "58d0f54fad9499a425078aac948521fbd936bb5a606af3718b2354f114c22894"
@@ -817,13 +822,13 @@
     },
     {
       "path": "public/property-27-design-way-kalkallo.html",
-      "bytes": 16401,
-      "sha256": "f6986c6be89068f17ec612345ad2f7e2016207838ef4b65242d99e03636f2124"
+      "bytes": 16639,
+      "sha256": "44d445d149ec3cfa9c5496ca84bfd8395e1ba48d97c50840a228fada58fea11d"
     },
     {
       "path": "public/property-31-roseneath-way-mickleham.html",
-      "bytes": 16214,
-      "sha256": "543cb38ef90e787fa111f85dbdf424140db322b5b84c8faac8d3817f3cb3283e"
+      "bytes": 16460,
+      "sha256": "7b770fba0abd4a7297e633d4b99268bda85db9c24332c67a4f7a1f24c3d30dd0"
     },
     {
       "path": "public/property-6-alisterus-road-kalkallo.html",
@@ -832,13 +837,13 @@
     },
     {
       "path": "public/property-6-mathoura-road-mickleham.html",
-      "bytes": 16105,
-      "sha256": "1d70391c1f82b744549013ab5131f349934066d0aaaf9699d91cf95daeee4121"
+      "bytes": 16348,
+      "sha256": "de66ca3f1378bdd996d8aaf7535f16481e616b9b7fded5474986d78efd55afa7"
     },
     {
       "path": "public/property-7-rulingia-road-donnybrook.html",
-      "bytes": 15761,
-      "sha256": "133f45e12f88b28260f6fcbe8cb43cf81f6d61c6a983eb09ab3b5c63b25f9d21"
+      "bytes": 15984,
+      "sha256": "a7b1f5628a9536b207c632c55c7052e5f5b98828ae2af4fc7047988de5481519"
     },
     {
       "path": "public/property-management.html",

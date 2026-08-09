@@ -24,3 +24,7 @@ The existing NorthEdge WordPress listing pages could not be used as an unattende
 For each active campaign: ingest the ordered published VaultRE originals; preserve source ordering as evidence; art-direct a premium lead sequence; generate responsive local derivatives without upscaling; use the actual lead photo for social sharing; include authorised floorplan/aerial assets; use truthful scene-specific alt text; and verify every image, lightbox control, keyboard action and mobile crop on the Cloudflare preview.
 
 **Current media readiness: NO-GO for live-domain cutover until authorised VaultRE masters for the four active campaigns are obtained and the complete galleries pass QA.**
+
+## Gallery interface readiness
+
+The production property template is now prepared for complete ordered galleries without changing the restrained first-fold composition. Full galleries will remain locally hosted and can extend beyond the visible lead grid using hidden gallery items that are available to the accessible lightbox. Property-specific social-preview images and neutral per-image labels are in place for the current local assets. This is interface readiness only; the authorised VaultRE master-ingest requirement remains open.
