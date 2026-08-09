@@ -73,3 +73,7 @@ The following cannot be honestly certified from a static local package alone and
 ## Preview accessibility correction — 9 August 2026
 
 Automated Chromium + axe testing on the Cloudflare branch preview identified insufficient contrast for the large italic brass title accents on the About page. The affected text used `#D9B97A` against `#F7F4EE` / `#EEE8DE`, producing 1.71:1 / 1.54:1 where WCAG requires 3:1 for large text. Light-surface About title accents now use the established darker NorthEdge brass `#815B25`. The complete route-level accessibility gate must pass again on the replacement preview before merge.
+
+## Agent appraisal label contrast correction — 9 August 2026
+
+The full Cloudflare preview axe pass identified insufficient contrast on five labels in the Gurinder appraisal form. Labels on light appraisal surfaces now use `#3F4742`, preserving the restrained visual system while exceeding WCAG AA text contrast requirements. The complete preview gate must pass again before merge.

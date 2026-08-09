@@ -360,3 +360,8 @@ button[aria-busy="true"]{cursor:wait;opacity:.75}
   color:#815B25;
 }
 
+/* Production QA: accessible labels on light appraisal forms */
+.content-section.is-stone .light-form .form-field label{
+  color:#3F4742!important;
+}
+
