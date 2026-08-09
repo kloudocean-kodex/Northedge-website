@@ -27,8 +27,8 @@
     },
     {
       "path": "docs/QA_REPORT.md",
-      "bytes": 6114,
-      "sha256": "9099b02c682d26c9d5b030fc09329daa35d1a95dde95de2b27daec7f12f92482"
+      "bytes": 6644,
+      "sha256": "e3f846e3ae5e3f196d4a3098a8b773075e06f7d53e4b6c142812a94b6f48730c"
     },
     {
       "path": "docs/SOURCE_PROVENANCE.md",
@@ -62,8 +62,8 @@
     },
     {
       "path": "public/_headers",
-      "bytes": 639,
-      "sha256": "ce7314e979fc47aa9ddb9c0bc165f10df36277f58bd4515dd02edf8419cf0810"
+      "bytes": 912,
+      "sha256": "5be9edf33688b87dd75590e49c9c9d1030ec8cfadc04b9abb59e314a01fd099f"
     },
     {
       "path": "public/_redirects",

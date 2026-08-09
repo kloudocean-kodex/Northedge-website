@@ -85,3 +85,7 @@ A full-route Cloudflare preview sweep showed the same low-contrast label token o
 ## Base form-label contrast correction — 9 August 2026
 
 The deployment-synchronised 28-route axe sweep proved the previous selector was too narrow: several light forms do not carry `.light-form`. The base `.form-field label,.field label` token is now `#3F4742`. The more-specific dark appraisal-band rule remains unchanged and continues to render light labels on dark surfaces.
+
+## Mutable asset cache correction — 9 August 2026
+
+Deployment-synchronised accessibility testing exposed stale CSS on the Cloudflare branch alias: a query-busted CSS request returned the new release while normal page loads could reuse the older `/assets/*` response. Mutable CSS and JavaScript now require revalidation (`max-age=0, must-revalidate`). Images, motifs and partner assets use a one-hour revalidation window rather than a seven-day stale window. This prevents source fixes from being masked by stale client assets.
