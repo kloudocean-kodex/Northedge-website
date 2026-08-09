@@ -20,22 +20,13 @@ jobs:
           css=Path('public/assets/css/final-demo.css')
           s=css.read_text(encoding='utf-8')
           marker='/* Production QA: shared accessible light-form tokens */'
-          block='''/* Production QA: shared accessible light-form tokens */
-.light-form .form-field label,
-.enquiry-card .form-field label{
-  color:#3F4742!important;
-}
-.page-rent .content-section .section-title em{
-  color:#815B25;
-}'''
+          block='/* Production QA: shared accessible light-form tokens */\n.light-form .form-field label,\n.enquiry-card .form-field label{\n  color:#3F4742!important;\n}\n.page-rent .content-section .section-title em{\n  color:#815B25;\n}'
           if marker not in s:
               s=s.rstrip()+'\n\n'+block+'\n'
           css.write_text(s,encoding='utf-8')
           qa=Path('docs/QA_REPORT.md')
           q=qa.read_text(encoding='utf-8')
-          note='''## Shared form contrast correction — 9 August 2026
-
-A full-route Cloudflare preview sweep showed the same low-contrast label token on light forms and property enquiry cards, plus one Rent section title accent. The shared light-form/enquiry-card label colour is now `#3F4742` and the affected Rent light-surface accent uses `#815B25`. These are shared design-token corrections rather than page-by-page exceptions. A deployment-synchronised 28-route accessibility sweep is required after this change.'''
+          note='## Shared form contrast correction — 9 August 2026\n\nA full-route Cloudflare preview sweep showed the same low-contrast label token on light forms and property enquiry cards, plus one Rent section title accent. The shared light-form/enquiry-card label colour is now `#3F4742` and the affected Rent light-surface accent uses `#815B25`. These are shared design-token corrections rather than page-by-page exceptions. A deployment-synchronised 28-route accessibility sweep is required after this change.'
           if '## Shared form contrast correction — 9 August 2026' not in q:
               q=q.rstrip()+'\n\n'+note+'\n'
           else:
