@@ -1,0 +1,58 @@
+name: NorthEdge final preview interaction gate
+on:
+  push:
+    branches: [cutover/legacy-routing-preview]
+    paths: [.github/workflows/e2e-final-gate.yml]
+permissions:
+  contents: write
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    env:
+      BASE: https://cutover-legacy-routing-previ.northedge-website.pages.dev
+      QA_KEY: northedge-e2e-20260810-v3
+      EXPECTED_CLEAN_TREE: f42eda054e28ee367c25f9749c8b122796938fcc
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: cutover/legacy-routing-preview, fetch-depth: 0}
+      - name: Wait for this QA deployment
+        run: |
+          for i in $(seq 1 60); do curl -fsS "$BASE/api/_qa-e2e?key=$QA_KEY" | grep -q '"ok":true' && exit 0; sleep 6; done; exit 1
+      - name: Set batch and install browser tools
+        run: |
+          echo "QA_BATCH=B$(date +%s%3N)" >> "$GITHUB_ENV"
+          npm init -y >/dev/null 2>&1
+          npm install --no-save playwright-core@1.54.2 lighthouse@12.8.2 >/dev/null
+      - name: Browser + D1 + routing gate
+        run: |
+          cat > gate.cjs <<'NODE'
+          const {chromium,request:pwRequest}=require('playwright-core'),fs=require('fs');
+          const BASE=process.env.BASE,KEY=process.env.QA_KEY,batch=process.env.QA_BATCH,fail=m=>{throw Error(m)};
+          const q=()=>`${BASE}/api/_qa-e2e?key=${KEY}&batch=${batch}`;
+          async function fill(f,i){for(const e of await f.locator('input,select,textarea').all()){if(!(await e.isVisible()))continue;const t=(await e.getAttribute('type')||'').toLowerCase(),n=(await e.getAttribute('name')||'').toLowerCase(),tag=await e.evaluate(x=>x.tagName.toLowerCase());if(t==='hidden'||n==='website'||t==='submit'||t==='button')continue;if(t==='checkbox'||t==='radio'){if(!(await e.isChecked().catch(()=>false)))await e.check();continue}if(tag==='select'){const o=await e.locator('option').evaluateAll(xs=>xs.filter(x=>!x.disabled&&x.value).map(x=>x.value));if(o.length)await e.selectOption(o[0]);continue}let v='QA test';if(n.includes('email'))v=`qa+${batch}-${i}@example.com`;else if(n.includes('phone'))v='0400000000';else if(n.includes('name'))v=`QA NorthEdge E2E ${batch} ${i}`;else if(n.includes('address'))v='QA TEST ONLY — 1 Test Street, Mickleham VIC 3064';else if(n.includes('message')||n.includes('context')||n.includes('introduction'))v=`QA TEST ONLY ${batch}`;else if(n.includes('timeframe'))v='QA testing only';await e.fill(v)}}
+          (async()=>{const api=await pwRequest.newContext();const before=await (await api.get(q())).json(),beforeTotal=before.total;const h=await (await api.get(BASE+'/api/health')).json();if(!(h.leadDatabase&&h.leadDatabaseHealthy&&h.leadSchemaHealthy))fail('D1 health');const routes=[...fs.readFileSync('public/sitemap.xml','utf8').matchAll(/<loc>(.*?)<\/loc>/g)].map(m=>new URL(m[1]).pathname||'/');if(routes.length!==28)fail('route count');for(const r of routes){const x=await api.get(BASE+r,{maxRedirects:5});if(x.status()!==200)fail(`${r}:${x.status()}`)}
+          const b=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']}),c=await b.newContext({viewport:{width:1440,height:1000}}),p=await c.newPage();const errs=[];p.on('console',m=>{if(m.type()==='error')errs.push(m.text())});p.on('pageerror',e=>errs.push(e.message));const forms=[];for(const r of routes){await p.goto(BASE+r,{waitUntil:'networkidle'});const fsx=p.locator('form[data-lead-form]');for(let i=0;i<await fsx.count();i++)forms.push({r,i,id:await fsx.nth(i).getAttribute('data-lead-form')})}if(forms.length!==14)fail(`forms ${forms.length}`);for(let i=0;i<forms.length;i++){const f=forms[i];await p.goto(BASE+f.r,{waitUntil:'networkidle'});const el=p.locator('form[data-lead-form]').nth(f.i);await fill(el,i+1);const [resp]=await Promise.all([p.waitForResponse(r=>r.url().includes('/api/leads')&&r.request().method()==='POST'),el.evaluate(x=>x.requestSubmit())]);if(![201,202].includes(resp.status()))fail(`${f.id}:${resp.status()}`)}
+          await p.goto(BASE+'/',{waitUntil:'networkidle'});const sf=p.locator('form[data-property-search]');if(await sf.count()){const j=sf.locator('[name="journey"]');if(await j.count())await j.selectOption('rent');await sf.evaluate(x=>x.requestSubmit());await p.waitForURL(/\/rent(?:#rent-register)?$/)}
+          await p.setViewportSize({width:390,height:844});await p.goto(BASE+'/',{waitUntil:'networkidle'});const mob=p.locator('[data-mobile-nav]');if((await mob.getAttribute('inert'))===null)fail('closed menu inert');for(let i=0;i<12;i++){await p.keyboard.press('Tab');if(await p.evaluate(()=>document.querySelector('[data-mobile-nav]')?.contains(document.activeElement)))fail('hidden menu focus')}await p.locator('[data-menu-toggle]').click();if((await mob.getAttribute('inert'))!==null)fail('open menu inert');
+          const props=['105-tungsten-drive-kalkallo','27-design-way-kalkallo','31-roseneath-way-mickleham','6-alisterus-road-kalkallo','6-mathoura-road-mickleham','7-rulingia-road-donnybrook'];await p.setViewportSize({width:1440,height:1000});for(const s of props){await p.goto(`${BASE}/property-${s}`,{waitUntil:'networkidle'});const g=p.locator('[data-gallery-open]');if(await g.count()<1)fail(`${s}:gallery`);await g.first().click();const im=p.locator('[data-lightbox] img');await im.waitFor({state:'visible'});await p.waitForFunction(el=>el.complete&&el.naturalWidth>0,await im.elementHandle(),{timeout:10000});await p.keyboard.press('Escape');const fav=p.locator('[data-favourite]').first();if(await fav.count()){const a=await fav.getAttribute('aria-pressed');await fav.click();if(a===await fav.getAttribute('aria-pressed'))fail(`${s}:save`)}}
+          await b.close();if(errs.length)fail(`browser:${errs.join('|')}`);
+          const nb=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']}),nc=await nb.newContext({javaScriptEnabled:false}),np=await nc.newPage();await np.goto(BASE+'/contact');const nf=np.locator('form[data-lead-form]').first();await fill(nf,15);await Promise.all([np.waitForNavigation(),nf.evaluate(x=>x.requestSubmit())]);if(!np.url().includes('/thank-you'))fail('nojs');await nb.close();
+          const ev=await (await api.get(q())).json();if(ev.rows.length!==15||ev.total!==beforeTotal+15)fail(`D1 rows ${ev.rows.length}/${ev.total}`);const ref=ev.rows.find(x=>x.form_type==='referral');if(!ref||!JSON.parse(ref.payload_json).referral_consent)fail('referral consent');for(const x of ev.rows){if(!x.source_url?.startsWith(BASE)||x.source_url.includes('?')||x.source_url.includes('#'))fail('source url')}console.log(`E2E PASS; original rows=${beforeTotal}`);await api.dispose()})().catch(e=>{console.error(e);process.exit(1)});
+          NODE
+          node gate.cjs
+      - name: Lighthouse 95/100 production target
+        run: |
+          mkdir lh
+          for r in / /buy /property-27-design-way-kalkallo /sell /contact; do n=$(echo "$r"|tr '/-' '__'|sed 's/^_*$/home/'); npx lighthouse "$BASE$r" --chrome-path=/usr/bin/google-chrome --chrome-flags='--headless --no-sandbox' --only-categories=performance,accessibility,best-practices,seo --output=json --output-path="lh/$n.json" --quiet; done
+          node - <<'NODE'
+          const fs=require('fs');let bad=[];for(const f of fs.readdirSync('lh')){const c=JSON.parse(fs.readFileSync('lh/'+f)).categories,s={p:c.performance.score*100,a:c.accessibility.score*100,b:c['best-practices'].score*100,seo:c.seo.score*100};console.log(f,s);if(s.p<95||s.a<100||s.b<95||s.seo<100)bad.push({f,s})}if(bad.length){console.error(JSON.stringify(bad));process.exit(1)}
+          NODE
+      - name: Delete this run's QA rows
+        if: always()
+        run: curl -fsS -X DELETE "$BASE/api/_qa-e2e?key=$QA_KEY&batch=$QA_BATCH" || true
+      - name: Restore exact clean production tree
+        if: always()
+        run: |
+          rm -f functions/api/_qa-e2e.js .github/workflows/e2e-final-gate.yml gate.cjs; rm -rf lh node_modules package.json package-lock.json; rmdir .github/workflows 2>/dev/null || true; rmdir .github 2>/dev/null || true
+          git add -A; git diff --cached --check; T=$(git write-tree); echo "$T"; test "$T" = "$EXPECTED_CLEAN_TREE"
+          git config user.name github-actions[bot]; git config user.email 41898282+github-actions[bot]@users.noreply.github.com; git commit -m 'qa: restore clean candidate after final gate'; git push origin HEAD:cutover/legacy-routing-preview
